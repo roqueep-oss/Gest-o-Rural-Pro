@@ -2608,7 +2608,7 @@
         </script>
 
         <!-- ================================================================ -->
-        <!-- INICIALIZAÇÃO MELHORADA -->
+        <!-- INICIALIZAÇÃO MELHORADA (COM A CORREÇÃO) -->
         <!-- ================================================================ -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -2890,7 +2890,7 @@
                 }
 
                 // ============================================================
-                // FIREBASE AUTH
+                // FIREBASE AUTH - CORRIGIDO (REMOVIDA CHAMADA AUTOMÁTICA À PECUÁRIA)
                 // ============================================================
 
                 if (typeof firebase !== 'undefined' && firebase.auth) {
@@ -2933,12 +2933,8 @@
                                         if (GR.Modules && GR.Modules.Perfis && typeof GR.Modules.Perfis.init === 'function') {
                                             GR.Modules.Perfis.init();
                                         }
-                                        if (GR.Modules && GR.Modules.Pecuaria && typeof GR.Modules.Pecuaria.render === 'function') {
-                                            setTimeout(function() {
-                                                GR.Modules.Pecuaria.render();
-                                                console.log('✅ Pecuária renderizada após login');
-                                            }, 200);
-                                        }
+                                        // 🔥 CORREÇÃO: a chamada a Pecuaria.render() foi REMOVIDA
+                                        // A pecuária será renderizada apenas quando o usuário clicar na aba.
                                         // Atualizar propriedades após login
                                         window.atualizarListaPropriedades();
                                     }, 500);
