@@ -2344,8 +2344,8 @@ tbody tr:hover { background: var(--bg); }
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
+    gap: 4px;
+    padding: 6px 12px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
@@ -2357,21 +2357,21 @@ tbody tr:hover { background: var(--bg); }
 .nav-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 4px;
+    padding: 5px 10px;
     border: 1.5px solid transparent;
     border-radius: var(--radius-full);
     background: transparent;
     color: var(--text-light);
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     user-select: none;
 }
 .nav-btn .icon {
-    font-size: 15px;
+    font-size: 13px;
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nav-btn:hover {
