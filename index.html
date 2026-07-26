@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -2585,6 +2585,9 @@
         <script src="js/login.js"></script>
         <script src="js/ui.js"></script>
 
+        <!-- Dashboard -->
+        <script src="js/modules/dashboard.js"></script>
+
         <!-- Módulo de Fornecedores -->
         <script src="js/modules/fornecedores.js"></script>
 
@@ -2900,8 +2903,8 @@
                                     
                                 case 'dashboard':
                                     setTimeout(function() {
-                                        if (GR.UI && typeof GR.UI._atualizarDashboard === 'function') {
-                                            GR.UI._atualizarDashboard();
+                                        if (typeof GR.Modules.Dashboard._atualizarDashboard === 'function') {
+                                            GR.Modules.Dashboard._atualizarDashboard();
                                         }
                                     }, 100);
                                     break;
@@ -2982,8 +2985,8 @@
                                         }
                                     }, 300);
                                     setTimeout(function() {
-                                        if (GR.UI && typeof GR.UI._atualizarDashboard === 'function') {
-                                            GR.UI._atualizarDashboard();
+                                        if (typeof GR.Modules.Dashboard._atualizarDashboard === 'function') {
+                                            GR.Modules.Dashboard._atualizarDashboard();
                                         }
                                         if (GR.Modules && GR.Modules.Funcionarios && typeof GR.Modules.Funcionarios.render === 'function') {
                                             GR.Modules.Funcionarios.render();
@@ -3253,8 +3256,8 @@
                     // Dashboard
                     if (section === 'dashboard') {
                         setTimeout(function() {
-                            if (GR.UI && typeof GR.UI._atualizarDashboard === 'function') {
-                                GR.UI._atualizarDashboard();
+                            if (typeof GR.Modules.Dashboard._atualizarDashboard === 'function') {
+                                GR.Modules.Dashboard._atualizarDashboard();
                             }
                         }, 50);
                         return;
@@ -3465,8 +3468,8 @@
                     
                     if (section === 'dashboard') {
                         setTimeout(function() {
-                            if (GR.UI && typeof GR.UI._atualizarDashboard === 'function') {
-                                GR.UI._atualizarDashboard();
+                            if (typeof GR.Modules.Dashboard._atualizarDashboard === 'function') {
+                                GR.Modules.Dashboard._atualizarDashboard();
                             }
                         }, 50);
                         return;
