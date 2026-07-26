@@ -139,7 +139,8 @@ GR.UI = {
             'configuracoes': '⚙️ Configurações',
             'historico': '📜 Histórico',
             'notificacoes': '🔔 Notificações',
-            'nfe': '📄 NF-e'
+            'nfe': '📄 NF-e',
+            'producao': '🌾 Produção'
         };
         var titleEl = this._getElement('view-title');
         if (titleEl) titleEl.textContent = titles[view] || view;
@@ -190,7 +191,8 @@ GR.UI = {
             'configuracoes': this._renderConfiguracoes.bind(this),
             'historico': this._renderHistorico.bind(this),
             'notificacoes': this._renderNotificacoes.bind(this),
-            'nfe': this._renderNFe.bind(this)
+            'nfe': this._renderNFe.bind(this),
+            'producao': this._renderProducao.bind(this)
         };
 
         var renderFn = renderMap[view];
@@ -1834,6 +1836,12 @@ GR.UI = {
             </div>
         `;
         if (GR.Modules.NFe && typeof GR.Modules.NFe.render === 'function') GR.Modules.NFe.render();
+    },
+
+    _renderProducao: function(container) {
+        container.innerHTML = '<div class="card"><div class="card-header"><div class="card-title"><span class="emoji">🌾</span> Produção</div>' +
+            '</div><div id="lista-producao"></div></div>';
+        if (GR.Modules.Producao && typeof GR.Modules.Producao.render === 'function') GR.Modules.Producao.render();
     },
 
     // ================================================================

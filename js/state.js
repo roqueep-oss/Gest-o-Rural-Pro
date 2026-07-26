@@ -45,7 +45,11 @@ GR.State = {
         partesRelacionadas: [],
         fornecedores: [],
         padroesExtracao: [],
+        // Coleções da Produção
+        culturas: [],
+        colheitas: [],
         // Configurações
+        configuracoes: {
         configuracoes: {
             notificacoes: true,
             backupAutomatico: false,
@@ -313,6 +317,56 @@ GR.State = {
     },
 
     // ================================================================
+    // 🆕 CARREGAR CULTURAS
+    // ================================================================
+    _carregarCulturas: function() {
+        var user = firebase.auth().currentUser;
+        if (!user) return;
+        var self = this;
+        var uid = user.uid;
+
+        db.collection('users').doc(uid).collection('culturas')
+            .onSnapshot(function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(doc) {
+                    var data = doc.data();
+                    data.id = doc.id;
+                    items.push(data);
+                });
+                self.data.culturas = items;
+                self._saveCache();
+                console.log('🔄 Culturas atualizadas:', items.length);
+            }, function(err) {
+                console.warn('⚠️ Erro no listener de culturas:', err);
+            });
+    },
+
+    // ================================================================
+    // 🆕 CARREGAR COLHEITAS
+    // ================================================================
+    _carregarColheitas: function() {
+        var user = firebase.auth().currentUser;
+        if (!user) return;
+        var self = this;
+        var uid = user.uid;
+
+        db.collection('users').doc(uid).collection('colheitas')
+            .onSnapshot(function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(doc) {
+                    var data = doc.data();
+                    data.id = doc.id;
+                    items.push(data);
+                });
+                self.data.colheitas = items;
+                self._saveCache();
+                console.log('🔄 Colheitas atualizadas:', items.length);
+            }, function(err) {
+                console.warn('⚠️ Erro no listener de colheitas:', err);
+            });
+    },
+
+    // ================================================================
     // CONFIGURAÇÕES
     // ================================================================
     _loadConfiguracoes: function() {
@@ -439,6 +493,12 @@ GR.State = {
 
         // 🆕 LISTENER PARA EPI
         this._carregarEPI();
+
+        // 🆕 LISTENER PARA CULTURAS
+        this._carregarCulturas();
+
+        // 🆕 LISTENER PARA COLHEITAS
+        this._carregarColheitas();
 
         // Listener para fornecedores
         db.collection('users').doc(uid).collection('fornecedores')
@@ -1774,7 +1834,8 @@ GR.State = {
             'partesRelacionadas', 'historico', 'notificacoes',
             'padroesExtracao',
             'perfis', 'recibos', 'modelosRecibo',
-            'pontos', 'producoes', 'ferias', 'epi'
+            'pontos', 'producoes', 'ferias', 'epi',
+            'culturas', 'colheitas'
         ];
         
         colecoes.forEach(function(col) {
