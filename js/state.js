@@ -50,7 +50,6 @@ GR.State = {
         colheitas: [],
         // Configurações
         configuracoes: {
-        configuracoes: {
             notificacoes: true,
             backupAutomatico: false,
             intervaloBackup: 24,
