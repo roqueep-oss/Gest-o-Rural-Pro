@@ -343,6 +343,7 @@ GR.UI = {
             }
             
             this.mudarView('dashboard');
+            this._filtrarNavPorPropriedade();
 
             setTimeout(function() {
                 if (typeof self.atualizarInfoUsuario === 'function') {
@@ -649,6 +650,7 @@ GR.UI = {
                 self.atualizarPropTabsComPermissoes();
                 self._atualizarSelectsPropriedade();
                 self._atualizarSelectsFornecedores();
+                self._filtrarNavPorPropriedade();
                 if (GR.State.ui.viewAtual === 'dashboard') {
                     GR.Modules.Dashboard._atualizarDashboard();
                 }
@@ -1856,7 +1858,33 @@ GR.UI = {
         GR.State.setPropriedadeAtiva(nome);
         this.atualizarPropTabsComPermissoes();
         this._atualizarSelectsPropriedade();
+        this._filtrarNavPorPropriedade();
         this.refreshCurrentView();
+    },
+
+    _filtrarNavPorPropriedade: function() {
+        var propAtiva = GR.State.ui.propriedadeAtiva || 'todas';
+        var propriedade = null;
+        if (propAtiva !== 'todas') {
+            propriedade = (GR.State.data.propriedades || []).find(function(p) { return p.nome === propAtiva; });
+        }
+
+        var modulosPermitidos = null;
+        if (propriedade && propriedade.modulos && propriedade.modulos.length) {
+            modulosPermitidos = propriedade.modulos;
+        }
+
+        var sempreVisiveis = ['dashboard', 'configuracoes', 'historico', 'notificacoes'];
+
+        document.querySelectorAll('.nav-btn').forEach(function(btn) {
+            var section = btn.dataset.section;
+            if (!section) return;
+            if (modulosPermitidos && sempreVisiveis.indexOf(section) === -1) {
+                btn.style.display = modulosPermitidos.indexOf(section) !== -1 ? '' : 'none';
+            } else {
+                btn.style.display = '';
+            }
+        });
     },
 
     _atualizarSelectsPropriedade: function() {

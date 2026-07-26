@@ -388,6 +388,25 @@ GR.Modules.Configuracoes = {
             '<option value="Em desenvolvimento">🚧 Em desenvolvimento</option>' +
             '</select>' +
             '</div>' +
+            '<div style="margin-top:8px;">' +
+            '<div style="font-size:12px;color:#2E7D32;margin-bottom:4px;font-weight:600;">🔧 Módulos ativos para esta propriedade:</div>' +
+            '<div style="font-size:11px;color:#666;margin-bottom:6px;">Marque os módulos que esta propriedade utiliza. Os não marcados ficarão ocultos no menu.</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:4px;" id="modal-prop-modulos">' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="acoes" checked> 📋 Ações</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="orcamentos" checked> 💰 Orçamentos</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="credito" checked> 💳 Crédito</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="insumos" checked> 🧪 Insumos</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="pecuaria" checked> 🐄 Pecuária</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="funcionarios" checked> 👨‍🌾 Funcionários</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="parceiros" checked> 👥 Parceiros</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="contabilidade" checked> 🧾 Contabilidade</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="documentos" checked> 📁 Documentos</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="analises" checked> 🔬 Análises</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="viveiro" checked> 🌱 Viveiro</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="relatorios" checked> 📊 Relatórios</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="producao" checked> 🌾 Produção</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="nfe" checked> 📄 NF-e</label>' +
+            '</div></div>' +
             '<textarea id="modal-prop-observacao" class="form-control" placeholder="📝 Observações" style="width:100%;height:60px;resize:vertical;padding:8px;border-radius:6px;border:1px solid #ddd;"></textarea>' +
             '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.salvarPropriedadeModal()" style="padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;background:#4CAF50;color:#fff;">➕ Adicionar Propriedade</button>' +
             '</div>' +
@@ -419,6 +438,11 @@ GR.Modules.Configuracoes = {
         }
 
         var uid = user.uid;
+        var modulos = [];
+        document.querySelectorAll('#modal-propriedades input[type="checkbox"][name="prop-modulos"]').forEach(function(cb) {
+            if (cb.checked) modulos.push(cb.value);
+        });
+
         var dados = {
             nome: GR.Utils.escapeHtml(nome),
             localizacao: GR.Utils.escapeHtml(localizacao) || '',
@@ -426,6 +450,7 @@ GR.Modules.Configuracoes = {
             tipo: tipo || 'Não definido',
             status: status || 'Ativa',
             observacao: GR.Utils.escapeHtml(observacao) || '',
+            modulos: modulos,
             dataCriacao: GR.Utils.now()
         };
 
@@ -696,6 +721,25 @@ GR.Modules.Configuracoes = {
             '<option value="Em desenvolvimento"' + (propriedade.status === 'Em desenvolvimento' ? ' selected' : '') + '>🚧 Em desenvolvimento</option>' +
             '</select></div>' +
             '<div><label>Observações</label><textarea id="edit-prop-observacao" class="form-control" style="width:100%;height:60px;resize:vertical;padding:8px;border-radius:6px;border:1px solid #ddd;">' + GR.Utils.escapeHtml(propriedade.observacao || '') + '</textarea></div>' +
+            '<div style="margin-top:8px;">' +
+            '<div style="font-size:12px;color:#2E7D32;margin-bottom:4px;font-weight:600;">🔧 Módulos ativos para esta propriedade:</div>' +
+            '<div style="font-size:11px;color:#666;margin-bottom:6px;">Desmarque os módulos que esta propriedade NÃO utiliza.</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:4px;">' +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'acoes', '📋 Ações', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'orcamentos', '💰 Orçamentos', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'credito', '💳 Crédito', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'insumos', '🧪 Insumos', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'pecuaria', '🐄 Pecuária', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'funcionarios', '👨‍🌾 Funcionários', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'parceiros', '👥 Parceiros', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'contabilidade', '🧾 Contabilidade', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'documentos', '📁 Documentos', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'analises', '🔬 Análises', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'viveiro', '🌱 Viveiro', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'relatorios', '📊 Relatórios', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'producao', '🌾 Produção', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'nfe', '📄 NF-e', propriedade) +
+            '</div></div>' +
             '</div>' +
             '<div style="display:flex;gap:8px;margin-top:12px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Configuracoes._salvarEdicaoPropriedade(\'' + id + '\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">💾 Salvar</button>' +
@@ -725,6 +769,11 @@ GR.Modules.Configuracoes = {
         var user = firebase.auth().currentUser;
         if (!user) return;
 
+        var modulos = [];
+        document.querySelectorAll('#modal-editar-propriedade input[type="checkbox"][name="edit-prop-modulos"]').forEach(function(cb) {
+            if (cb.checked) modulos.push(cb.value);
+        });
+
         var dados = {
             nome: GR.Utils.escapeHtml(nome),
             localizacao: GR.Utils.escapeHtml(localizacao),
@@ -732,6 +781,7 @@ GR.Modules.Configuracoes = {
             tipo: tipo || 'Não definido',
             status: status || 'Ativa',
             observacao: GR.Utils.escapeHtml(observacao),
+            modulos: modulos,
             dataAtualizacao: GR.Utils.now()
         };
 
@@ -752,6 +802,12 @@ GR.Modules.Configuracoes = {
             .catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
+    },
+
+    _htmlCheckboxModulo: function(prefix, valor, label, propriedade) {
+        var modulos = propriedade.modulos || ['acoes','orcamentos','credito','insumos','pecuaria','funcionarios','parceiros','contabilidade','documentos','analises','viveiro','relatorios','producao','nfe'];
+        var checked = modulos.indexOf(valor) !== -1 ? ' checked' : '';
+        return '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="' + prefix + '-prop-modulos" value="' + valor + '"' + checked + '> ' + label + '</label>';
     },
 
     _fecharModalEdicao: function() {
