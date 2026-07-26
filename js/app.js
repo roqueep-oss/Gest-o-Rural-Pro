@@ -743,6 +743,7 @@
             { nome: 'Pecuaria', obj: GR.Modules.Pecuaria },
             { nome: 'Funcionarios', obj: GR.Modules.Funcionarios },
             { nome: 'Parceiros', obj: GR.Modules.Parceiros },
+            { nome: 'Producao', obj: GR.Modules.Producao },
             { nome: 'PartesRelacionadas', obj: GR.Modules.PartesRelacionadas },
             { nome: 'Contabilidade', obj: GR.Modules.Contabilidade },
             { nome: 'Documentos', obj: GR.Modules.Documentos },

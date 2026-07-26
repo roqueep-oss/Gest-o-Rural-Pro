@@ -5,6 +5,10 @@
 GR.Modules.Producao = {
     _abaAtiva: 'colheitas',
 
+    init: function() {
+        console.log('🌾 Módulo Produção inicializado');
+    },
+
     render: function() {
         var div = document.getElementById('lista-producao');
         if (!div) return;
