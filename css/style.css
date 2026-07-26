@@ -1680,7 +1680,7 @@ tbody tr:hover { background: var(--bg); }
     border: none;
     background: transparent;
     border-radius: 16px;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--text-light);
     cursor: pointer;
@@ -2015,19 +2015,19 @@ tbody tr:hover { background: var(--bg); }
     }
 
     .nav-menu {
-        padding: 4px 6px;
-        gap: 4px;
+        padding: 3px 4px;
+        gap: 2px;
         top: 48px;
         justify-content: flex-start;
     }
     .nav-btn {
-        font-size: 13px;
-        padding: 4px 8px;
-        min-height: 36px;
-        gap: 4px;
+        font-size: 11px;
+        padding: 3px 6px;
+        min-height: 34px;
+        gap: 3px;
     }
     .nav-btn .icon {
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .container {
@@ -2274,12 +2274,12 @@ tbody tr:hover { background: var(--bg); }
         font-size: 13px;
     }
     .nav-btn {
-        font-size: 11px;
-        padding: 3px 5px;
-        gap: 3px;
+        font-size: 10px;
+        padding: 2px 4px;
+        gap: 2px;
     }
     .nav-btn .icon {
-        font-size: 11px;
+        font-size: 10px;
     }
     .prop-tab {
         font-size: 8px;
@@ -2344,8 +2344,8 @@ tbody tr:hover { background: var(--bg); }
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 6px 12px;
+    gap: 3px;
+    padding: 5px 10px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
@@ -2357,21 +2357,21 @@ tbody tr:hover { background: var(--bg); }
 .nav-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 5px 10px;
+    gap: 3px;
+    padding: 4px 8px;
     border: 1.5px solid transparent;
     border-radius: var(--radius-full);
     background: transparent;
     color: var(--text-light);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     user-select: none;
 }
 .nav-btn .icon {
-    font-size: 13px;
+    font-size: 12px;
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nav-btn:hover {
