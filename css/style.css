@@ -2748,3 +2748,222 @@ tbody tr:hover { background: var(--bg); }
         color: #fff !important;
     }
 }
+
+/* ================================================================
+   NAV-BUTTONS COM CORES DISTINTAS POR MÓDULO
+   ================================================================ */
+.nav-btn[data-section="dashboard"] {
+    background: rgba(76, 175, 80, 0.08);
+    border-color: rgba(76, 175, 80, 0.15);
+}
+.nav-btn[data-section="dashboard"]:hover {
+    background: rgba(76, 175, 80, 0.15);
+}
+.nav-btn[data-section="dashboard"].active {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: rgba(76, 175, 80, 0.4);
+}
+
+.nav-btn[data-section="acoes"] {
+    background: rgba(33, 150, 243, 0.08);
+    border-color: rgba(33, 150, 243, 0.15);
+}
+.nav-btn[data-section="acoes"]:hover {
+    background: rgba(33, 150, 243, 0.15);
+}
+.nav-btn[data-section="acoes"].active {
+    background: rgba(33, 150, 243, 0.2);
+    border-color: rgba(33, 150, 243, 0.4);
+}
+
+.nav-btn[data-section="orcamentos"] {
+    background: rgba(156, 39, 176, 0.08);
+    border-color: rgba(156, 39, 176, 0.15);
+}
+.nav-btn[data-section="orcamentos"]:hover {
+    background: rgba(156, 39, 176, 0.15);
+}
+.nav-btn[data-section="orcamentos"].active {
+    background: rgba(156, 39, 176, 0.2);
+    border-color: rgba(156, 39, 176, 0.4);
+}
+
+.nav-btn[data-section="credito"] {
+    background: rgba(0, 150, 136, 0.08);
+    border-color: rgba(0, 150, 136, 0.15);
+}
+.nav-btn[data-section="credito"]:hover {
+    background: rgba(0, 150, 136, 0.15);
+}
+.nav-btn[data-section="credito"].active {
+    background: rgba(0, 150, 136, 0.2);
+    border-color: rgba(0, 150, 136, 0.4);
+}
+
+.nav-btn[data-section="insumos"] {
+    background: rgba(63, 81, 181, 0.08);
+    border-color: rgba(63, 81, 181, 0.15);
+}
+.nav-btn[data-section="insumos"]:hover {
+    background: rgba(63, 81, 181, 0.15);
+}
+.nav-btn[data-section="insumos"].active {
+    background: rgba(63, 81, 181, 0.2);
+    border-color: rgba(63, 81, 181, 0.4);
+}
+
+.nav-btn[data-section="pecuaria"] {
+    background: rgba(255, 152, 0, 0.08);
+    border-color: rgba(255, 152, 0, 0.15);
+}
+.nav-btn[data-section="pecuaria"]:hover {
+    background: rgba(255, 152, 0, 0.15);
+}
+.nav-btn[data-section="pecuaria"].active {
+    background: rgba(255, 152, 0, 0.2);
+    border-color: rgba(255, 152, 0, 0.4);
+}
+
+.nav-btn[data-section="funcionarios"] {
+    background: rgba(0, 188, 212, 0.08);
+    border-color: rgba(0, 188, 212, 0.15);
+}
+.nav-btn[data-section="funcionarios"]:hover {
+    background: rgba(0, 188, 212, 0.15);
+}
+.nav-btn[data-section="funcionarios"].active {
+    background: rgba(0, 188, 212, 0.2);
+    border-color: rgba(0, 188, 212, 0.4);
+}
+
+.nav-btn[data-section="parceiros"] {
+    background: rgba(233, 30, 99, 0.08);
+    border-color: rgba(233, 30, 99, 0.15);
+}
+.nav-btn[data-section="parceiros"]:hover {
+    background: rgba(233, 30, 99, 0.15);
+}
+.nav-btn[data-section="parceiros"].active {
+    background: rgba(233, 30, 99, 0.2);
+    border-color: rgba(233, 30, 99, 0.4);
+}
+
+.nav-btn[data-section="contabilidade"] {
+    background: rgba(255, 87, 34, 0.08);
+    border-color: rgba(255, 87, 34, 0.15);
+}
+.nav-btn[data-section="contabilidade"]:hover {
+    background: rgba(255, 87, 34, 0.15);
+}
+.nav-btn[data-section="contabilidade"].active {
+    background: rgba(255, 87, 34, 0.2);
+    border-color: rgba(255, 87, 34, 0.4);
+}
+
+.nav-btn[data-section="documentos"] {
+    background: rgba(121, 85, 72, 0.08);
+    border-color: rgba(121, 85, 72, 0.15);
+}
+.nav-btn[data-section="documentos"]:hover {
+    background: rgba(121, 85, 72, 0.15);
+}
+.nav-btn[data-section="documentos"].active {
+    background: rgba(121, 85, 72, 0.2);
+    border-color: rgba(121, 85, 72, 0.4);
+}
+
+.nav-btn[data-section="analises"] {
+    background: rgba(205, 220, 57, 0.1);
+    border-color: rgba(205, 220, 57, 0.18);
+}
+.nav-btn[data-section="analises"]:hover {
+    background: rgba(205, 220, 57, 0.18);
+}
+.nav-btn[data-section="analises"].active {
+    background: rgba(205, 220, 57, 0.25);
+    border-color: rgba(205, 220, 57, 0.4);
+}
+
+.nav-btn[data-section="viveiro"] {
+    background: rgba(139, 195, 74, 0.08);
+    border-color: rgba(139, 195, 74, 0.15);
+}
+.nav-btn[data-section="viveiro"]:hover {
+    background: rgba(139, 195, 74, 0.15);
+}
+.nav-btn[data-section="viveiro"].active {
+    background: rgba(139, 195, 74, 0.2);
+    border-color: rgba(139, 195, 74, 0.4);
+}
+
+.nav-btn[data-section="relatorios"] {
+    background: rgba(96, 125, 139, 0.08);
+    border-color: rgba(96, 125, 139, 0.15);
+}
+.nav-btn[data-section="relatorios"]:hover {
+    background: rgba(96, 125, 139, 0.15);
+}
+.nav-btn[data-section="relatorios"].active {
+    background: rgba(96, 125, 139, 0.2);
+    border-color: rgba(96, 125, 139, 0.4);
+}
+
+.nav-btn[data-section="configuracoes"] {
+    background: rgba(158, 158, 158, 0.08);
+    border-color: rgba(158, 158, 158, 0.15);
+}
+.nav-btn[data-section="configuracoes"]:hover {
+    background: rgba(158, 158, 158, 0.15);
+}
+.nav-btn[data-section="configuracoes"].active {
+    background: rgba(158, 158, 158, 0.2);
+    border-color: rgba(158, 158, 158, 0.4);
+}
+
+.nav-btn[data-section="historico"] {
+    background: rgba(103, 58, 183, 0.08);
+    border-color: rgba(103, 58, 183, 0.15);
+}
+.nav-btn[data-section="historico"]:hover {
+    background: rgba(103, 58, 183, 0.15);
+}
+.nav-btn[data-section="historico"].active {
+    background: rgba(103, 58, 183, 0.2);
+    border-color: rgba(103, 58, 183, 0.4);
+}
+
+.nav-btn[data-section="notificacoes"] {
+    background: rgba(244, 67, 54, 0.08);
+    border-color: rgba(244, 67, 54, 0.15);
+}
+.nav-btn[data-section="notificacoes"]:hover {
+    background: rgba(244, 67, 54, 0.15);
+}
+.nav-btn[data-section="notificacoes"].active {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.4);
+}
+
+.nav-btn[data-section="producao"] {
+    background: rgba(255, 193, 7, 0.08);
+    border-color: rgba(255, 193, 7, 0.15);
+}
+.nav-btn[data-section="producao"]:hover {
+    background: rgba(255, 193, 7, 0.15);
+}
+.nav-btn[data-section="producao"].active {
+    background: rgba(255, 193, 7, 0.2);
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+.nav-btn[data-section="nfe"] {
+    background: rgba(33, 150, 243, 0.08);
+    border-color: rgba(33, 150, 243, 0.15);
+}
+.nav-btn[data-section="nfe"]:hover {
+    background: rgba(33, 150, 243, 0.15);
+}
+.nav-btn[data-section="nfe"].active {
+    background: rgba(33, 150, 243, 0.2);
+    border-color: rgba(33, 150, 243, 0.4);
+}
