@@ -273,6 +273,60 @@
             background: #388E3C;
             transform: scale(1.05);
         }
+        /* 🏠 Botão de Propriedades no Header */
+        .btn-propriedade-header {
+            background: #2E7D32;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(46,125,50,0.3);
+        }
+        .btn-propriedade-header:hover {
+            background: #1B5E20;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(46,125,50,0.4);
+        }
+        [data-theme="escuro"] .btn-propriedade-header {
+            background: #388E3C;
+        }
+        [data-theme="escuro"] .btn-propriedade-header:hover {
+            background: #2E7D32;
+        }
+        [data-theme="azul"] .btn-propriedade-header {
+            background: #1976D2;
+        }
+        [data-theme="azul"] .btn-propriedade-header:hover {
+            background: #0D47A1;
+        }
+        [data-theme="roxo"] .btn-propriedade-header {
+            background: #7B1FA2;
+        }
+        [data-theme="roxo"] .btn-propriedade-header:hover {
+            background: #4A148C;
+        }
+        @media (max-width: 768px) {
+            .btn-propriedade-header {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 380px) {
+            .btn-propriedade-header {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+
         [data-theme="escuro"] .btn-funcionario {
             background: #388E3C;
         }
@@ -537,6 +591,10 @@
                 <!-- 🆕 BOTÃO PARA FUNCIONÁRIOS -->
                 <button class="btn-funcionario" onclick="GR.Modules.Perfis.abrirLoginFuncionario()" title="Acesso do Funcionário">
                     👨‍🌾
+                </button>
+                <!-- 🏠 BOTÃO NOVA PROPRIEDADE (sempre visível) -->
+                <button class="btn-propriedade-header" onclick="GR.Modules.Propriedades.abrirModal()" title="Cadastrar Nova Propriedade">
+                    🏠
                 </button>
                 <button class="config-btn" onclick="GR.Login.logout()">🚪</button>
             </div>
@@ -2548,6 +2606,8 @@
         <script src="js/modules/viveiro.js"></script>
         <script src="js/modules/relatorios.js"></script>
         <script src="js/modules/configuracoes.js"></script>
+        <!-- 🏠 MÓDULO PROPRIEDADES (cadastro com vínculo global) -->
+        <script src="js/modules/propriedades.js"></script>
         <script src="js/modules/historico.js"></script>
         <script src="js/modules/backup.js"></script>
         <script src="js/modules/notificacoes.js"></script>

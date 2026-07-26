@@ -1817,6 +1817,32 @@ GR.State = {
     recarregar: function() {
         console.log('🔄 Recarregando dados...');
         return this.carregarDados();
+    },
+
+    // ================================================================
+    // ATUALIZAÇÃO INSTANTÂNEA DO CACHE LOCAL APÓS CRUD
+    // ================================================================
+    inserirNoCache: function(colecao, dados) {
+        if (!this.data[colecao]) this.data[colecao] = [];
+        this.data[colecao].push(dados);
+        this._saveCache();
+    },
+
+    atualizarNoCache: function(colecao, id, dados) {
+        var arr = this.data[colecao];
+        if (!arr) return;
+        var idx = arr.findIndex(function(item) { return item.id === id; });
+        if (idx >= 0) {
+            arr[idx] = Object.assign({}, arr[idx], dados);
+            this._saveCache();
+        }
+    },
+
+    removerDoCache: function(colecao, id) {
+        var arr = this.data[colecao];
+        if (!arr) return;
+        this.data[colecao] = arr.filter(function(item) { return item.id !== id; });
+        this._saveCache();
     }
 };
 

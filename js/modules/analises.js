@@ -1995,7 +1995,18 @@ GR.Analises = {
         var operation = isEdit ? ref.doc(editId).update(dados) : ref.add(dados);
         var successMsg = isEdit ? 'Análise atualizada!' : 'Análise salva!';
 
-        operation.then(function() {
+        operation.then(function(docRef) {
+            if (!isEdit && docRef) {
+                dados.id = docRef.id;
+                if (GR.State && GR.State.inserirNoCache) {
+                    GR.State.inserirNoCache('analises', dados);
+                }
+            } else if (isEdit) {
+                if (GR.State && GR.State.atualizarNoCache) {
+                    GR.State.atualizarNoCache('analises', editId, dados);
+                }
+            }
+
             GR.Modal.close('modal-analise');
             GR.Toast.success(successMsg);
             
@@ -2050,6 +2061,9 @@ GR.Analises = {
                 }
                 
                 GR.Toast.success('Análise excluída!');
+                if (GR.State && GR.State.removerDoCache) {
+                    GR.State.removerDoCache('analises', id);
+                }
                 if (GR.State && GR.State.adicionarHistorico) {
                     GR.State.adicionarHistorico('excluiu análise', 'Análises', 'Análise: ' + nome);
                 }

@@ -2323,6 +2323,7 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-venda');
                 GR.Toast.success('Venda atualizada!');
+                GR.State.atualizarNoCache('viveiroVendas', editId, dados);
                 self._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
@@ -2385,6 +2386,8 @@ GR.Modules.Viveiro = {
                 }
                 
                 GR.State.ui.viveiroVendaPedidoId = null;
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroVendas', dados);
                 self._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -2421,6 +2424,7 @@ GR.Modules.Viveiro = {
                         });
                 }
                 GR.Toast.success('Venda excluída!');
+                GR.State.removerDoCache('viveiroVendas', id);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);
@@ -2531,14 +2535,17 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-lancamento');
                 GR.Toast.success('Lançamento atualizado!');
+                GR.State.atualizarNoCache('viveiroCaixa', editId, dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-lancamento');
                 GR.Toast.success('Lançamento registrado!');
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroCaixa', dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -2562,6 +2569,7 @@ GR.Modules.Viveiro = {
         db.collection('users').doc(uid).collection('viveiroCaixa').doc(id).delete()
             .then(function() {
                 GR.Toast.success('Lançamento excluído!');
+                GR.State.removerDoCache('viveiroCaixa', id);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);
@@ -2697,6 +2705,7 @@ GR.Modules.Viveiro = {
                 .then(function() {
                     GR.Modal.close('modal-viveiro-variedade');
                     GR.Toast.success('✅ Variedade atualizada com sucesso!');
+                    GR.State.atualizarNoCache('viveiroVariedades', editId, dados);
                     self._invalidateAndRender();
                 })
                 .catch(function(err) {
@@ -2709,6 +2718,8 @@ GR.Modules.Viveiro = {
                     GR.Modal.close('modal-viveiro-variedade');
                     GR.Toast.success('✅ Variedade "' + nome + '" registrada com sucesso!');
                     console.log('📝 Variedade salva com ID:', docRef.id, 'Propriedade:', propriedade);
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('viveiroVariedades', dados);
                     self._invalidateAndRender();
                 })
                 .catch(function(err) {
@@ -2736,6 +2747,7 @@ GR.Modules.Viveiro = {
         db.collection('users').doc(uid).collection('viveiroVariedades').doc(id).delete()
             .then(function() {
                 GR.Toast.success('Variedade excluída!');
+                GR.State.removerDoCache('viveiroVariedades', id);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);
@@ -2882,12 +2894,13 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-pedido');
                 GR.Toast.success('Pedido atualizado!');
+                GR.State.atualizarNoCache('viveiroPedidos', editId, dados);
                 self._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-pedido');
                 GR.Toast.success('Pedido registrado!');
                 
@@ -2907,6 +2920,8 @@ GR.Modules.Viveiro = {
                     });
                 }
                 
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroPedidos', dados);
                 self._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -2932,6 +2947,7 @@ GR.Modules.Viveiro = {
         db.collection('users').doc(uid).collection('viveiroPedidos').doc(id).delete()
             .then(function() {
                 GR.Toast.success('Pedido excluído!');
+                GR.State.removerDoCache('viveiroPedidos', id);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);
@@ -3264,14 +3280,17 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-muda');
                 GR.Toast.success('Muda atualizada!');
+                GR.State.atualizarNoCache('viveiroMudas', editId, dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-muda');
                 GR.Toast.success('Muda registrada!');
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroMudas', dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -3405,12 +3424,13 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-insumo');
                 GR.Toast.success('Insumo atualizado!');
+                GR.State.atualizarNoCache('viveiroInsumos', editId, dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-insumo');
                 GR.Toast.success('Insumo registrado!');
                 var caixaRef = db.collection('users').doc(uid).collection('viveiroCaixa');
@@ -3425,6 +3445,8 @@ GR.Modules.Viveiro = {
                 }).catch(function(err) {
                     console.warn('Erro ao registrar no caixa:', err);
                 });
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroInsumos', dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -3562,12 +3584,13 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-servico');
                 GR.Toast.success('Serviço atualizado!');
+                GR.State.atualizarNoCache('viveiroServicos', editId, dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-servico');
                 GR.Toast.success('Serviço registrado!');
                 if (custo > 0) {
@@ -3584,6 +3607,8 @@ GR.Modules.Viveiro = {
                         console.warn('Erro ao registrar no caixa:', err);
                     });
                 }
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroServicos', dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -3711,14 +3736,17 @@ GR.Modules.Viveiro = {
             ref.doc(editId).update(dados).then(function() {
                 GR.Modal.close('modal-viveiro-trabalhador');
                 GR.Toast.success('Trabalhador atualizado!');
+                GR.State.atualizarNoCache('viveiroTrabalhadores', editId, dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
                 GR.Modal.close('modal-viveiro-trabalhador');
                 GR.Toast.success('Trabalhador registrado!');
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('viveiroTrabalhadores', dados);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -3759,6 +3787,7 @@ GR.Modules.Viveiro = {
         db.collection('users').doc(uid).collection(col).doc(id).delete()
             .then(function() {
                 GR.Toast.success(tipo.charAt(0).toUpperCase() + tipo.slice(1) + ' excluído!');
+                GR.State.removerDoCache(col, id);
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);

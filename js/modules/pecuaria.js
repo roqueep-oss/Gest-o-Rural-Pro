@@ -200,6 +200,14 @@
                 return self.render();
             };
             
+            window.abrirModalPesagemGlobal = function() {
+                return self.abrirModalPesagem();
+            };
+            
+            window.abrirModalVacinaGlobal = function() {
+                return self.abrirModalVacina();
+            };
+            
             console.log('✅ Aliases globais registrados');
         },
 
@@ -770,6 +778,7 @@
                 if (editId) {
                     ref.doc(editId).update(dados)
                         .then(function() {
+                            GR.State.atualizarNoCache('animais', editId, dados);
                             this._closeModal('modal-animal');
                             alert('🐄 Animal atualizado!');
                             this._refreshView();
@@ -780,7 +789,9 @@
                 } else {
                     dados.dataCriacao = new Date().toISOString();
                     ref.add(dados)
-                        .then(function() {
+                        .then(function(docRef) {
+                            dados.id = docRef.id;
+                            GR.State.inserirNoCache('animais', dados);
                             this._closeModal('modal-animal');
                             alert('🐄 Animal salvo!');
                             this._refreshView();
@@ -812,6 +823,7 @@
                 var uid = user.uid;
                 db.collection('users').doc(uid).collection('animais').doc(id).delete()
                     .then(function() {
+                        GR.State.removerDoCache('animais', id);
                         alert('🐄 Animal excluído!');
                         this._refreshView();
                     }.bind(this))
@@ -861,6 +873,7 @@
 
                 db.collection('users').doc(uid).collection('animais').doc(id).update(dados)
                     .then(function() {
+                        GR.State.atualizarNoCache('animais', id, dados);
                         alert('🤰 Prenha registrada com sucesso!');
                         this._refreshView();
                     }.bind(this))
@@ -949,6 +962,96 @@
                 console.error('❌ Erro em exportarLista:', e);
                 alert('Erro ao exportar: ' + e.message);
             }
+        },
+
+        // ================================================================
+        // PESAGEM
+        // ================================================================
+        abrirModalPesagem: function() {
+            var modal = document.getElementById('modal-pesagem');
+            if (!modal) { alert('Modal de pesagem não encontrado!'); return; }
+            document.getElementById('pesagem-data').value = new Date().toISOString().split('T')[0];
+            document.getElementById('pesagem-peso').value = '';
+            document.getElementById('pesagem-obs').value = '';
+            var select = document.getElementById('pesagem-animal');
+            select.innerHTML = '<option value="">Selecione um animal</option>';
+            try {
+                var animais = (GR.State.data.animais || []).filter(function(a) { return a.status === 'Ativo' || a.status === 'Prenhe'; });
+                animais.sort(function(a, b) { return (a.brinco || a.nome || '').localeCompare(b.brinco || b.nome || ''); });
+                animais.forEach(function(a) {
+                    var opt = document.createElement('option');
+                    opt.value = a.id;
+                    opt.textContent = (a.brinco || '') + ' - ' + (a.nome || '');
+                    select.appendChild(opt);
+                });
+            } catch (e) { console.warn('Erro ao carregar animais:', e); }
+            GR.Modal.open('modal-pesagem');
+        },
+
+        salvarPesagem: function() {
+            var animalId = document.getElementById('pesagem-animal').value;
+            var data = document.getElementById('pesagem-data').value;
+            var peso = parseFloat(document.getElementById('pesagem-peso').value);
+            var obs = document.getElementById('pesagem-obs').value.trim();
+            if (!animalId || !data || !peso) { alert('Animal, data e peso são obrigatórios!'); return; }
+            var user = firebase.auth().currentUser;
+            if (!user) { alert('Usuário não autenticado!'); return; }
+            var uid = user.uid;
+            var dados = { data: data, peso: peso, obs: this._escapeHtml(obs), dataCriacao: new Date().toISOString() };
+            db.collection('users').doc(uid).collection('animais').doc(animalId).collection('pesagens').add(dados)
+                .then(function() {
+                    GR.Modal.close('modal-pesagem');
+                    alert('✅ Pesagem registrada!');
+                })
+                .catch(function(err) { alert('Erro: ' + err.message); });
+        },
+
+        // ================================================================
+        // VACINA
+        // ================================================================
+        abrirModalVacina: function() {
+            var modal = document.getElementById('modal-vacina');
+            if (!modal) { alert('Modal de vacinação não encontrado!'); return; }
+            document.getElementById('vacina-nome').value = '';
+            document.getElementById('vacina-data').value = new Date().toISOString().split('T')[0];
+            document.getElementById('vacina-proxima').value = '';
+            document.getElementById('vacina-lote').value = '';
+            var select = document.getElementById('vacina-animal');
+            select.innerHTML = '<option value="">Selecione um animal</option>';
+            try {
+                var animais = (GR.State.data.animais || []).filter(function(a) { return a.status === 'Ativo' || a.status === 'Prenhe'; });
+                animais.sort(function(a, b) { return (a.brinco || a.nome || '').localeCompare(b.brinco || b.nome || ''); });
+                animais.forEach(function(a) {
+                    var opt = document.createElement('option');
+                    opt.value = a.id;
+                    opt.textContent = (a.brinco || '') + ' - ' + (a.nome || '');
+                    select.appendChild(opt);
+                });
+            } catch (e) { console.warn('Erro ao carregar animais:', e); }
+            GR.Modal.open('modal-vacina');
+        },
+
+        salvarVacina: function() {
+            var animalId = document.getElementById('vacina-animal').value;
+            var nome = document.getElementById('vacina-nome').value.trim();
+            var data = document.getElementById('vacina-data').value;
+            var proxima = document.getElementById('vacina-proxima').value;
+            var lote = document.getElementById('vacina-lote').value.trim();
+            if (!animalId || !nome || !data) { alert('Animal, vacina e data são obrigatórios!'); return; }
+            var user = firebase.auth().currentUser;
+            if (!user) { alert('Usuário não autenticado!'); return; }
+            var uid = user.uid;
+            var dados = {
+                vacina: this._escapeHtml(nome), data: data,
+                proximaDose: proxima || '', lote: this._escapeHtml(lote),
+                dataCriacao: new Date().toISOString()
+            };
+            db.collection('users').doc(uid).collection('animais').doc(animalId).collection('vacinas').add(dados)
+                .then(function() {
+                    GR.Modal.close('modal-vacina');
+                    alert('✅ Vacinação registrada!');
+                })
+                .catch(function(err) { alert('Erro: ' + err.message); });
         },
 
         // ================================================================
@@ -1047,6 +1150,11 @@
         excluirAnimal: function(id) { return this.excluir(id); },
         registrarPrenhaAnimal: function(id) { return this.registrarPrenha(id); },
         renderizar: function() { return this.render(); },
+        renderAnimais: function() { return this.render(); },
+        abrirModalPesagemAnimal: function() { return this.abrirModalPesagem(); },
+        abrirModalVacinaAnimal: function() { return this.abrirModalVacina(); },
+        salvarPesagemAnimal: function() { return this.salvarPesagem(); },
+        salvarVacinaAnimal: function() { return this.salvarVacina(); },
 
         destroy: function() {
             this._stopDashboardRefresh();
@@ -1079,6 +1187,22 @@
         alert('Módulo de pecuária não disponível. Recarregue a página.');
     };
 
+    window.abrirModalPesagem = function() {
+        if (GR && GR.Modules && GR.Modules.Pecuaria && typeof GR.Modules.Pecuaria.abrirModalPesagem === 'function') {
+            return GR.Modules.Pecuaria.abrirModalPesagem();
+        }
+        if (window.PecuariaModule) return window.PecuariaModule.abrirModalPesagem();
+        console.error('❌ Pesagem não disponível');
+    };
+
+    window.abrirModalVacina = function() {
+        if (GR && GR.Modules && GR.Modules.Pecuaria && typeof GR.Modules.Pecuaria.abrirModalVacina === 'function') {
+            return GR.Modules.Pecuaria.abrirModalVacina();
+        }
+        if (window.PecuariaModule) return window.PecuariaModule.abrirModalVacina();
+        console.error('❌ Vacina não disponível');
+    };
+
     // ================================================================
     // INICIALIZAÇÃO AUTOMÁTICA
     // ================================================================
@@ -1105,5 +1229,5 @@
     }
 
     console.log('✅ Módulo Pecuária v5.0 carregado!');
-    console.log('📌 Funções: abrirModal, abrirModalAnimal, editar, salvar, excluir, registrarPrenha');
+    console.log('📌 Funções: abrirModal, abrirModalAnimal, abrirModalPesagem, abrirModalVacina, editar, salvar, salvarPesagem, salvarVacina, excluir, registrarPrenha');
 })();

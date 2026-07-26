@@ -437,14 +437,18 @@ GR.Modules.Configuracoes = {
         }
 
         db.collection('users').doc(uid).collection('propriedades').add(dados)
-            .then(function() {
+            .then(function(docRef) {
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('propriedades', dados);
                 GR.Toast.success('✅ Propriedade "' + nome + '" adicionada!');
                 var modal = document.getElementById('modal-propriedades');
                 if (modal) modal.remove();
-                GR.Modules.Configuracoes.abrirModalPropriedades();
+                GR.UI.atualizarPropTabs();
+                GR.UI._atualizarSelectsPropriedade();
+                GR.UI.refreshCurrentView();
+                GR.Toast.success('🏠 Propriedade vinculada a todos os módulos!');
                 GR.State.carregarDados().then(function() {
-                    GR.UI.atualizarPropTabs();
-                    GR.UI.refreshCurrentView();
+                    GR.Modules.Configuracoes.abrirModalPropriedades();
                 });
             })
             .catch(function(err) {
@@ -733,11 +737,13 @@ GR.Modules.Configuracoes = {
 
         db.collection('users').doc(user.uid).collection('propriedades').doc(id).update(dados)
             .then(function() {
+                GR.State.atualizarNoCache('propriedades', id, dados);
                 GR.Toast.success('✅ Propriedade atualizada!');
                 GR.Modules.Configuracoes._fecharModalEdicao();
+                GR.UI.atualizarPropTabs();
+                GR.UI._atualizarSelectsPropriedade();
+                GR.UI.refreshCurrentView();
                 GR.State.carregarDados().then(function() {
-                    GR.UI.atualizarPropTabs();
-                    GR.UI.refreshCurrentView();
                     if (document.getElementById('modal-propriedades')) {
                         GR.Modules.Configuracoes.abrirModalPropriedades();
                     }
@@ -785,11 +791,13 @@ GR.Modules.Configuracoes = {
 
         db.collection('users').doc(uid).collection('propriedades').doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache('propriedades', id);
                 GR.Toast.success('Propriedade excluída!');
                 GR.Modules.Configuracoes._fecharModalConfirmacao();
+                GR.UI.atualizarPropTabs();
+                GR.UI._atualizarSelectsPropriedade();
+                GR.UI.refreshCurrentView();
                 GR.State.carregarDados().then(function() {
-                    GR.UI.atualizarPropTabs();
-                    GR.UI.refreshCurrentView();
                     if (document.getElementById('modal-propriedades')) {
                         GR.Modules.Configuracoes.abrirModalPropriedades();
                     }

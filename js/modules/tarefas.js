@@ -998,7 +998,7 @@ GR.Modules.Tarefas = {
         }
 
         operacao
-            .then(function() {
+            .then(function(docRef) {
                 GR.Modal.close('modal-tarefa');
                 GR.Toast.success(editId ? '✅ Ação atualizada!' : '✅ Ação salva!');
                 GR.State.adicionarHistorico(
@@ -1007,6 +1007,12 @@ GR.Modules.Tarefas = {
                     'Ação: ' + dados.tipo + ' - ' + dados.responsavel
                 );
                 
+                if (editId) {
+                    GR.State.atualizarNoCache('tarefas', editId, dados);
+                } else {
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('tarefas', dados);
+                }
                 GR.UI.refreshCurrentView();
                 
                 if (!editId) {
@@ -1114,6 +1120,7 @@ GR.Modules.Tarefas = {
                     'Ações', 
                     'Ação: ' + item.tipo + ' - ' + item.responsavel
                 );
+                GR.State.removerDoCache('tarefas', id);
                 GR.UI.refreshCurrentView();
             })
             .catch(function(err) {

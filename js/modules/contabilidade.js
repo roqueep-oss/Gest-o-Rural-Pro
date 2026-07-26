@@ -131,7 +131,9 @@ GR.Modules.Contabilidade = {
         };
 
         db.collection('users').doc(uid).collection('despesas').add(dados)
-            .then(function() {
+            .then(function(docRef) {
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('despesas', dados);
                 GR.Modal.close('modal-despesa');
                 GR.Toast.success('Despesa registrada!');
                 GR.State.adicionarHistorico('criou despesa', 'Contabilidade', 'Despesa: ' + descricao);
@@ -170,7 +172,9 @@ GR.Modules.Contabilidade = {
         };
 
         db.collection('users').doc(uid).collection('receitas').add(dados)
-            .then(function() {
+            .then(function(docRef) {
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('receitas', dados);
                 GR.Modal.close('modal-receita');
                 GR.Toast.success('Receita registrada!');
                 GR.State.adicionarHistorico('criou receita', 'Contabilidade', 'Receita: ' + descricao);
@@ -187,6 +191,7 @@ GR.Modules.Contabilidade = {
         var uid = user.uid;
         db.collection('users').doc(uid).collection(tipo).doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache(tipo, id);
                 GR.Toast.success('Excluído!');
                 GR.State.adicionarHistorico('excluiu ' + tipo, 'Contabilidade', 'Excluiu ' + tipo + ' ID: ' + id);
                 GR.UI.refreshCurrentView();

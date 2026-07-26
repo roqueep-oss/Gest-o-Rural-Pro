@@ -476,6 +476,7 @@ GR.Modules.Documentos = {
                 return ref.doc(editId).update(dadosParaSalvar).then(function() {
                     GR.Modal.close('modal-documento');
                     GR.Toast.success('Documento atualizado!');
+                    GR.State.atualizarNoCache('documentos', editId, dadosParaSalvar);
                     GR.State.adicionarHistorico('editou documento', 'Documentos', 'Documento: ' + dadosParaSalvar.tipo);
                     GR.UI.refreshCurrentView();
                 }).catch(function(err) {
@@ -483,7 +484,9 @@ GR.Modules.Documentos = {
                     GR.Toast.error('Erro ao atualizar: ' + err.message);
                 });
             } else {
-                return ref.add(dadosParaSalvar).then(function() {
+                return ref.add(dadosParaSalvar).then(function(docRef) {
+                    dadosParaSalvar.id = docRef.id;
+                    GR.State.inserirNoCache('documentos', dadosParaSalvar);
                     GR.Modal.close('modal-documento');
                     GR.Toast.success('Documento salvo!');
                     GR.State.adicionarHistorico('criou documento', 'Documentos', 'Documento: ' + dadosParaSalvar.tipo);
@@ -566,6 +569,7 @@ GR.Modules.Documentos = {
                     });
                 }
                 GR.Toast.success('Documento excluído!');
+                GR.State.removerDoCache('documentos', id);
                 GR.State.adicionarHistorico('excluiu documento', 'Documentos', 'Documento ID: ' + id);
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {

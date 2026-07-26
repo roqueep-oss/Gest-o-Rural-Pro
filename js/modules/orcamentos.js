@@ -763,6 +763,7 @@ Caminhão de entrega - R$ 150,00 (Transportadora Y)">${this._itensParaTexto(this
                     GR.Modal.close('modal-orcamento');
                     GR.Toast.success('✅ Cotação atualizada!');
                     GR.State.adicionarHistorico('atualizou cotação', 'Orçamentos', 'Fornecedor: ' + fornecedor);
+                    GR.State.atualizarNoCache('orcamentos', editId, dados);
                     GR.UI.refreshCurrentView();
                 }).catch(function(err) {
                     GR.Toast.error('Erro ao atualizar: ' + err.message);
@@ -773,6 +774,8 @@ Caminhão de entrega - R$ 150,00 (Transportadora Y)">${this._itensParaTexto(this
                 .then(function(docRef) {
                     GR.Modal.close('modal-orcamento');
                     GR.Toast.success('✅ Cotação salva!');
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('orcamentos', dados);
                     GR.State.adicionarHistorico('criou cotação', 'Orçamentos', 'Fornecedor: ' + fornecedor);
                     GR.UI.refreshCurrentView();
                 }).catch(function(err) {
@@ -858,6 +861,7 @@ Caminhão de entrega - R$ 150,00 (Transportadora Y)">${this._itensParaTexto(this
             .then(function() {
                 GR.Toast.success('🗑️ Cotação excluída!');
                 GR.State.adicionarHistorico('excluiu cotação', 'Orçamentos', 'ID: ' + id);
+                GR.State.removerDoCache('orcamentos', id);
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);

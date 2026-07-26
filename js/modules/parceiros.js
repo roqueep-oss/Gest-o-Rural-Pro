@@ -207,6 +207,7 @@ GR.Modules.Parceiros = {
         if (editId) {
             ref.doc(editId).update(dados)
                 .then(function() {
+                    GR.State.atualizarNoCache('parceiros', editId, dados);
                     GR.Modal.close('modal-contrato-parceiro');
                     GR.Toast.success('Parceiro atualizado!');
                     GR.State.adicionarHistorico('editou parceiro', 'Parceiros', 'Parceiro: ' + nome);
@@ -216,7 +217,9 @@ GR.Modules.Parceiros = {
                 });
         } else {
             ref.add(dados)
-                .then(function() {
+                .then(function(docRef) {
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('parceiros', dados);
                     GR.Modal.close('modal-contrato-parceiro');
                     GR.Toast.success('Parceiro salvo!');
                     GR.State.adicionarHistorico('criou parceiro', 'Parceiros', 'Parceiro: ' + nome);
@@ -234,6 +237,7 @@ GR.Modules.Parceiros = {
         var uid = user.uid;
         db.collection('users').doc(uid).collection('parceiros').doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache('parceiros', id);
                 GR.Toast.success('Parceiro excluído!');
                 GR.State.adicionarHistorico('excluiu parceiro', 'Parceiros', 'Parceiro ID: ' + id);
                 GR.UI.refreshCurrentView();
@@ -419,6 +423,7 @@ GR.Modules.PartesRelacionadas = {
         if (editId) {
             ref.doc(editId).update(dados)
                 .then(function() {
+                    GR.State.atualizarNoCache('partesRelacionadas', editId, dados);
                     GR.Modal.close('modal-parte-relacionada');
                     GR.Toast.success('Parte atualizada!');
                     GR.State.adicionarHistorico('editou parte', 'Partes', 'Parte: ' + nome);
@@ -429,7 +434,9 @@ GR.Modules.PartesRelacionadas = {
                 });
         } else {
             ref.add(dados)
-                .then(function() {
+                .then(function(docRef) {
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('partesRelacionadas', dados);
                     GR.Modal.close('modal-parte-relacionada');
                     GR.Toast.success('Parte salva!');
                     GR.State.adicionarHistorico('criou parte', 'Partes', 'Parte: ' + nome);
@@ -452,6 +459,7 @@ GR.Modules.PartesRelacionadas = {
         var uid = user.uid;
         db.collection('users').doc(uid).collection('partesRelacionadas').doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache('partesRelacionadas', id);
                 GR.Toast.success('Parte excluída!');
                 GR.State.adicionarHistorico('excluiu parte', 'Partes', 'Parte ID: ' + id);
                 GR.UI.atualizarDatalists();

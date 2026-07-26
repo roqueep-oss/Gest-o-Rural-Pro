@@ -2568,6 +2568,7 @@ GR.Modules.Contratos = {
             if (editId) {
                 ref.doc(editId).update(dados).then(function() {
                     self._atualizarLocal('update', editId, dados);
+                    GR.State.atualizarNoCache('contratos', editId, dados);
                     GR.Modal.close('modal-contrato');
                     GR.Toast.success('Operação atualizada!');
                     GR.State.adicionarHistorico('editou contrato', 'Crédito', 'Contrato: ' + dados.numero);
@@ -2581,6 +2582,8 @@ GR.Modules.Contratos = {
             } else {
                 ref.add(dados).then(function(docRef) {
                     self._atualizarLocal('add', docRef.id, dados);
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('contratos', dados);
                     GR.Modal.close('modal-contrato');
                     GR.Toast.success('Operação salva!');
                     GR.State.adicionarHistorico('criou contrato', 'Crédito', 'Contrato: ' + dados.numero);
@@ -2615,6 +2618,7 @@ GR.Modules.Contratos = {
 
         db.collection('users').doc(uid).collection('contratos').doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache('contratos', id);
                 if (item && item.arquivoPath) {
                     storage.ref(item.arquivoPath).delete().catch(function(err) {
                         console.warn('Erro ao excluir arquivo:', err);

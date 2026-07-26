@@ -634,6 +634,7 @@ GR.Modules.Insumos = {
 
         if (editId) {
             ref.doc(editId).update(dados).then(function() {
+                GR.State.atualizarNoCache('insumos', editId, dados);
                 GR.Modal.close('modal-insumo');
                 GR.Toast.success('Insumo atualizado!');
                 GR.State.adicionarHistorico('editou insumo', 'Insumos', 'Insumo: ' + nome);
@@ -642,7 +643,9 @@ GR.Modules.Insumos = {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('insumos', dados);
                 GR.Modal.close('modal-insumo');
                 GR.Toast.success('Insumo salvo!');
                 GR.State.adicionarHistorico('criou insumo', 'Insumos', 'Insumo: ' + nome);
@@ -663,6 +666,7 @@ GR.Modules.Insumos = {
         var uid = user.uid;
         db.collection('users').doc(uid).collection('insumos').doc(id).delete()
             .then(function() {
+                GR.State.removerDoCache('insumos', id);
                 GR.Toast.success('Insumo excluído!');
                 GR.State.adicionarHistorico('excluiu insumo', 'Insumos', 'Insumo ID: ' + id);
                 GR.UI.refreshCurrentView();

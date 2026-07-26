@@ -271,13 +271,16 @@ GR.Modules.Funcionarios = {
                 GR.Modal.close('modal-funcionario');
                 GR.Toast.success('Funcionário atualizado!');
                 GR.State.adicionarHistorico('editou funcionário', 'Funcionários', 'Funcionário: ' + nome);
+                GR.State.atualizarNoCache('funcionarios', editId, dados);
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao atualizar: ' + err.message);
             });
         } else {
             dados.dataCriacao = GR.Utils.now();
-            ref.add(dados).then(function() {
+            ref.add(dados).then(function(docRef) {
+                dados.id = docRef.id;
+                GR.State.inserirNoCache('funcionarios', dados);
                 GR.Modal.close('modal-funcionario');
                 GR.Toast.success('Funcionário salvo!');
                 GR.State.adicionarHistorico('criou funcionário', 'Funcionários', 'Funcionário: ' + nome);
@@ -320,6 +323,7 @@ GR.Modules.Funcionarios = {
             .then(function() {
                 GR.Toast.success('Funcionário excluído!');
                 GR.State.adicionarHistorico('excluiu funcionário', 'Funcionários', 'Funcionário ID: ' + id);
+                GR.State.removerDoCache('funcionarios', id);
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao excluir: ' + err.message);
