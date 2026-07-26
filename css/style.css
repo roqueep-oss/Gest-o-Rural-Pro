@@ -494,6 +494,18 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="laranja"] .header { background: linear-gradient(135deg, #9a3412, #ea580c, #fb923c); box-shadow: 0 4px 20px rgba(154, 52, 18, 0.25); }
 [data-theme="escuro"] .header { background: linear-gradient(135deg, #0f172a, #1e293b, #334155); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255,255,255,0.08); }
 
+.app-icon {
+    height: 24px;
+    width: 24px;
+    vertical-align: middle;
+    border-radius: 4px;
+    object-fit: cover;
+}
+.header h1 .app-icon {
+    height: 24px;
+    width: 24px;
+    margin-right: 4px;
+}
 .header h1 { 
     font-family: var(--font-heading);
     font-size: 20px; 
