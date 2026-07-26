@@ -1946,7 +1946,7 @@ tbody tr:hover { background: var(--bg); }
 
 /* ----- TOUCH TARGET PARA MOBILE ----- */
 @media (max-width: 768px) {
-    .btn, .nav-btn, .prop-tab, .config-btn, .close-btn {
+    .btn, .nav-btn, .prop-tab, .config-btn, .close-btn, .btn-funcionario, .btn-propriedade-header {
         min-height: 44px !important;
         min-width: 44px !important;
     }
@@ -1973,12 +1973,24 @@ tbody tr:hover { background: var(--bg); }
     }
     .header-right {
         gap: 3px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .header-right::-webkit-scrollbar {
+        display: none;
     }
     .header-right .config-btn {
         font-size: 13px;
         padding: 4px 6px;
         min-height: 36px;
         min-width: 36px;
+    }
+    #themeSelector.config-btn {
+        font-size: 11px;
+        padding: 2px 4px;
+        max-width: 90px;
     }
     .user-badge {
         font-size: 10px;
@@ -2052,7 +2064,6 @@ tbody tr:hover { background: var(--bg); }
     }
     table {
         font-size: 11px;
-        min-width: 480px;
     }
     thead th, tbody td {
         padding: 4px 6px;
@@ -2286,7 +2297,6 @@ tbody tr:hover { background: var(--bg); }
     }
     #orcamento-itens-container table {
         font-size: 8px;
-        min-width: 400px;
     }
     #orcamento-itens-container table thead th,
     #orcamento-itens-container table tbody td {
@@ -2321,6 +2331,7 @@ tbody tr:hover { background: var(--bg); }
     .funcionario-stats-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+}
 /* ================================================================ */
 /* 🧭 NAVEGAÇÃO PRINCIPAL (NAVBAR) E TABS */
 /* ================================================================ */
