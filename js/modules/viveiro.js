@@ -2388,6 +2388,15 @@ GR.Modules.Viveiro = {
                 GR.State.ui.viveiroVendaPedidoId = null;
                 dados.id = docRef.id;
                 GR.State.inserirNoCache('viveiroVendas', dados);
+                GR.Modules.Contabilidade.registrarTransacao('receita', {
+                    descricao: 'Venda de mudas - ' + (dados.comprador || ''),
+                    data: dados.data,
+                    valor: dados.valorTotal,
+                    origem: 'Venda',
+                    propriedade: dados.propriedade,
+                    modulo: 'Viveiro',
+                    id: docRef.id
+                });
                 self._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);
@@ -2546,6 +2555,16 @@ GR.Modules.Viveiro = {
                 GR.Toast.success('Lançamento registrado!');
                 dados.id = docRef.id;
                 GR.State.inserirNoCache('viveiroCaixa', dados);
+                var tipoContabil = dados.tipo === 'receita' ? 'receita' : 'despesa';
+                GR.Modules.Contabilidade.registrarTransacao(tipoContabil, {
+                    descricao: dados.descricao || 'Lançamento Viveiro',
+                    data: dados.data,
+                    valor: dados.valor,
+                    categoria: dados.categoria || (tipoContabil === 'receita' ? 'Venda' : 'Insumos'),
+                    propriedade: dados.propriedade,
+                    modulo: 'Viveiro',
+                    id: docRef.id
+                });
                 GR.Modules.Viveiro._invalidateAndRender();
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);

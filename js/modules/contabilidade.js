@@ -297,6 +297,49 @@ GR.Modules.Contabilidade = {
         });
 
         return categorias;
+    },
+
+    // ================================================================
+    // 🆕 INTEGRAÇÃO AUTOMÁTICA DE TRANSAÇÕES
+    // ================================================================
+    // Chamada por outros módulos (viveiro, contratos, etc.)
+    // para registrar automaticamente receitas/despesas na contabilidade.
+    // tipo: 'receita' | 'despesa'
+    // dados: { descricao, data, valor, origem/categoria, propriedade, modulo }
+    // ================================================================
+    registrarTransacao: function(tipo, dados) {
+        var user = firebase.auth().currentUser;
+        if (!user) return Promise.reject('Usuário não autenticado');
+
+        var uid = user.uid;
+        var colecao = tipo === 'receita' ? 'receitas' : 'despesas';
+
+        var registro = {
+            descricao: GR.Utils.escapeHtml(dados.descricao || ''),
+            data: dados.data || new Date().toISOString().slice(0, 10),
+            valor: dados.valor || 0,
+            propriedade: GR.Utils.escapeHtml(dados.propriedade || ''),
+            dataCriacao: GR.Utils.now(),
+            integradoDe: dados.modulo || '',
+            integradoId: dados.id || ''
+        };
+
+        if (tipo === 'receita') {
+            registro.origem = dados.origem || dados.categoria || 'Outros';
+        } else {
+            registro.categoria = dados.categoria || dados.origem || 'Outros';
+        }
+
+        return db.collection('users').doc(uid).collection(colecao).add(registro)
+            .then(function(docRef) {
+                registro.id = docRef.id;
+                GR.State.inserirNoCache(colecao, registro);
+                console.log('📊 Contabilidade: ' + tipo + ' registrada automaticamente (' + dados.modulo + ')');
+                return registro;
+            })
+            .catch(function(err) {
+                console.error('❌ Erro ao integrar ' + tipo + ' na contabilidade:', err);
+            });
     }
 };
 

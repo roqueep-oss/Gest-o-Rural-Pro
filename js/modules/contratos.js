@@ -2569,6 +2569,25 @@ GR.Modules.Contratos = {
                 ref.doc(editId).update(dados).then(function() {
                     self._atualizarLocal('update', editId, dados);
                     GR.State.atualizarNoCache('contratos', editId, dados);
+                    if (dados.parcelas && Array.isArray(dados.parcelas)) {
+                        dados.parcelas.forEach(function(parc) {
+                            if (parc.status === 'Pago') {
+                                try {
+                                    GR.Modules.Contabilidade.registrarTransacao('receita', {
+                                        descricao: 'Parcela contrato ' + (dados.numero || '') + ' - Parcela #' + parc.numero,
+                                        data: parc.dataPagamento || parc.vencimento || '',
+                                        valor: parseFloat(parc.valor) || 0,
+                                        origem: 'Financiamento',
+                                        propriedade: dados.propriedade || '',
+                                        modulo: 'Contratos',
+                                        id: editId
+                                    });
+                                } catch (e) {
+                                    console.warn('Contabilidade não disponível:', e);
+                                }
+                            }
+                        });
+                    }
                     GR.Modal.close('modal-contrato');
                     GR.Toast.success('Operação atualizada!');
                     GR.State.adicionarHistorico('editou contrato', 'Crédito', 'Contrato: ' + dados.numero);

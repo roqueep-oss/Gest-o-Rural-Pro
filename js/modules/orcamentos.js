@@ -797,16 +797,35 @@ Caminhão de entrega - R$ 150,00 (Transportadora Y)">${this._itensParaTexto(this
         }
 
         var uid = user.uid;
-        db.collection('users').doc(uid).collection('orcamentos').doc(id).update({
-            status: 'Aprovado',
-            dataAprovacao: GR.Utils.now(),
-            aprovadoPor: user.displayName || user.email
-        }).then(function() {
-            GR.Toast.success('✅ Orçamento aprovado!');
-            GR.State.adicionarHistorico('aprovou orçamento', 'Orçamentos', 'ID: ' + id);
-            GR.UI.refreshCurrentView();
+        var docRef = db.collection('users').doc(uid).collection('orcamentos').doc(id);
+        docRef.get().then(function(doc) {
+            if (!doc.exists) {
+                GR.Toast.error('Orçamento não encontrado!');
+                return;
+            }
+            var dados = doc.data();
+            docRef.update({
+                status: 'Aprovado',
+                dataAprovacao: GR.Utils.now(),
+                aprovadoPor: user.displayName || user.email
+            }).then(function() {
+                GR.Toast.success('✅ Orçamento aprovado!');
+                GR.State.adicionarHistorico('aprovou orçamento', 'Orçamentos', 'ID: ' + id);
+                GR.UI.refreshCurrentView();
+                GR.Modules.Contabilidade.registrarTransacao('despesa', {
+                    descricao: 'Orçamento aprovado - ' + (dados.fornecedor || dados.numero || ''),
+                    data: dados.dataRecebimento || new Date().toISOString().slice(0, 10),
+                    valor: dados.valorTotal || 0,
+                    categoria: 'Insumos',
+                    propriedade: dados.propriedade || '',
+                    modulo: 'Orçamentos',
+                    id: id
+                });
+            }).catch(function(err) {
+                GR.Toast.error('Erro ao aprovar: ' + err.message);
+            });
         }).catch(function(err) {
-            GR.Toast.error('Erro ao aprovar: ' + err.message);
+            GR.Toast.error('Erro ao buscar orçamento: ' + err.message);
         });
     },
 
