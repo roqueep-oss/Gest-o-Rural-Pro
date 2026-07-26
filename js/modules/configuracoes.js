@@ -249,7 +249,7 @@ GR.Modules.Configuracoes = {
             '<div style="display:flex;gap:8px;">' +
             '<input type="text" id="config-novo-perfil" class="form-control" placeholder="Nome do perfil" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);">' +
             '<input type="number" id="config-novo-perfil-nivel" class="form-control" placeholder="Nível" style="width:80px;padding:8px;border-radius:6px;border:1px solid var(--border);" value="1">' +
-            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarPerfil()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">➕</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarPerfil()" title="Adicionar perfil" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">➕</button>' +
             '</div>' +
             '</div>';
         return html;
@@ -266,7 +266,7 @@ GR.Modules.Configuracoes = {
                     '<span><strong>' + GR.Utils.escapeHtml(f.nome || f.razaoSocial || 'Sem nome') + '</strong> ' +
                     (f.cpfcnpj ? '📄 ' + f.cpfcnpj : '') +
                     '</span>' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirFornecedor(\'' + f.id + '\')" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirFornecedor(\'' + f.id + '\')" title="Excluir fornecedor" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
                     '</div>';
             });
             html += '</div>';
@@ -354,8 +354,8 @@ GR.Modules.Configuracoes = {
                     (p.area && p.area !== '0' ? ' <span style="font-size:11px;color:#666;">📐 ' + GR.Utils.escapeHtml(p.area) + ' ha</span>' : '') +
                     '</div>' +
                     '<div style="display:flex;gap:4px;">' +
-                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.Configuracoes.editarPropriedade(\'' + p.id + '\')" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;">✏️</button> ' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPropriedade(\'' + p.id + '\')" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;">🗑️</button>' +
+                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.Configuracoes.editarPropriedade(\'' + p.id + '\')" title="Editar propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;">✏️</button> ' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPropriedade(\'' + p.id + '\')" title="Excluir propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;">🗑️</button>' +
                     '</div>' +
                     '</div>';
             });

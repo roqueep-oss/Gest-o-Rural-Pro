@@ -924,8 +924,8 @@ GR.Modules.Funcionarios = {
                                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
                                         <strong>${GR.Utils.escapeHtml(m.nome)}</strong>
                                         <div style="display:flex;gap:2px;">
-                                            <button class="btn btn-primary btn-sm" onclick="GR.Modules.Funcionarios.editarModeloRecibo('${m.id}')">✏️</button>
-                                            <button class="btn btn-danger btn-sm" onclick="GR.Modules.Funcionarios.excluirModeloRecibo('${m.id}')">🗑️</button>
+                                            <button class="btn btn-primary btn-sm" onclick="GR.Modules.Funcionarios.editarModeloRecibo('${m.id}')" title="Editar modelo">✏️</button>
+                                            <button class="btn btn-danger btn-sm" onclick="GR.Modules.Funcionarios.excluirModeloRecibo('${m.id}')" title="Excluir modelo">🗑️</button>
                                         </div>
                                     </div>
                                     <div style="margin-top:4px;font-size:10px;color:var(--text-light);">

@@ -582,21 +582,19 @@
                     <button class="btn" onclick="GR.UI.ajustarFonte(1)">A+</button>
                     <button class="btn" onclick="GR.UI.resetarFonte()">↺</button>
                 </div>
-                <button class="config-btn" onclick="GR.UI.toggleModoEscuro()">🌓</button>
-                <button class="config-btn" onclick="GR.Backup.openBackupModal()">💾</button>
-                <button class="config-btn" onclick="GR.UI.openConfigurations()">⚙️</button>
-                <button class="config-btn" onclick="GR.Notificacoes.abrirModal()" style="position:relative;">
+                <button class="config-btn" onclick="GR.UI.toggleModoEscuro()" title="Modo escuro">🌓</button>
+                <button class="config-btn" onclick="GR.Backup.openBackupModal()" title="Backup">💾</button>
+                <button class="config-btn" onclick="GR.UI.openConfigurations()" title="Configurações">⚙️</button>
+                <button class="config-btn" onclick="GR.Notificacoes.abrirModal()" title="Notificações" style="position:relative;">
                     🔔<span id="notificacao-badge" style="display:none;position:absolute;top:-5px;right:-5px;background:red;color:#fff;border-radius:50%;padding:1px 5px;font-size:8px;font-weight:bold;">0</span>
                 </button>
-                <!-- 🆕 BOTÃO PARA FUNCIONÁRIOS -->
                 <button class="btn-funcionario" onclick="GR.Modules.Perfis.abrirLoginFuncionario()" title="Acesso do Funcionário">
                     👨‍🌾
                 </button>
-                <!-- 🏠 BOTÃO NOVA PROPRIEDADE (sempre visível) -->
                 <button class="btn-propriedade-header" onclick="GR.Modules.Propriedades.abrirModal()" title="Cadastrar Nova Propriedade">
                     🏠
                 </button>
-                <button class="config-btn" onclick="GR.Login.logout()">🚪</button>
+                <button class="config-btn" onclick="GR.Login.logout()" title="Sair">🚪</button>
             </div>
         </header>
 

@@ -1680,7 +1680,7 @@ tbody tr:hover { background: var(--bg); }
     border: none;
     background: transparent;
     border-radius: 16px;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-light);
     cursor: pointer;
@@ -2008,12 +2008,12 @@ tbody tr:hover { background: var(--bg); }
         top: 48px;
     }
     .nav-btn {
-        font-size: 0.65rem;
+        font-size: 0.8rem;
         padding: 4px 8px;
         min-height: 36px;
     }
     .nav-btn .icon {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .container {
@@ -2261,7 +2261,7 @@ tbody tr:hover { background: var(--bg); }
         font-size: 13px;
     }
     .nav-btn {
-        font-size: 0.5rem;
+        font-size: 0.7rem;
         padding: 3px 6px;
     }
     .prop-tab {
@@ -2351,7 +2351,7 @@ tbody tr:hover { background: var(--bg); }
     background: transparent;
     color: var(--text-light);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
@@ -2709,4 +2709,46 @@ tbody tr:hover { background: var(--bg); }
         background: #333 !important;
         color: #fff !important;
     }
+}
+
+/* ================================================================ */
+/* TOOLTIPS GLOBAIS */
+/* ================================================================ */
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 99999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.4;
+}
+[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1e293b;
+    pointer-events: none;
+    z-index: 99999;
+}
+[title] {
+    position: relative;
+}
+/* Nao aplicar tooltip custom em elementos com title vazio */
+[title=""]:hover::after,
+[title=""]:hover::before {
+    display: none;
 }
