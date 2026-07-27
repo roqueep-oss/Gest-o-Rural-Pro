@@ -692,7 +692,7 @@ GR.Analises = {
     _renderStats: function(analises) {
         var total = analises.length;
         var solo = analises.filter(function(a) { return a.tipo === 'solo'; }).length;
-        var folha = analises.filter(function(a) { return a.tipo === 'folha'; }).length;
+        var folha = analises.filter(function(a) { return a.tipo === 'tecido-vegetal' || a.tipo === 'folha'; }).length;
         var dres = analises.filter(function(a) { return a.tipo === 'dres'; }).length;
         var corrigir = analises.filter(function(a) { 
             return a.status === 'Correção Necessária' || 
@@ -753,7 +753,7 @@ GR.Analises = {
             '<span style="color:#999;font-size:10px;">Sem PDF</span>';
         
         var infoText = this._getInfoText(a);
-        var hasRecomendacao = (a.tipo === 'solo' && a.recomendacoes && a.recomendacoes.length > 0);
+        var hasRecomendacao = (a.recomendacoes && a.recomendacoes.length > 0);
 
         return '<tr data-id="' + a.id + '">' +
             '<td><span class="badge badge-info">' + tipoLabel + '</span></td>' +
@@ -776,7 +776,7 @@ GR.Analises = {
 
     _getTipoLabel: function(tipo) {
         if (tipo === 'solo') return '🧪 Solo';
-        if (tipo === 'folha') return '🌿 Folha';
+        if (tipo === 'tecido-vegetal') return '🌿 Tecido Vegetal';
         if (tipo === 'dres') return '📐 DRES';
         return '🧪 Solo';
     },
@@ -848,6 +848,9 @@ GR.Analises = {
 
         this._toggleTipoFields('solo');
 
+        // Popular dropdown de culturas
+        this._popularDropdownCulturas();
+
         if (editId) {
             var item = this._findAnalise(editId);
             if (item) {
@@ -897,17 +900,41 @@ GR.Analises = {
     _toggleTipoFields: function(tipo) {
         var soloFields = document.getElementById('analise-solo-fields');
         if (soloFields) soloFields.style.display = tipo === 'solo' ? 'block' : 'none';
-        
-        var folhaFields = document.getElementById('analise-folha-fields');
-        if (folhaFields) folhaFields.style.display = tipo === 'folha' ? 'block' : 'none';
-        
+
+        var partePlantaGroup = document.getElementById('analise-parte-planta-group');
+        if (partePlantaGroup) partePlantaGroup.style.display = tipo === 'tecido-vegetal' ? 'block' : 'none';
+
         var dresFields = document.getElementById('analise-dres-fields');
         if (dresFields) dresFields.style.display = tipo === 'dres' ? 'block' : 'none';
-        
+
         var resultadosEl = document.getElementById('analise-resultados');
         if (resultadosEl) {
-            resultadosEl.style.display = (tipo === 'dres' || tipo === 'solo' || tipo === 'folha') ? 'block' : 'none';
+            resultadosEl.style.display = (tipo === 'dres' || tipo === 'solo' || tipo === 'tecido-vegetal') ? 'block' : 'none';
         }
+    },
+
+    // ============================================================
+    // POPULAR DROPDOWN DE CULTURAS
+    // ============================================================
+    _popularDropdownCulturas: function() {
+        var select = document.getElementById('analise-cultura');
+        if (!select) return;
+
+        var culturas = [];
+        if (typeof GR !== 'undefined' && GR.State && GR.State.data && GR.State.data.culturas) {
+            culturas = GR.State.data.culturas;
+        }
+
+        var html = '<option value="">Selecione...</option>';
+        var nomes = {};
+        for (var i = 0; i < culturas.length; i++) {
+            var nome = culturas[i].nome || '';
+            if (nome && !nomes[nome]) {
+                nomes[nome] = true;
+                html += '<option value="' + this._escapeHtml(nome) + '">' + this._escapeHtml(nome) + '</option>';
+            }
+        }
+        select.innerHTML = html;
     },
 
     // ============================================================
@@ -922,13 +949,17 @@ GR.Analises = {
             'analise-cultura': '',
             'analise-cultura-especifica': '',
             'analise-produtividade': '',
-            'analise-area': '1.0'
+            'analise-area': '1.0',
+            'analise-parte-planta': 'folha'
         };
 
         for (var id in campos) {
             var el = document.getElementById(id);
             if (el) el.value = campos[id];
         }
+
+        var partePlantaGroup = document.getElementById('analise-parte-planta-group');
+        if (partePlantaGroup) partePlantaGroup.style.display = 'none';
 
         var camposDRES = [
             'dres-num-amostras',
@@ -971,12 +1002,18 @@ GR.Analises = {
             'analise-cultura': item.cultura || '',
             'analise-cultura-especifica': item.culturaEspecifica || '',
             'analise-produtividade': item.produtividade || '',
-            'analise-area': item.area || '1.0'
+            'analise-area': item.area || '1.0',
+            'analise-parte-planta': item.partePlanta || 'folha'
         };
 
         for (var id in campos) {
             var el = document.getElementById(id);
             if (el) el.value = campos[id];
+        }
+
+        if (item.tipo === 'tecido-vegetal') {
+            var partePlantaGroup = document.getElementById('analise-parte-planta-group');
+            if (partePlantaGroup) partePlantaGroup.style.display = 'block';
         }
     },
 
@@ -1154,6 +1191,13 @@ GR.Analises = {
                     
                     var resultadosEl = document.getElementById('analise-resultados');
                     if (resultadosEl) resultadosEl.style.display = 'block';
+
+                    // Atualizar tipo no formulário conforme o PDF detectado
+                    var tipoEl = document.getElementById('analise-tipo');
+                    if (tipoEl && dados && dados.tipo) {
+                        tipoEl.value = dados.tipo;
+                        self._toggleTipoFields(dados.tipo);
+                    }
                     
                     if (progress) progress.style.width = '100%';
                     setTimeout(function() { 
@@ -1335,7 +1379,7 @@ GR.Analises = {
     // ============================================================
     _extrairDadosFoliar: function(texto) {
         var dados = {
-            tipo: 'folha',
+            tipo: 'tecido-vegetal',
             elementos: {},
             amostras: [],
             recomendacoes: [],
@@ -1724,7 +1768,7 @@ GR.Analises = {
         }
 
         // Mostrar tipo de análise
-        var tipoLabel = dados.tipo === 'folha' ? '🍃 Análise Foliar' : '🪴 Análise de Solo';
+        var tipoLabel = dados.tipo === 'tecido-vegetal' ? '🍃 Análise de Tecido Vegetal' : '🪴 Análise de Solo';
         html += '<div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">' + tipoLabel + '</div>';
 
         // Renderizar elementos
@@ -2437,6 +2481,8 @@ GR.Analises = {
             return;
         }
 
+        var partePlanta = document.getElementById('analise-parte-planta')?.value || 'folha';
+
         var dados = {
             tipo: tipo,
             propriedade: propriedade,
@@ -2446,6 +2492,7 @@ GR.Analises = {
             culturaEspecifica: culturaEspecifica,
             produtividade: produtividade,
             area: parseFloat(area) || 1.0,
+            partePlanta: tipo === 'tecido-vegetal' ? partePlanta : '',
             dataCriacao: GR.Utils.now ? GR.Utils.now() : new Date().toISOString(),
             dataAtualizacao: GR.Utils.now ? GR.Utils.now() : new Date().toISOString()
         };

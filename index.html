@@ -1771,7 +1771,16 @@
                     <label>Tipo</label>
                     <select id="analise-tipo" class="form-control">
                         <option value="solo">🧪 Solo</option>
-                        <option value="folha">🌿 Foliar</option>
+                        <option value="tecido-vegetal">🌿 Tecido Vegetal</option>
+                    </select>
+                </div>
+                <div id="analise-parte-planta-group" class="form-group" style="display:none;">
+                    <label>Parte da Planta</label>
+                    <select id="analise-parte-planta" class="form-control">
+                        <option value="folha">Folha</option>
+                        <option value="ramo">Ramo</option>
+                        <option value="raiz">Raiz</option>
+                        <option value="outros">Outros</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1788,7 +1797,9 @@
                 </div>
                 <div class="form-group">
                     <label>Cultura Alvo</label>
-                    <input type="text" id="analise-cultura" class="form-control" placeholder="Ex: Soja, Milho, Café...">
+                    <select id="analise-cultura" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
                 </div>
                 <div id="analise-resultados" style="display:none;margin-top:6px;">
                     <h4 style="font-size:12px;">📊 Resultados</h4>
