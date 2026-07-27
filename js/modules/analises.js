@@ -917,24 +917,25 @@ GR.Analises = {
     // POPULAR DROPDOWN DE CULTURAS
     // ============================================================
     _popularDropdownCulturas: function() {
-        var select = document.getElementById('analise-cultura');
-        if (!select) return;
+        var input = document.getElementById('analise-cultura');
+        var datalist = document.getElementById('cultura-list');
+        if (!input || !datalist) return;
 
         var culturas = [];
         if (typeof GR !== 'undefined' && GR.State && GR.State.data && GR.State.data.culturas) {
             culturas = GR.State.data.culturas;
         }
 
-        var html = '<option value="">Selecione...</option>';
+        var html = '';
         var nomes = {};
         for (var i = 0; i < culturas.length; i++) {
             var nome = culturas[i].nome || '';
             if (nome && !nomes[nome]) {
                 nomes[nome] = true;
-                html += '<option value="' + this._escapeHtml(nome) + '">' + this._escapeHtml(nome) + '</option>';
+                html += '<option value="' + this._escapeHtml(nome) + '">';
             }
         }
-        select.innerHTML = html;
+        datalist.innerHTML = html;
     },
 
     // ============================================================
@@ -2541,22 +2542,27 @@ GR.Analises = {
     },
 
     _uploadPDF: function(file, dados, uid) {
-        var filePath = 'analises/' + uid + '/' + Date.now() + '_' + file.name;
-        var uploadTask = storage.ref(filePath).put(file);
+        try {
+            var filePath = 'analises/' + uid + '/' + Date.now() + '_' + file.name;
+            var uploadTask = storage.ref(filePath).put(file);
 
-        GR.Toast.info('📤 Fazendo upload do PDF...');
+            GR.Toast.info('📤 Fazendo upload do PDF...');
 
-        uploadTask.then(function(snapshot) {
-            return snapshot.ref.getDownloadURL();
-        }).then(function(downloadURL) {
-            dados.arquivoUrl = downloadURL;
-            dados.arquivoNome = file.name;
-            dados.arquivoPath = filePath;
+            uploadTask.then(function(snapshot) {
+                return snapshot.ref.getDownloadURL();
+            }).then(function(downloadURL) {
+                dados.arquivoUrl = downloadURL;
+                dados.arquivoNome = file.name;
+                dados.arquivoPath = filePath;
+                GR.Analises._salvarDados(dados, uid);
+            }).catch(function(err) {
+                console.warn('Upload PDF falhou, salvando dados sem arquivo:', err);
+                GR.Analises._salvarDados(dados, uid);
+            });
+        } catch (err) {
+            console.warn('Upload PDF falhou (síncrono), salvando dados sem arquivo:', err);
             GR.Analises._salvarDados(dados, uid);
-        }).catch(function(err) {
-            GR.Toast.error('Erro no upload: ' + err.message);
-            GR.Analises._salvarDados(dados, uid);
-        });
+        }
     },
 
     _salvarDados: function(dados, uid) {
