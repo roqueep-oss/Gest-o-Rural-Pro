@@ -22,22 +22,22 @@ GR.Analises = {
     // ============================================================
     _config: {
         classesSolo: {
-            'pH': { muitoBaixo: '<4.5', baixo: '4.5-5.0', medio: '5.1-5.5', alto: '5.6-6.5', muitoAlto: '>6.5' },
+            'pH': { muitoBaixo: '<4.5', baixo: '4.5-5.4', medio: '5.5-6.0', alto: '6.1-7.0', muitoAlto: '>7.0' },
             'P': { muitoBaixo: '<3', baixo: '3-5', medio: '6-10', alto: '11-20', muitoAlto: '>20' },
             'K': { muitoBaixo: '<30', baixo: '30-60', medio: '61-120', alto: '121-200', muitoAlto: '>200' },
-            'Ca': { baixo: '<0.5', medio: '0.5-1.5', alto: '1.6-3.0', muitoAlto: '>3.0' },
-            'Mg': { baixo: '<0.3', medio: '0.3-0.8', alto: '0.9-1.5', muitoAlto: '>1.5' },
+            'Ca': { baixo: '<1.5', medio: '1.5-4.0', alto: '>4.0' },
+            'Mg': { baixo: '<0.5', medio: '0.5-1.0', alto: '>1.0' },
             'Al': { baixo: '<0.3', medio: '0.3-1.0', alto: '>1.0' },
-            'H+Al': { baixo: '<2.0', medio: '2.0-4.0', alto: '>4.0' },
-            'SB': { baixo: '<1.5', medio: '1.5-3.0', alto: '>3.0' },
-            'CTC': { baixo: '<4.0', medio: '4.0-8.0', alto: '>8.0' },
-            'V': { baixo: '<30', medio: '30-50', alto: '51-70', muitoAlto: '>70' },
+            'H+Al': { baixo: '<2.5', medio: '2.5-5.0', alto: '>5.0' },
+            'SB': { baixo: '<2.0', medio: '2.0-5.0', alto: '>5.0' },
+            'CTC': { baixo: '<4.5', medio: '4.5-10', alto: '>10' },
+            'V': { baixo: '<50', medio: '50-70', alto: '>70' },
             'MO': { baixo: '<1.5', medio: '1.5-3.0', alto: '>3.0' },
-            'Zn': { baixo: '<1.0', medio: '1.0-2.2', alto: '>2.2' },
-            'Cu': { baixo: '<0.8', medio: '0.8-1.8', alto: '>1.8' },
-            'Fe': { baixo: '<20', medio: '20-45', alto: '>45' },
-            'Mn': { baixo: '<5.0', medio: '5.0-12', alto: '>12' },
-            'B': { baixo: '<0.35', medio: '0.35-0.9', alto: '>0.9' },
+            'Zn': { baixo: '<2.0', medio: '2.0-6.0', alto: '>6.0' },
+            'Cu': { baixo: '<0.5', medio: '0.5-1.5', alto: '>1.5' },
+            'Fe': { baixo: '<20', medio: '20-30', alto: '>30' },
+            'Mn': { baixo: '<5.0', medio: '5.0-15', alto: '>15' },
+            'B': { baixo: '<0.2', medio: '0.2-0.6', alto: '>0.6' },
             'S': { baixo: '<5.0', medio: '5.0-10', alto: '>10' }
         },
 
@@ -177,6 +177,37 @@ GR.Analises = {
             }
         },
 
+        // Classes de interpretação para análise foliar (Tabela 5 - Incaper 2017)
+        // Macronutrientes em g/kg, Micronutrientes em mg/kg
+        classesFoliares: {
+            'N': { baixo: '<24.2', adequado: '24.2-30.5', alto: '>30.5' },
+            'P': { baixo: '<0.9', adequado: '0.9-1.5', alto: '>1.5' },
+            'K': { baixo: '<17.5', adequado: '17.5-25.3', alto: '>25.3' },
+            'Ca': { baixo: '<9.8', adequado: '9.8-16.0', alto: '>16.0' },
+            'Mg': { baixo: '<2.6', adequado: '2.6-4.2', alto: '>4.2' },
+            'S': { baixo: '<2.1', adequado: '2.1-2.7', alto: '>2.7' },
+            'B': { baixo: '<54', adequado: '54-127', alto: '>127' },
+            'Zn': { baixo: '<8', adequado: '8-15', alto: '>15' },
+            'Mn': { baixo: '<24', adequado: '24-80', alto: '>80' },
+            'Fe': { baixo: '<38', adequado: '38-61', alto: '>61' },
+            'Cu': { baixo: '<3', adequado: '3-18', alto: '>18' }
+        },
+
+        // Nomes completos dos elementos foliares
+        nomesElementosFoliares: {
+            'N': 'Nitrogênio (N)',
+            'P': 'Fósforo (P)',
+            'K': 'Potássio (K)',
+            'Ca': 'Cálcio (Ca)',
+            'Mg': 'Magnésio (Mg)',
+            'S': 'Enxofre (S)',
+            'B': 'Boro (B)',
+            'Zn': 'Zinco (Zn)',
+            'Mn': 'Manganês (Mn)',
+            'Fe': 'Ferro (Fe)',
+            'Cu': 'Cobre (Cu)'
+        },
+
         // Nomes completos dos elementos
         nomesElementos: {
             'pH': 'pH do Solo',
@@ -198,24 +229,60 @@ GR.Analises = {
             'S': 'Enxofre (S)'
         },
 
+        // Tabelas de adubação N-P-K por produtividade (Fonte: Incaper 2017)
+        tabelasAdubacao: {
+            N: {
+                produtividades: [0, 20, 30, 50, 70, 100, 130, 170],
+                doses: [200, 260, 320, 380, 440, 500, 560, 620]
+            },
+            K: {
+                produtividades: [0, 20, 30, 50, 70, 100, 130, 170],
+                faixasSolo: [
+                    { label: 'baixo', limite: 60, doses: [170, 230, 290, 350, 410, 470, 530, 600] },
+                    { label: 'medio', limite: 120, doses: [100, 160, 220, 280, 340, 400, 460, 520] },
+                    { label: 'alto', limite: 200, doses: [30, 90, 150, 210, 270, 330, 390, 450] },
+                    { label: 'muitoAlto', limite: Infinity, doses: [0, 0, 0, 80, 140, 200, 260, 320] }
+                ]
+            },
+            P: {
+                produtividades: [0, 20, 30, 50, 70, 100, 130, 170],
+                faixasSolo: [
+                    { label: 'muitoBaixo', doses: [20, 35, 45, 60, 75, 90, 105, 120] },
+                    { label: 'baixo', doses: [0, 0, 0, 20, 35, 50, 65, 80] },
+                    { label: 'medio', doses: [0, 0, 0, 0, 0, 20, 40, 60] },
+                    { label: 'alto', doses: [0, 0, 0, 0, 0, 0, 0, 0] }
+                ]
+            }
+        },
+
         // Cores por status
         coresStatus: {
             'ideal': '#2e7d32',
+            'adequado': '#2e7d32',
             'baixo': '#c62828',
             'medio': '#f57c00',
             'alto': '#e65100',
-            'muito baixo': '#b71c1c',
-            'muito alto': '#1b5e20'
+            'muitoBaixo': '#b71c1c',
+            'muitoAlto': '#1b5e20',
+            'recomendado': '#1565c0',
+            'abaixo': '#c62828',
+            'acima': '#e65100',
+            'necessario': '#c62828'
         },
 
         // Labels por status
         labelsStatus: {
             'ideal': '✅ Ideal',
+            'adequado': '✅ Adequado',
             'baixo': '⬇️ Baixo',
             'medio': '➡️ Médio',
             'alto': '⬆️ Alto',
-            'muito baixo': '⬇️⬇️ Muito Baixo',
-            'muito alto': '⬆️⬆️ Muito Alto'
+            'muitoBaixo': '⬇️⬇️ Muito Baixo',
+            'muitoAlto': '⬆️⬆️ Muito Alto',
+            'recomendado': '📌 Recomendado',
+            'abaixo': '⬇️ Abaixo',
+            'acima': '⬆️ Acima',
+            'necessario': '⚠️ Necessário'
         }
     },
 
@@ -1139,6 +1206,13 @@ GR.Analises = {
     // EXTRAIR DADOS - Suporte Cooabriel e padrão
     // ============================================================
     _extrairDados: function(texto) {
+        // Detectar tipo de análise
+        var isFoliar = /tecido\s*vegetal/i.test(texto);
+
+        if (isFoliar) {
+            return this._extrairDadosFoliar(texto);
+        }
+
         var dados = {
             tipo: 'solo',
             elementos: {},
@@ -1156,25 +1230,25 @@ GR.Analises = {
         var dataMatch = texto.match(/DATA ANÁLISE:\s*([^\n]+)/i);
         if (dataMatch) dados.dataExtraida = dataMatch[1].trim();
 
-        // Elementos do solo com seus padrões
+        // Elementos do solo com seus padrões (classificação via Incaper 2017)
         var elementosMap = {
-            'pH': { label: 'pH', ideal: [5.5, 6.5] },
-            'P': { label: 'Fósforo', ideal: [10, 30] },
-            'K': { label: 'Potássio', ideal: [80, 150] },
-            'Ca': { label: 'Cálcio', ideal: [1.5, 3.0] },
-            'Mg': { label: 'Magnésio', ideal: [0.8, 1.5] },
-            'Al': { label: 'Alumínio', ideal: [0, 0.3] },
-            'H+Al': { label: 'Acidez', ideal: [0, 2.0] },
-            'SB': { label: 'Soma de Bases', ideal: [3, 6] },
-            'CTC': { label: 'CTC Total', ideal: [5, 10] },
-            'V': { label: 'Saturação por Bases', ideal: [50, 80] },
-            'MO': { label: 'Matéria Orgânica', ideal: [2, 4] },
-            'Zn': { label: 'Zinco', ideal: [1.0, 2.2] },
-            'Cu': { label: 'Cobre', ideal: [0.8, 1.8] },
-            'Fe': { label: 'Ferro', ideal: [20, 45] },
-            'Mn': { label: 'Manganês', ideal: [5, 12] },
-            'B': { label: 'Boro', ideal: [0.35, 0.9] },
-            'S': { label: 'Enxofre', ideal: [5, 10] }
+            'pH': { label: 'pH' },
+            'P': { label: 'Fósforo' },
+            'K': { label: 'Potássio' },
+            'Ca': { label: 'Cálcio' },
+            'Mg': { label: 'Magnésio' },
+            'Al': { label: 'Alumínio' },
+            'H+Al': { label: 'Acidez' },
+            'SB': { label: 'Soma de Bases' },
+            'CTC': { label: 'CTC Total' },
+            'V': { label: 'Saturação por Bases' },
+            'MO': { label: 'Matéria Orgânica' },
+            'Zn': { label: 'Zinco' },
+            'Cu': { label: 'Cobre' },
+            'Fe': { label: 'Ferro' },
+            'Mn': { label: 'Manganês' },
+            'B': { label: 'Boro' },
+            'S': { label: 'Enxofre' }
         };
 
         // Buscar números no texto
@@ -1214,36 +1288,19 @@ GR.Analises = {
             }
         }
 
-        // Gerar recomendações
+        // Classificar elementos usando tabelas do Incaper 2017
         var precisaCorrecao = false;
-        var recomendacoes = this._config.recomendacoesProdutos || {};
+        var produtividade = parseFloat(document.getElementById('analise-produtividade')?.value) || 0;
+        dados._produtividadeExtraida = produtividade;
 
         for (var ek in dados.elementos) {
             var ev = dados.elementos[ek];
             var config = elementosMap[ek];
             if (!config) continue;
 
-            var min = config.ideal[0];
-            var max = config.ideal[1];
-            var status = '';
-            var recomendacao = '';
+            var status = this._classificarElemento(ek, ev);
+            if (status !== 'ideal' && status !== 'medio') precisaCorrecao = true;
 
-            // Determinar status
-            if (ev < min) {
-                status = 'baixo';
-                // Verificar se é muito baixo
-                var metadeMin = min * 0.5;
-                if (ev < metadeMin) status = 'muito baixo';
-                precisaCorrecao = true;
-            } else if (ev > max) {
-                status = 'alto';
-                var dobroMax = max * 2;
-                if (ev > dobroMax) status = 'muito alto';
-            } else {
-                status = 'ideal';
-            }
-
-            // Buscar recomendação
             var recText = this._getRecomendacaoPorElemento(ek, status);
             
             dados.recomendacoes.push({
@@ -1254,8 +1311,200 @@ GR.Analises = {
             });
         }
 
+        // Verificar relação Ca:Mg
+        var caMg = this._verificarRelacaoCaMg(dados.elementos);
+        if (caMg && caMg.status !== 'ideal') {
+            dados.recomendacoes.push({
+                elemento: 'Relação Ca:Mg',
+                valor: caMg.valor.toFixed(1) + ':1',
+                status: caMg.status,
+                recomendacao: caMg.recomendacao
+            });
+            precisaCorrecao = true;
+        }
+
         dados.status = precisaCorrecao ? 'Correção Necessária' : 'Equilibrado';
+        if (dados.status === 'Correção Necessária' && dados.recomendacoes.length === 0) {
+            dados.status = 'Equilibrado';
+        }
         return dados;
+    },
+
+    // ============================================================
+    // EXTRAIR DADOS FOLIAR - Formato Labosoil (Tabela 5 - Incaper 2017)
+    // ============================================================
+    _extrairDadosFoliar: function(texto) {
+        var dados = {
+            tipo: 'folha',
+            elementos: {},
+            amostras: [],
+            recomendacoes: [],
+            status: 'Equilibrado'
+        };
+
+        // Extrair amostras - ignorar número do relatório (primeiro match)
+        var todosIds = texto.match(/(\d{4}\/\d{4})/g) || [];
+        var sampleIds = todosIds.slice(1); // Remove número do relatório
+
+        var sampleNames = texto.match(/AMOSTRA\s*-\s*\d+\s*-\s*([^\n]+)/gi) || [];
+
+        // Ordem dos nutrientes na análise foliar
+        var nutrientes = ['N', 'P', 'K', 'Ca', 'Mg', 'S', 'B', 'Zn', 'Mn', 'Fe', 'Cu'];
+
+        // Encontrar a seção de resultados analíticos no texto
+        var idxResultados = texto.search(/RESULTADOS\s*ANAL[IÍ]TICOS/i);
+        if (idxResultados < 0) {
+            dados.status = 'Erro: formato não reconhecido';
+            return dados;
+        }
+        var textoSecao = texto.substring(idxResultados);
+
+        // Extrair números apenas da seção de resultados
+        var nums = textoSecao.match(/(\d+[,.]?\d*)/g) || [];
+        var valores = [];
+        for (var ni = 0; ni < nums.length; ni++) {
+            var v = parseFloat(nums[ni].replace(',', '.'));
+            if (!isNaN(v)) valores.push(v);
+        }
+
+        // Encontrar inicio dos dados: buscar primeiro valor potencial de N (15-35)
+        // que ocorre APÓS os cabeçalhos de coluna (4 digitos)
+        var startIdx = 0;
+        var encontrouHeader = false;
+        for (var si = 0; si < valores.length; si++) {
+            var v = valores[si];
+            // Cabeçalhos de coluna são valores de 4 dígitos no início da seção
+            if (!encontrouHeader && v >= 1000 && v < 10000) {
+                encontrouHeader = true;
+                continue;
+            }
+            // Após encontrar um header, o próximo valor entre 15-35 é o N
+            if (encontrouHeader && v > 15 && v < 35) {
+                startIdx = si;
+                break;
+            }
+        }
+        // Fallback: buscar primeiro N se não encontrou headers
+        if (!encontrouHeader) {
+            for (var si2 = 0; si2 < valores.length; si2++) {
+                if (valores[si2] > 15 && valores[si2] < 35) {
+                    startIdx = si2;
+                    break;
+                }
+            }
+        }
+
+        // Agrupar por amostra: 11 nutrientes + 13 razões por coluna
+        // Pular cabeçalhos de coluna (4 dígitos) e razões (13 valores após cada 11 nutrientes)
+        var amostras = [];
+        var vi = startIdx;
+        while (vi < valores.length && amostras.length < 3) {
+            // Pular cabeçalhos de coluna que aparecem entre as amostras
+            while (vi < valores.length && valores[vi] >= 1000 && valores[vi] < 10000) {
+                vi++;
+            }
+            if (vi + 11 > valores.length) break;
+            var grupoNutrientes = valores.slice(vi, vi + 11);
+            amostras.push(grupoNutrientes);
+            vi += 11 + 13; // Pular nutrientes + razões
+        }
+
+        // Limitar a número de amostras conhecidas
+        var numAmostras = Math.min(amostras.length, Math.max(sampleIds.length, 3));
+
+        for (var ai = 0; ai < numAmostras; ai++) {
+            var amostra = {
+                id: sampleIds[ai] || ('Amostra ' + (ai + 1)),
+                nome: '',
+                elementos: {}
+            };
+
+            if (sampleNames[ai]) {
+                var nomeMatch = sampleNames[ai].match(/AMOSTRA\s*-\s*\d+\s*-\s*(.+)/i);
+                if (nomeMatch) amostra.nome = nomeMatch[1].trim();
+            }
+
+            var vals = amostras[ai] || [];
+            for (var ei = 0; ei < nutrientes.length && ei < vals.length; ei++) {
+                amostra.elementos[nutrientes[ei]] = vals[ei];
+            }
+
+            dados.amostras.push(amostra);
+        }
+
+        // Usar a primeira amostra como referência principal
+        if (dados.amostras.length > 0) {
+            dados.elementos = dados.amostras[0].elementos;
+            dados.amostraPrincipal = dados.amostras[0];
+        }
+
+        // Classificar elementos foliares
+        var precisaCorrecao = false;
+        for (var ek in dados.elementos) {
+            var ev = dados.elementos[ek];
+            var status = this._classificarElementoFoliar(ek, ev);
+            if (status === 'baixo' || status === 'alto') precisaCorrecao = true;
+
+            var nomeEl = this._config.nomesElementosFoliares[ek] || ek;
+            dados.recomendacoes.push({
+                elemento: ek,
+                nomeElemento: nomeEl,
+                valor: ev + (['B', 'Zn', 'Mn', 'Fe', 'Cu'].indexOf(ek) >= 0 ? ' mg/kg' : ' g/kg'),
+                status: status,
+                recomendacao: this._getRecomendacaoFoliar(ek, status, ev)
+            });
+        }
+
+        dados.status = precisaCorrecao ? 'Correção Necessária' : 'Equilibrado';
+        if (dados.status === 'Correção Necessária' && dados.recomendacoes.length === 0) {
+            dados.status = 'Equilibrado';
+        }
+        return dados;
+    },
+
+    _getRecomendacaoFoliar: function(elemento, status, valor) {
+        if (status === 'adequado' || status === 'ideal') {
+            return 'Teor dentro da faixa de suficiência. Manter o manejo atual.';
+        }
+
+        var nomes = this._config.nomesElementosFoliares;
+        var nome = nomes[elemento] || elemento;
+
+        if (status === 'baixo') {
+            var recomendacoes = {
+                'N': 'Deficiência de N. Aplicar ureia (45% N) via foliar a 1-2% ou sulfato de amônio a 1-2%. Realizar adubação de cobertura com 20-40 kg/ha de N.',
+                'P': 'Deficiência de P. Aplicar MAP (11-52-00) ou fosfato monoamônico via foliar a 0.5-1%. Adubação de solo com 30-60 kg/ha de P2O5.',
+                'K': 'Deficiência de K. Aplicar KCl (60% K2O) via foliar a 1-1.5% ou nitrato de potássio a 0.5-1%. Adubação de solo com 40-80 kg/ha de K2O.',
+                'Ca': 'Deficiência de Ca. Aplicar cálcio quelatizado ou nitrato de cálcio via foliar a 0.5-1%. Gesso agrícola 500-1000 kg/ha no solo.',
+                'Mg': 'Deficiência de Mg. Aplicar sulfato de magnésio via foliar a 0.5-1% ou quelato de Mg. Calcário dolomítico se solo ácido.',
+                'S': 'Deficiência de S. Aplicar sulfato de amônio (24% S) ou gesso agrícola 200-400 kg/ha. Sulfato de magnésio via foliar a 1-2%.',
+                'B': 'Deficiência de B. Aplicar ácido bórico (17% B) via foliar a 0.1-0.3% ou bórax a 0.2-0.5%. Cuidado: toxidez próxima.',
+                'Zn': 'Deficiência de Zn. Aplicar sulfato de zinco (20% Zn) via foliar a 0.3-0.5% ou quelato de Zn. Adubação de solo com 5-10 kg/ha de Zn.',
+                'Mn': 'Deficiência de Mn. Aplicar sulfato de manganês (30% Mn) via foliar a 0.2-0.5% ou quelato de Mn. Evitar pH > 6.0.',
+                'Fe': 'Deficiência de Fe. Aplicar quelato de Fe (EDTA-Fe 13%) via foliar a 0.1-0.2% ou sulfato ferroso a 0.2-0.5%.',
+                'Cu': 'Deficiência de Cu. Aplicar sulfato de cobre (25% Cu) via foliar a 0.1-0.2%. Cuidado com fitotoxidez.'
+            };
+            return recomendacoes[elemento] || nome + ' abaixo da faixa de suficiência. Consultar engenheiro agrônomo.';
+        }
+
+        if (status === 'alto') {
+            var recomendacoesExcesso = {
+                'N': 'Excesso de N. Reduzir adubação nitrogenada. Sintomas: crescimento vegetativo excessivo, suscetibilidade a pragas.',
+                'P': 'Excesso de P. Suspender adubação fosfatada. Pode causar deficiência de Zn e Fe.',
+                'K': 'Excesso de K. Reduzir adubação potássica. Pode induzir deficiência de Ca e Mg.',
+                'Ca': 'Excesso de Ca. Verificar pH do solo. Suspender calagem. Pode induzir deficiência de Mg e K.',
+                'Mg': 'Excesso de Mg. Reduzir aplicação de magnésio. Pode induzir deficiência de K.',
+                'S': 'Excesso de S. Suspender adubação sulfatada. Pode acidificar o solo.',
+                'B': 'TOXIDEZ de B. Suspender aplicação de boro. Risco de queima de folhas. Lavar com água se aplicação recente.',
+                'Zn': 'Excesso de Zn. Suspender aplicação de zinco. Pode causar fitotoxidez.',
+                'Mn': 'Excesso de Mn. Verificar pH do solo. Pode estar relacionado à acidez excessiva.',
+                'Fe': 'Excesso de Fe. Pode estar relacionado à acidez do solo ou compactação. Verificar drenagem.',
+                'Cu': 'Excesso de Cu. Suspender aplicação de cobre. Risco de fitotoxidez radicular.'
+            };
+            return recomendacoesExcesso[elemento] || nome + ' acima da faixa de suficiência. Consultar engenheiro agrônomo.';
+        }
+
+        return nome + ' - ' + status + '. Consultar engenheiro agrônomo.';
     },
 
     _getRecomendacaoPorElemento: function(elemento, status) {
@@ -1292,14 +1541,158 @@ GR.Analises = {
             }
         }
 
-        // Fallback
-        for (var key2 in config) {
-            if (config[key2].condicao === 'baixo' || config[key2].condicao === 'alto') {
-                return config[key2].produto + ': ' + config[key2].dose + ' - ' + config[key2].observacao;
+        // Fallback - tentar baixo, depois medio, depois alto
+        var fallbacks = ['baixo', 'muitoBaixo', 'alto', 'muitoAlto', 'medio'];
+        for (var fi = 0; fi < fallbacks.length; fi++) {
+            for (var key2 in config) {
+                if (config[key2].condicao === fallbacks[fi]) {
+                    return config[key2].produto + ': ' + config[key2].dose + ' - ' + config[key2].observacao;
+                }
             }
         }
 
         return 'Consulte um engenheiro agrônomo para ' + elemento;
+    },
+
+    _classificarElemento: function(elemento, valor) {
+        if (valor === undefined || valor === null || isNaN(valor)) return 'ideal';
+        var classes = this._config.classesSolo[elemento];
+        if (!classes) return 'ideal';
+
+        if (elemento === 'pH') {
+            if (valor < 4.5) return 'muitoBaixo';
+            if (valor <= 5.4) return 'baixo';
+            if (valor <= 6.0) return 'medio';
+            if (valor <= 7.0) return 'alto';
+            return 'muitoAlto';
+        }
+        if (elemento === 'P') {
+            if (valor < 3) return 'muitoBaixo';
+            if (valor <= 5) return 'baixo';
+            if (valor <= 10) return 'medio';
+            if (valor <= 20) return 'alto';
+            return 'muitoAlto';
+        }
+        if (elemento === 'K') {
+            if (valor < 30) return 'muitoBaixo';
+            if (valor <= 60) return 'baixo';
+            if (valor <= 120) return 'medio';
+            if (valor <= 200) return 'alto';
+            return 'muitoAlto';
+        }
+
+        if (classes.baixo && classes.medio && classes.alto) {
+            var baixoMax = parseFloat(classes.baixo.replace('<', '').split('-')[1]) || parseFloat(classes.baixo.replace('<', ''));
+            var medioMax = parseFloat(classes.medio.split('-')[1]) || parseFloat(classes.medio.replace('<', ''));
+            if (isNaN(baixoMax)) baixoMax = parseFloat(classes.baixo.match(/[\d.]+/)[1]);
+            if (isNaN(medioMax)) medioMax = parseFloat(classes.medio.match(/[\d.]+/)[1]);
+
+            if (classes.baixo.startsWith('<')) {
+                baixoMax = parseFloat(classes.baixo.substring(1));
+                if (valor < baixoMax) return 'baixo';
+            } else {
+                var partes = classes.baixo.split('-');
+                var baixoMin = parseFloat(partes[0]);
+                baixoMax = parseFloat(partes[1]);
+                if (valor < baixoMin) return 'baixo';
+                if (valor <= baixoMax) return 'medio';
+            }
+
+            if (classes.medio.indexOf('-') !== -1) {
+                var medPartes = classes.medio.split('-');
+                var medioMin = parseFloat(medPartes[0]);
+                medioMax = parseFloat(medPartes[1]);
+                if (valor >= medioMin && valor <= medioMax) return 'medio';
+            } else {
+                medioMax = parseFloat(classes.medio.replace('<', ''));
+                if (classes.medio.startsWith('<') && valor < medioMax) return 'medio';
+            }
+
+            if (classes.alto.startsWith('>')) {
+                var altoMin = parseFloat(classes.alto.substring(1));
+                if (valor >= altoMin) return 'alto';
+            } else {
+                var altPartes = classes.alto.split('-');
+                var altoMin = parseFloat(altPartes[0]);
+                if (valor >= altoMin) return 'alto';
+            }
+        }
+
+        return 'ideal';
+    },
+
+    // ============================================================
+    // CLASSIFICAR ELEMENTO FOLIAR (Tabela 5 - Incaper 2017)
+    // ============================================================
+    _classificarElementoFoliar: function(elemento, valor) {
+        if (valor === undefined || valor === null || isNaN(valor)) return 'ideal';
+        var classes = this._config.classesFoliares[elemento];
+        if (!classes) return 'ideal';
+
+        var baixoMax = parseFloat(classes.baixo.replace('<', '').replace(',', '.'));
+        var adeqPartes = classes.adequado.split('-');
+        var adeqMin = parseFloat(adeqPartes[0].replace(',', '.'));
+        var adeqMax = parseFloat(adeqPartes[1].replace(',', '.'));
+        var altoMin = parseFloat(classes.alto.replace('>', '').replace(',', '.'));
+
+        if (valor < baixoMax) return 'baixo';
+        if (valor >= adeqMin && valor <= adeqMax) return 'adequado';
+        if (valor > adeqMax) return 'alto';
+
+        return 'ideal';
+    },
+
+    _calcularCalagemRecomendacao: function(elementos, produtividade) {
+        var V = elementos['V'];
+        var CTC = elementos['CTC'];
+        if (V === undefined || CTC === undefined) return null;
+
+        var V2 = 60;
+        if (produtividade && produtividade > 60) {
+            V2 = 70;
+        }
+        var QC = CTC * (V2 - V) * 0.5 / 80;
+        if (QC < 0) QC = 0;
+        QC = Math.round(QC * 100) / 100;
+
+        var recomendacao = null;
+        if (QC > 0) {
+            recomendacao = {
+                elemento: 'Calagem',
+                produto: 'Calcário Dolomítico (PRNT 80%)',
+                doseHa: QC.toFixed(2) + ' t/ha',
+                observacao: 'QC = T(V2 - V1) x p / PRNT. V2=' + V2 + '%, PRNT=80%, p=0.5 (superficial). ' +
+                    'Manter Ca > 2.5 e Mg > 1.0 cmolc/dm³. Relação Ca:Mg ideal 3:1 a 4:1.'
+            };
+        }
+
+        var recomendacaoGesso = null;
+        var Ca = elementos['Ca'];
+        var Al = elementos['Al'];
+        if (Ca !== undefined && Ca <= 0.4 || Al !== undefined && Al >= 0.5) {
+            var QG = QC * 0.3;
+            recomendacaoGesso = {
+                elemento: 'Gesso',
+                produto: 'Gesso Agrícola',
+                doseHa: QG.toFixed(2) + ' t/ha',
+                observacao: 'QG = 0.3 x QC. Aplicar quando Ca <= 0.4 cmolc/dm³ ou Al >= 0.5 cmolc/dm³ ou m% > 30%.'
+            };
+        }
+
+        return { calagem: recomendacao, gesso: recomendacaoGesso };
+    },
+
+    _verificarRelacaoCaMg: function(elementos) {
+        var Ca = elementos['Ca'];
+        var Mg = elementos['Mg'];
+        if (Ca === undefined || Mg === undefined || Mg === 0) return null;
+        var relacao = Ca / Mg;
+        if (relacao < 3) {
+            return { status: 'abaixo', valor: relacao, recomendacao: 'Relação Ca:Mg baixa (' + relacao.toFixed(1) + ':1). Utilizar calcário calcítico para elevar Ca.' };
+        } else if (relacao > 4) {
+            return { status: 'acima', valor: relacao, recomendacao: 'Relação Ca:Mg alta (' + relacao.toFixed(1) + ':1). Utilizar calcário dolomítico para elevar Mg.' };
+        }
+        return { status: 'ideal', valor: relacao, recomendacao: 'Relação Ca:Mg ideal (' + relacao.toFixed(1) + ':1).' };
     },
 
     // ============================================================
@@ -1330,22 +1723,28 @@ GR.Analises = {
             html += '<div style="background:var(--surface);padding:6px;border-radius:4px;margin-bottom:6px;">' + infoHtml + '</div>';
         }
 
+        // Mostrar tipo de análise
+        var tipoLabel = dados.tipo === 'folha' ? '🍃 Análise Foliar' : '🪴 Análise de Solo';
+        html += '<div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">' + tipoLabel + '</div>';
+
         // Renderizar elementos
         var cores = this._config.coresStatus || {
             ideal: '#2e7d32',
+            adequado: '#2e7d32',
             baixo: '#c62828',
             medio: '#f57c00',
             alto: '#e65100',
-            'muito baixo': '#b71c1c',
-            'muito alto': '#1b5e20'
+            muitoBaixo: '#b71c1c',
+            muitoAlto: '#1b5e20'
         };
         var labels = this._config.labelsStatus || {
             ideal: '✅ Ideal',
+            adequado: '✅ Adequado',
             baixo: '⬇️ Baixo',
             medio: '➡️ Médio',
             alto: '⬆️ Alto',
-            'muito baixo': '⬇️⬇️ Muito Baixo',
-            'muito alto': '⬆️⬆️ Muito Alto'
+            muitoBaixo: '⬇️⬇️ Muito Baixo',
+            muitoAlto: '⬆️⬆️ Muito Alto'
         };
 
         for (var key in elementos) {
@@ -1374,7 +1773,8 @@ GR.Analises = {
         // Renderizar recomendações não ideais
         var recsNaoIdeais = [];
         for (var ri2 = 0; ri2 < recomendacoes.length; ri2++) {
-            if (recomendacoes[ri2].status !== 'ideal') {
+            var s = recomendacoes[ri2].status;
+            if (s !== 'ideal' && s !== 'adequado') {
                 recsNaoIdeais.push(recomendacoes[ri2]);
             }
         }
@@ -1383,9 +1783,10 @@ GR.Analises = {
             var recHtml = '<h5 style="font-size:11px;color:#e65100;margin-top:6px;">📝 Recomendações (' + recsNaoIdeais.length + ')</h5>';
             for (var ri3 = 0; ri3 < recsNaoIdeais.length; ri3++) {
                 var r = recsNaoIdeais[ri3];
-                var cor2 = (r.status === 'baixo' || r.status === 'muito baixo') ? '#c62828' : '#e65100';
+                var cor2 = (r.status === 'baixo' || r.status === 'muitoBaixo') ? '#c62828' : '#e65100';
+                var nomeExib = r.nomeElemento || r.elemento;
                 recHtml += '<div class="receituario-item" style="background:#e8f5e9;border-left:3px solid ' + cor2 + ';padding:4px 8px;margin:3px 0;border-radius:3px;font-size:11px;">' +
-                    '<strong>' + r.elemento + ':</strong> ' + r.recomendacao +
+                    '<strong>' + nomeExib + ':</strong> ' + r.recomendacao +
                     '</div>';
             }
             recDiv.innerHTML = recHtml;
@@ -1443,20 +1844,161 @@ GR.Analises = {
 
         var recomendacoes = [];
         var produtos = this._config.recomendacoesProdutos || {};
+        var tabelas = this._config.tabelasAdubacao || {};
         var elementos = analise.elementos || {};
         var recomendacoesSalvas = analise.recomendacoes || [];
         var area = parseFloat(analise.area) || 1;
+        var produtividade = parseFloat(analise.produtividade) || 0;
 
-        // Mapear elementos para grupos de recomendação
+        // Calcular recomendação de calagem (Incaper 2017)
+        var calcResult = this._calcularCalagemRecomendacao(elementos, produtividade);
+        if (calcResult) {
+            if (calcResult.calagem) {
+                recomendacoes.push({
+                    elemento: 'Calagem',
+                    nomeElemento: 'Calagem',
+                    valor: elementos['V'] || 'N/A',
+                    status: 'baixo',
+                    statusLabel: '⬇️ Necessário',
+                    produto: calcResult.calagem.produto,
+                    doseHa: calcResult.calagem.doseHa,
+                    doseAmostra: (parseFloat(calcResult.calagem.doseHa) * area).toFixed(2) + ' t',
+                    observacao: calcResult.calagem.observacao,
+                    prioridade: 'Alta',
+                    grupo: 'Calagem'
+                });
+            }
+            if (calcResult.gesso) {
+                recomendacoes.push({
+                    elemento: 'Gesso',
+                    nomeElemento: 'Gesso Agrícola',
+                    valor: 'Ca: ' + (elementos['Ca'] || 'N/A'),
+                    status: 'baixo',
+                    statusLabel: '⬇️ Necessário',
+                    produto: calcResult.gesso.produto,
+                    doseHa: calcResult.gesso.doseHa,
+                    doseAmostra: (parseFloat(calcResult.gesso.doseHa) * area).toFixed(2) + ' t',
+                    observacao: calcResult.gesso.observacao,
+                    prioridade: 'Alta',
+                    grupo: 'Gesso'
+                });
+            }
+        }
+
+        // Verificar relação Ca:Mg
+        var caMgResult = this._verificarRelacaoCaMg(elementos);
+        if (caMgResult && caMgResult.status !== 'ideal') {
+            recomendacoes.push({
+                elemento: 'Relação Ca:Mg',
+                nomeElemento: 'Relação Cálcio:Magnésio',
+                valor: caMgResult.valor.toFixed(1) + ':1',
+                status: caMgResult.status,
+                statusLabel: caMgResult.status === 'abaixo' ? '⬇️ Baixa' : '⬆️ Alta',
+                produto: caMgResult.status === 'abaixo' ? 'Calcário Calcítico' : 'Calcário Dolomítico',
+                doseHa: 'Ajustar pela calagem',
+                doseAmostra: 'Conforme necessidade de calagem',
+                observacao: caMgResult.recomendacao,
+                prioridade: 'Média',
+                grupo: 'CaMg'
+            });
+        }
+
+        // Usar tabelas de adubação N-P-K (Incaper 2017, Tabelas 7 e 8)
+        if (produtividade > 0 && tabelas.N && tabelas.K && tabelas.P) {
+            var prodTable = tabelas.N.produtividades;
+            var prodIndex = 0;
+            for (var pi = 0; pi < prodTable.length; pi++) {
+                if (produtividade > prodTable[pi]) prodIndex = pi;
+            }
+
+            // Nitrogênio
+            var doseN = tabelas.N.doses[prodIndex];
+            var recN = this._encontrarRecSalva(recomendacoesSalvas, 'N');
+            recomendacoes.push({
+                elemento: 'N',
+                nomeElemento: 'Nitrogênio (N)',
+                valor: doseN + ' kg/ha/ano',
+                status: 'recomendado',
+                statusLabel: '📌 Recomendado',
+                produto: 'Ureia (45% N) ou Sulfato de Amônio (20% N)',
+                doseHa: doseN + ' kg/ha de N',
+                doseAmostra: (doseN * area).toFixed(0) + ' kg de N',
+                observacao: 'Tabela 7 - Incaper 2017. Parcelar em 3 aplicações (floração, chumbinho, granação). ' +
+                    'Se usar ureia: ' + (doseN / 0.45).toFixed(0) + ' kg/ha de ureia. ' +
+                    'Se usar sulfato de amônio: ' + (doseN / 0.20).toFixed(0) + ' kg/ha de sulfato de amônio.',
+                prioridade: 'Alta',
+                grupo: 'N'
+            });
+
+            // Potássio
+            var teorK = elementos['K'] || 0;
+            var doseK = 0;
+            var faixaK = null;
+            for (var fk = 0; fk < tabelas.K.faixasSolo.length; fk++) {
+                var faixa = tabelas.K.faixasSolo[fk];
+                if (teorK < faixa.limite) {
+                    doseK = faixa.doses[prodIndex];
+                    faixaK = faixa.label;
+                    break;
+                }
+            }
+            if (doseK > 0) {
+                recomendacoes.push({
+                    elemento: 'K',
+                    nomeElemento: 'Potássio (K)',
+                    valor: doseK + ' kg/ha/ano',
+                    status: 'recomendado',
+                    statusLabel: '📌 Recomendado (K solo: ' + faixaK + ')',
+                    produto: 'Cloreto de Potássio (60% K2O)',
+                    doseHa: doseK + ' kg/ha de K2O',
+                    doseAmostra: (doseK * area).toFixed(0) + ' kg de K2O',
+                    observacao: 'Tabela 7 - Incaper 2017. Parcelar em 3 aplicações. ' +
+                        'Equivale a ' + (doseK / 0.60).toFixed(0) + ' kg/ha de KCl.',
+                    prioridade: 'Alta',
+                    grupo: 'K'
+                });
+            }
+
+            // Fósforo (Incaper 2017, Tabela 8)
+            var teorP = elementos['P'] || 0;
+            var doseP = 0;
+            var faixaP = null;
+            var pLimites = { 'muitoBaixo': [0, 3], 'baixo': [3, 5], 'medio': [5, 10], 'alto': [10, Infinity] };
+            for (var fp = 0; fp < tabelas.P.faixasSolo.length; fp++) {
+                var faixaP2 = tabelas.P.faixasSolo[fp];
+                var pLim = pLimites[faixaP2.label] || [0, 0];
+                if (teorP >= pLim[0] && teorP < pLim[1]) {
+                    doseP = faixaP2.doses[prodIndex];
+                    faixaP = faixaP2.label;
+                    break;
+                }
+            }
+            if (doseP > 0) {
+                recomendacoes.push({
+                    elemento: 'P',
+                    nomeElemento: 'Fósforo (P)',
+                    valor: doseP + ' kg/ha/ano',
+                    status: 'recomendado',
+                    statusLabel: '📌 Recomendado (P solo: ' + faixaP + ')',
+                    produto: 'Superfosfato Simples (18% P2O5) ou Superfosfato Triplo (41% P2O5)',
+                    doseHa: doseP + ' kg/ha de P2O5',
+                    doseAmostra: (doseP * area).toFixed(0) + ' kg de P2O5',
+                    observacao: 'Tabela 8 - Incaper 2017. Aplicar em dose única na floração. ' +
+                        'Se usar superfosfato simples: ' + (doseP / 0.18).toFixed(0) + ' kg/ha. ' +
+                        'Se usar superfosfato triplo: ' + (doseP / 0.41).toFixed(0) + ' kg/ha.',
+                    prioridade: 'Alta',
+                    grupo: 'P'
+                });
+            }
+        }
+
+        // Demais elementos usando mapa de recomendação
         var mapaElementos = {
             'pH': 'Calagem',
-            'P': 'Fósforo',
-            'K': 'Potássio',
             'Ca': 'Cálcio',
             'Mg': 'Magnésio',
             'Al': 'Alumínio',
             'H+Al': 'Acidez',
-            'V': 'Saturação por Bases',
             'MO': 'Matéria Orgânica',
             'Zn': 'Zinco',
             'Cu': 'Cobre',
@@ -1467,69 +2009,41 @@ GR.Analises = {
         };
 
         for (var key in elementos) {
-            var valor = elementos[key];
+            if (key === '_produtividade' || key === 'N' || key === 'P' || key === 'K' || key === 'V' || key === 'SB' || key === 'CTC') continue;
+
             var grupo = mapaElementos[key];
             if (!grupo) continue;
 
-            // Encontrar a recomendação salva para este elemento
-            var recSalva = null;
-            for (var i = 0; i < recomendacoesSalvas.length; i++) {
-                var r = recomendacoesSalvas[i];
-                if (r.elemento === key || r.elemento === this._config.nomesElementos[key]) {
-                    recSalva = r;
-                    break;
-                }
-            }
+            var recSalva = this._encontrarRecSalva(recomendacoesSalvas, key);
+            if (!recSalva || recSalva.status === 'ideal' || recSalva.status === 'medio') continue;
 
-            if (!recSalva || recSalva.status === 'ideal') continue;
-
-            // Buscar produto recomendado
             var produtoConfig = produtos[grupo];
             if (!produtoConfig) continue;
 
-            // Determinar qual recomendação usar
             var configProduto = null;
             var chaves = Object.keys(produtoConfig);
-            
-            // Tentar match exato
             for (var j = 0; j < chaves.length; j++) {
                 var chave = chaves[j];
-                if (chave === key && produtoConfig[chave].condicao === recSalva.status) {
-                    configProduto = produtoConfig[chave];
-                    break;
-                }
                 if (produtoConfig[chave].condicao === recSalva.status) {
                     configProduto = produtoConfig[chave];
                     break;
                 }
             }
-
-            // Se não encontrou, usar o primeiro
             if (!configProduto && chaves.length > 0) {
                 configProduto = produtoConfig[chaves[0]];
             }
-
             if (!configProduto) continue;
 
-            // Calcular dose por hectare e por amostra
             var doseHa = configProduto.dose || 'N/A';
             var doseAmostra = this._calcularDosePorAmostra(doseHa, area);
 
-            // Determinar prioridade
-            var prioridade = 'Média';
-            if (recSalva.status === 'baixo' || recSalva.status === 'muito baixo') {
-                prioridade = 'Alta';
-            }
-            if (recSalva.status === 'muito alto') {
-                prioridade = 'Alta';
-            }
-
+            var prioridade = (recSalva.status === 'baixo' || recSalva.status === 'muitoBaixo' || recSalva.status === 'muitoAlto') ? 'Alta' : 'Média';
             var nomeElemento = this._config.nomesElementos[key] || key;
 
             recomendacoes.push({
                 elemento: key,
                 nomeElemento: nomeElemento,
-                valor: valor,
+                valor: elementos[key],
                 status: recSalva.status,
                 statusLabel: this._getStatusLabel(recSalva.status),
                 produto: configProduto.produto || 'Produto recomendado',
@@ -1550,6 +2064,17 @@ GR.Analises = {
 
         this._cache.recomendacoesCalculadas = recomendacoes;
         return recomendacoes;
+    },
+
+    _encontrarRecSalva: function(recomendacoes, key) {
+        for (var i = 0; i < recomendacoes.length; i++) {
+            var r = recomendacoes[i];
+            if (r.elemento === key || r.elemento === key.toLowerCase() ||
+                r.elemento === this._config.nomesElementos[key]) {
+                return r;
+            }
+        }
+        return null;
     },
 
     _calcularDosePorAmostra: function(doseHa, areaHa) {
@@ -1645,8 +2170,8 @@ GR.Analises = {
             baixo: '#c62828',
             medio: '#f57c00',
             alto: '#e65100',
-            'muito baixo': '#b71c1c',
-            'muito alto': '#1b5e20',
+            muitoBaixo: '#b71c1c',
+            muitoAlto: '#1b5e20',
             ideal: '#2e7d32'
         };
         var color = cores[rec.status] || '#666';
