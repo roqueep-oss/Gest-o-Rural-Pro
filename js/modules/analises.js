@@ -2566,9 +2566,16 @@ GR.Analises = {
                 }
             }).catch(function(err) {
                 console.warn('Upload PDF em background falhou:', err);
+                var msg = err?.message || err?.code || 'erro desconhecido';
+                if (err?.code === 'storage/unknown') {
+                    GR.Toast.error('Upload PDF falhou: CORS não configurado no Storage Firebase.');
+                } else {
+                    GR.Toast.error('Upload PDF falhou: ' + msg);
+                }
             });
         } catch (err) {
             console.warn('Upload PDF em background falhou (síncrono):', err);
+            GR.Toast.error('Erro ao iniciar upload do PDF.');
         }
     },
 
