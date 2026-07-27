@@ -2527,17 +2527,19 @@ GR.Analises = {
             }
         }
 
-        // Upload de PDF
+        // Salvar dados SEMPRE primeiro
+        var savePromise = this._salvarDados(dados, user.uid);
+
+        // Upload do PDF em background (não bloqueia)
         var pdfInput = document.getElementById('analise-file-input');
         var file = (this._cache && this._cache.arquivoPDF) || (pdfInput?.files?.[0]) || null;
-
         if (file && window.location.protocol !== 'file:') {
-            this._uploadPDF(file, dados, user.uid);
-        } else {
-            if (file && window.location.protocol === 'file:') {
-                GR.Toast.warning('Ambiente local - PDF não será salvo.');
-            }
-            this._salvarDados(dados, user.uid);
+            var self = this;
+            savePromise.then(function() {
+                self._uploadPDF(file, dados, user.uid);
+            });
+        } else if (file) {
+            GR.Toast.info('📄 PDF não será anexado (ambiente local).');
         }
     },
 
@@ -2546,22 +2548,27 @@ GR.Analises = {
             var filePath = 'analises/' + uid + '/' + Date.now() + '_' + file.name;
             var uploadTask = storage.ref(filePath).put(file);
 
-            GR.Toast.info('📤 Fazendo upload do PDF...');
+            GR.Toast.info('📤 Fazendo upload do PDF em segundo plano...');
 
             uploadTask.then(function(snapshot) {
                 return snapshot.ref.getDownloadURL();
             }).then(function(downloadURL) {
-                dados.arquivoUrl = downloadURL;
-                dados.arquivoNome = file.name;
-                dados.arquivoPath = filePath;
-                GR.Analises._salvarDados(dados, uid);
+                if (dados.id) {
+                    db.collection('users').doc(uid).collection('analises').doc(dados.id).update({
+                        arquivoUrl: downloadURL,
+                        arquivoNome: file.name,
+                        arquivoPath: filePath
+                    }).then(function() {
+                        GR.Toast.success('✅ PDF anexado à análise!');
+                    }).catch(function(err) {
+                        console.warn('Erro ao salvar URL do PDF:', err);
+                    });
+                }
             }).catch(function(err) {
-                console.warn('Upload PDF falhou, salvando dados sem arquivo:', err);
-                GR.Analises._salvarDados(dados, uid);
+                console.warn('Upload PDF em background falhou:', err);
             });
         } catch (err) {
-            console.warn('Upload PDF falhou (síncrono), salvando dados sem arquivo:', err);
-            GR.Analises._salvarDados(dados, uid);
+            console.warn('Upload PDF em background falhou (síncrono):', err);
         }
     },
 
@@ -2573,7 +2580,7 @@ GR.Analises = {
         var operation = isEdit ? ref.doc(editId).update(dados) : ref.add(dados);
         var successMsg = isEdit ? 'Análise atualizada!' : 'Análise salva!';
 
-        operation.then(function(docRef) {
+        return operation.then(function(docRef) {
             if (!isEdit && docRef) {
                 dados.id = docRef.id;
                 if (GR.State && GR.State.inserirNoCache) {
