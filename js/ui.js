@@ -1890,13 +1890,14 @@ GR.UI = {
     _atualizarSelectsPropriedade: function() {
         var props = GR.State.data.propriedades || [];
         var propAtiva = GR.State.ui.propriedadeAtiva || 'todas';
-        var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade',
-            'insumo-propriedade', 'animal-propriedade', 'func-propriedade',
-            'parceiro-propriedade', 'desp-propriedade', 'rec-propriedade',
-            'doc-propriedade', 'analise-propriedade',
-            'viveiro-insumo-propriedade', 'viveiro-servico-propriedade',
-            'viveiro-muda-propriedade', 'viveiro-trabalhador-propriedade'
-        ];
+var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade',
+        'insumo-propriedade', 'animal-propriedade', 'func-propriedade',
+        'parceiro-propriedade', 'desp-propriedade', 'rec-propriedade',
+        'doc-propriedade', 'analise-propriedade',
+        'viveiro-insumo-propriedade', 'viveiro-servico-propriedade',
+        'viveiro-muda-propriedade', 'viveiro-trabalhador-propriedade',
+        'cultura-propriedade', 'colheita-propriedade'
+    ];
 
         selectIds.forEach(function(id) {
             var select = document.getElementById(id);

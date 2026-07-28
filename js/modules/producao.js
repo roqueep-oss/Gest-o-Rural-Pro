@@ -141,11 +141,12 @@ GR.Modules.Producao = {
         modal.innerHTML = '<div class="modal-content" style="max-width:400px;">' +
             '<div class="modal-header"><h2 class="modal-title">🌱 Nova Cultura</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
             '<div class="form-group"><label>Nome da Cultura</label><input type="text" id="cultura-nome" class="form-control" placeholder="Ex: Café Conilon"></div>' +
-            '<div class="form-group"><label>Propriedade</label><input type="text" id="cultura-propriedade" class="form-control" placeholder="Propriedade" value="' + GR.Utils.escapeHtml(GR.State.ui.propriedadeAtiva || '') + '"></div>' +
+            '<div class="form-group"><label>Propriedade</label><select id="cultura-propriedade" class="form-control"></select></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarCultura()">✅ Salvar</button>' +
             '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
         container.appendChild(modal);
+        if (GR.UI && typeof GR.UI._atualizarSelectsPropriedade === 'function') GR.UI._atualizarSelectsPropriedade();
         setTimeout(function() { document.getElementById('cultura-nome').focus(); }, 100);
     },
 
@@ -226,11 +227,16 @@ GR.Modules.Producao = {
             '<div class="form-group"><label>💰 Custo por Saco (R$)</label><input type="number" id="colheita-custoSaco" class="form-control" step="0.01" value="' + (item ? item.custoSaco || 0 : 0) + '"></div>' +
             '</div>' +
             '<div class="form-group"><label>💸 Total Gasto (R$) <span style="font-size:10px;color:var(--text-light);">(calculado automaticamente)</span></label><input type="number" id="colheita-totalGasto" class="form-control" step="0.01" value="' + (item ? item.totalGasto || 0 : 0) + '"></div>' +
-            '<div class="form-group"><label>Propriedade</label><input type="text" id="colheita-propriedade" class="form-control" value="' + (item ? GR.Utils.escapeHtml(item.propriedade || '') : GR.Utils.escapeHtml(GR.State.ui.propriedadeAtiva || '')) + '"></div>' +
+            '<div class="form-group"><label>Propriedade</label><select id="colheita-propriedade" class="form-control"></select></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarColheita(\'' + (editId || '') + '\')">✅ Salvar</button>' +
             '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
         container.appendChild(modal);
+
+        if (GR.UI && typeof GR.UI._atualizarSelectsPropriedade === 'function') GR.UI._atualizarSelectsPropriedade();
+        if (item) {
+            document.getElementById('colheita-propriedade').value = item.propriedade || '';
+        }
 
         // Auto-calcular total gasto
         var inputPes = document.getElementById('colheita-pes');
@@ -268,7 +274,7 @@ GR.Modules.Producao = {
             custoPorPe: parseFloat(document.getElementById('colheita-custoPe').value) || 0,
             custoSaco: parseFloat(document.getElementById('colheita-custoSaco').value) || 0,
             totalGasto: parseFloat(document.getElementById('colheita-totalGasto').value) || 0,
-            propriedade: document.getElementById('colheita-propriedade').value.trim(),
+            propriedade: GR.Utils.escapeHtml(document.getElementById('colheita-propriedade').value.trim()),
             cargas: [],
             dataCriacao: GR.Utils.now()
         };
