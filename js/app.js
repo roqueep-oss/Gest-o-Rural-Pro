@@ -891,6 +891,14 @@
                     }, 100);
                 }
 
+                if (secao === 'producao' && GR.Modules && GR.Modules.Producao) {
+                    setTimeout(function() {
+                        if (typeof GR.Modules.Producao.render === 'function') {
+                            GR.Modules.Producao.render();
+                        }
+                    }, 100);
+                }
+
                 APP._secaoAtual = secao;
             } else {
                 log('⚠️ Seção não encontrada:', secao);
