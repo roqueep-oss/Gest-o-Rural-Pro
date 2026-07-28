@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "gestao-rural-1f1e3"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

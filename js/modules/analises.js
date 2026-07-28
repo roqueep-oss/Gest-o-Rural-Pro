@@ -2533,17 +2533,18 @@ GR.Analises = {
         // Upload do PDF em background (não bloqueia)
         var pdfInput = document.getElementById('analise-file-input');
         var file = (this._cache && this._cache.arquivoPDF) || (pdfInput?.files?.[0]) || null;
+        var editId = this._cache.analiseEditando || (GR.State && GR.State.ui ? GR.State.ui.analiseEditando : null);
         if (file && window.location.protocol !== 'file:') {
             var self = this;
             savePromise.then(function() {
-                self._uploadPDF(file, dados, user.uid);
+                self._uploadPDF(file, dados, user.uid, editId);
             });
         } else if (file) {
             GR.Toast.info('📄 PDF não será anexado (ambiente local).');
         }
     },
 
-    _uploadPDF: function(file, dados, uid) {
+    _uploadPDF: function(file, dados, uid, editId) {
         try {
             var filePath = 'analises/' + uid + '/' + Date.now() + '_' + file.name;
             var uploadTask = storage.ref(filePath).put(file);
@@ -2553,13 +2554,24 @@ GR.Analises = {
             uploadTask.then(function(snapshot) {
                 return snapshot.ref.getDownloadURL();
             }).then(function(downloadURL) {
-                if (dados.id) {
-                    db.collection('users').doc(uid).collection('analises').doc(dados.id).update({
+                var docId = editId || dados.id;
+                if (docId) {
+                    db.collection('users').doc(uid).collection('analises').doc(docId).update({
                         arquivoUrl: downloadURL,
                         arquivoNome: file.name,
                         arquivoPath: filePath
                     }).then(function() {
                         GR.Toast.success('✅ PDF anexado à análise!');
+                        if (typeof GR !== 'undefined' && GR.State && GR.State.atualizarNoCache) {
+                            GR.State.atualizarNoCache('analises', docId, {
+                                arquivoUrl: downloadURL,
+                                arquivoNome: file.name,
+                                arquivoPath: filePath
+                            });
+                        }
+                        if (typeof GR !== 'undefined' && GR.UI && GR.UI.refreshCurrentView) {
+                            GR.UI.refreshCurrentView();
+                        }
                     }).catch(function(err) {
                         console.warn('Erro ao salvar URL do PDF:', err);
                     });

@@ -499,6 +499,44 @@ GR.State = {
         // 🆕 LISTENER PARA COLHEITAS
         this._carregarColheitas();
 
+        // 🆕 LISTENER PARA ANÁLISES
+        db.collection('users').doc(uid).collection('analises')
+            .onSnapshot(function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(doc) {
+                    var data = doc.data();
+                    data.id = doc.id;
+                    items.push(data);
+                });
+                self.data.analises = items;
+                self._saveCache();
+                console.log('🔄 Análises atualizadas:', items.length);
+                if (window.dispatchEvent) {
+                    window.dispatchEvent(new Event('analises-atualizados'));
+                }
+            }, function(err) {
+                console.warn('⚠️ Erro no listener de análises:', err);
+            });
+
+        // 🆕 LISTENER PARA DOCUMENTOS
+        db.collection('users').doc(uid).collection('documentos')
+            .onSnapshot(function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(doc) {
+                    var data = doc.data();
+                    data.id = doc.id;
+                    items.push(data);
+                });
+                self.data.documentos = items;
+                self._saveCache();
+                console.log('🔄 Documentos atualizados:', items.length);
+                if (window.dispatchEvent) {
+                    window.dispatchEvent(new Event('documentos-atualizados'));
+                }
+            }, function(err) {
+                console.warn('⚠️ Erro no listener de documentos:', err);
+            });
+
         // Listener para fornecedores
         db.collection('users').doc(uid).collection('fornecedores')
             .onSnapshot(function(snapshot) {

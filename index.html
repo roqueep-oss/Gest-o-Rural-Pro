@@ -599,39 +599,44 @@
             </div>
         </header>
 
-        <!-- MENU DE NAVEGAÇÃO -->
-        <nav class="nav-menu no-print" id="mainNav">
-            <button class="nav-btn active" data-section="dashboard"><span class="icon">📊</span> Painel</button>
-            <button class="nav-btn" data-section="acoes"><span class="icon">📋</span> Ações</button>
-            <button class="nav-btn" data-section="orcamentos"><span class="icon">💰</span> Orçamentos</button>
-            <button class="nav-btn" data-section="credito"><span class="icon">💳</span> Crédito</button>
-            <button class="nav-btn" data-section="insumos"><span class="icon">🧪</span> Insumos</button>
-            <button class="nav-btn" data-section="pecuaria"><span class="icon">🐄</span> Pecuária</button>
-            <button class="nav-btn" data-section="funcionarios"><span class="icon">👨‍🌾</span> Funcionários</button>
-            <button class="nav-btn" data-section="parceiros"><span class="icon">👥</span> Parceiros</button>
-            <button class="nav-btn" data-section="contabilidade"><span class="icon">🧾</span> Contabilidade</button>
-            <button class="nav-btn" data-section="documentos"><span class="icon">📁</span> Documentos</button>
-            <button class="nav-btn" data-section="analises"><span class="icon">🧪</span> Análises</button>
-            <button class="nav-btn" data-section="viveiro"><span class="icon">🌱</span> Viveiro</button>
-            <button class="nav-btn" data-section="relatorios"><span class="icon">📊</span> Relatórios</button>
-            <button class="nav-btn" data-section="configuracoes"><span class="icon">⚙️</span> Config.</button>
-            <button class="nav-btn" data-section="historico"><span class="icon">📜</span> Histórico</button>
-            <button class="nav-btn" data-section="notificacoes"><span class="icon">🔔</span> Notificações</button>
-            <button class="nav-btn" data-section="producao"><span class="icon">🌾</span> Produção</button>
-        </nav>
+        <!-- WRAPPER LAYOUT: SIDEBAR + CONTEÚDO -->
+        <div class="app-layout">
 
-        <!-- BACKUP BANNER -->
-        <div id="backup-banner" class="backup-banner" style="display:none;">
-            <span>💾 <strong>Backup Automático:</strong> Último backup em <span id="backup-last-time" class="backup-time">Nunca</span></span>
-            <div style="display:flex;gap:3px;flex-wrap:wrap;">
-                <button class="btn btn-success btn-sm" onclick="GR.Backup.fazerBackupManual()">📤 Fazer Backup Agora</button>
-                <button class="btn btn-info btn-sm" onclick="GR.Backup.baixarBackup()">⬇️ Baixar</button>
-                <button class="btn btn-warning btn-sm" onclick="GR.Backup.exportarFiltrado()">🔍 Exportar Filtrado</button>
-            </div>
-        </div>
+            <!-- MENU DE NAVEGAÇÃO (SIDEBAR) -->
+            <nav class="nav-menu no-print" id="mainNav">
+                <button class="nav-btn active" data-section="dashboard"><span class="icon">📊</span> Painel</button>
+                <button class="nav-btn" data-section="acoes"><span class="icon">📋</span> Ações</button>
+                <button class="nav-btn" data-section="orcamentos"><span class="icon">💰</span> Orçamentos</button>
+                <button class="nav-btn" data-section="credito"><span class="icon">💳</span> Crédito</button>
+                <button class="nav-btn" data-section="insumos"><span class="icon">🧪</span> Insumos</button>
+                <button class="nav-btn" data-section="pecuaria"><span class="icon">🐄</span> Pecuária</button>
+                <button class="nav-btn" data-section="funcionarios"><span class="icon">👨‍🌾</span> Funcionários</button>
+                <button class="nav-btn" data-section="parceiros"><span class="icon">👥</span> Parceiros</button>
+                <button class="nav-btn" data-section="contabilidade"><span class="icon">🧾</span> Contabilidade</button>
+                <button class="nav-btn" data-section="documentos"><span class="icon">📁</span> Documentos</button>
+                <button class="nav-btn" data-section="analises"><span class="icon">🧪</span> Análises</button>
+                <button class="nav-btn" data-section="viveiro"><span class="icon">🌱</span> Viveiro</button>
+                <button class="nav-btn" data-section="relatorios"><span class="icon">📊</span> Relatórios</button>
+                <button class="nav-btn" data-section="configuracoes"><span class="icon">⚙️</span> Config.</button>
+                <button class="nav-btn" data-section="historico"><span class="icon">📜</span> Histórico</button>
+                <button class="nav-btn" data-section="notificacoes"><span class="icon">🔔</span> Notificações</button>
+                <button class="nav-btn" data-section="producao"><span class="icon">🌾</span> Produção</button>
+            </nav>
 
-        <!-- CONTEÚDO PRINCIPAL -->
-        <div class="container" id="container-principal">
+            <!-- CONTEÚDO PRINCIPAL -->
+            <div class="app-content">
+
+                <!-- BACKUP BANNER -->
+                <div id="backup-banner" class="backup-banner" style="display:none;">
+                    <span>💾 <strong>Backup Automático:</strong> Último backup em <span id="backup-last-time" class="backup-time">Nunca</span></span>
+                    <div style="display:flex;gap:3px;flex-wrap:wrap;">
+                        <button class="btn btn-success btn-sm" onclick="GR.Backup.fazerBackupManual()">📤 Fazer Backup Agora</button>
+                        <button class="btn btn-info btn-sm" onclick="GR.Backup.baixarBackup()">⬇️ Baixar</button>
+                        <button class="btn btn-warning btn-sm" onclick="GR.Backup.exportarFiltrado()">🔍 Exportar Filtrado</button>
+                    </div>
+                </div>
+
+                <div class="container" id="container-principal">
             <div class="prop-tabs-container no-print">
                 <div class="prop-tabs" id="prop-tabs-container">
                     <button class="prop-tab active" data-prop="todas">🏠 Todas</button>
@@ -697,6 +702,9 @@
                 <div id="section-notificacoes" class="section hidden"></div>
                 <div id="section-producao" class="section hidden"><div id="lista-producao"></div></div>
             </div>
+            </div>
+        </div>
+        </div>
 
             <!-- FOOTER -->
             <div id="app-footer">
