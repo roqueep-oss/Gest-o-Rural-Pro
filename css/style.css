@@ -686,20 +686,21 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ----- CONTAINER ----- */
 .container { 
-    max-width: 1440px; 
-    margin: 0 auto; 
+    width: 100%; 
+    max-width: none; 
     padding: 16px; 
 }
 
 /* ----- CARDS ----- */
 .card {
-    background: var(--surface);
+    background: var(--primary-subtle);
     border-radius: var(--radius-md);
     padding: 20px;
     margin-bottom: 16px;
     box-shadow: var(--card-shadow);
     border: 1px solid var(--border);
     transition: var(--transition);
+    backdrop-filter: blur(4px);
 }
 .card:hover {
     box-shadow: var(--shadow-md);
@@ -796,12 +797,13 @@ tbody tr:hover { background: var(--bg); }
     margin-bottom: 12px;
 }
 .stats-card {
-    background: var(--surface);
+    background: var(--primary-subtle);
     border-radius: var(--radius);
     padding: 12px;
     text-align: center;
     box-shadow: var(--card-shadow);
     border-left: 4px solid var(--primary);
+    backdrop-filter: blur(4px);
 }
 .stats-card .number { font-size: 22px; font-weight: 800; color: var(--primary-dark); }
 .stats-card .label { font-size: 11px; color: var(--text-light); margin-top: 2px; }
