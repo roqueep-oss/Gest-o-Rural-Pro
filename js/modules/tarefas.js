@@ -135,7 +135,15 @@ GR.Modules.Tarefas = {
         
         // Se for número
         if (typeof valor === 'number') {
-            return String(valor).replace(/\D/g, '');
+            const str = String(valor).replace(/\D/g, '');
+            if (str.length === 11) {
+                var possivelNumero2 = str.slice(0, 9);
+                var possivelDdd2 = str.slice(9);
+                if (parseInt(possivelDdd2, 10) >= 11 && /^[789]/.test(possivelNumero2)) {
+                    return possivelDdd2 + possivelNumero2;
+                }
+            }
+            return str;
         }
         
         return '';
