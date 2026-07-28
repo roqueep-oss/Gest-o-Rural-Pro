@@ -85,6 +85,26 @@ GR.Utils = {
         return '(' + ddd + ') ' + numero;
     },
 
+    extrairDddNumero: function(telefone) {
+        if (!telefone) return { ddd: '', numero: '' };
+        if (typeof telefone === 'object') {
+            return { ddd: telefone.ddd || '', numero: telefone.numero || '' };
+        }
+        const digitos = String(telefone).replace(/\D/g, '');
+        if (digitos.length === 11) {
+            const possivelNumero = digitos.slice(0, 9);
+            const possivelDdd = digitos.slice(9);
+            if (parseInt(possivelDdd, 10) >= 11 && /^[789]/.test(possivelNumero)) {
+                return { ddd: possivelDdd, numero: possivelNumero };
+            }
+            return { ddd: digitos.slice(0, 2), numero: digitos.slice(2) };
+        }
+        if (digitos.length === 10) {
+            return { ddd: digitos.slice(0, 2), numero: digitos.slice(2) };
+        }
+        return { ddd: '', numero: digitos };
+    },
+
     calcularDiasParaVencimento: function(data) {
         if (!data) return null;
         var hoje = new Date();

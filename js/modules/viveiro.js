@@ -3690,8 +3690,9 @@ GR.Modules.Viveiro = {
                 if (cpfEl) cpfEl.value = item.cpf || '';
                 if (funcaoEl) funcaoEl.value = item.funcao || '';
                 if (item.telefone) {
-                    if (dddEl) dddEl.value = item.telefone.ddd || '';
-                    if (telEl) telEl.value = item.telefone.numero || '';
+                    var tel = GR.Utils.extrairDddNumero(item.telefone);
+                    if (dddEl) dddEl.value = tel.ddd;
+                    if (telEl) telEl.value = tel.numero;
                 }
                 if (admissaoEl) admissaoEl.value = item.admissao || '';
                 if (propSelect) propSelect.value = item.propriedade || propViveiro;

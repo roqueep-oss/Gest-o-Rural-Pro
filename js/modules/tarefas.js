@@ -99,6 +99,19 @@ GR.Modules.Tarefas = {
                 return numero;
             }
             
+            // Detecta se a string está no formato numero+ddd (ex: "99632100827")
+            // onde o DDD está no final em vez do início
+            if (numeros.length === 11) {
+                var possivelNumero = numeros.slice(0, 9);
+                var possivelDdd = numeros.slice(9);
+                var dddNum = parseInt(possivelDdd, 10);
+                // Se os últimos 2 dígitos formam um DDD válido (11-99)
+                // E os primeiros 9 dígitos começam com 7, 8 ou 9 (celular)
+                if (dddNum >= 11 && dddNum <= 99 && /^[789]/.test(possivelNumero)) {
+                    return possivelDdd + possivelNumero;
+                }
+            }
+            
             // Se tiver 10 ou 11 dígitos, é um número válido
             if (numeros.length >= 10) {
                 return numeros;

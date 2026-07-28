@@ -129,8 +129,9 @@ GR.Modules.Parceiros = {
                 document.getElementById('parceiro-nome').value = item.nome || '';
                 document.getElementById('parceiro-cpf').value = item.cpf || '';
                 if (item.telefone) {
-                    document.getElementById('parceiro-ddd').value = item.telefone.ddd || '';
-                    document.getElementById('parceiro-telefone').value = item.telefone.numero || '';
+                    var tel = GR.Utils.extrairDddNumero(item.telefone);
+                    document.getElementById('parceiro-ddd').value = tel.ddd;
+                    document.getElementById('parceiro-telefone').value = tel.numero;
                 }
                 document.getElementById('parceiro-data-inicio').value = item.dataInicio || '';
                 document.getElementById('parceiro-data-fim').value = item.dataFim || '';
@@ -158,8 +159,9 @@ GR.Modules.Parceiros = {
             document.getElementById('parceiro-nome').value = parte.nome;
             document.getElementById('parceiro-cpf').value = GR.Utils.formatarCPF(parte.cpf);
             if (parte.telefone) {
-                document.getElementById('parceiro-ddd').value = parte.telefone.ddd || '';
-                document.getElementById('parceiro-telefone').value = parte.telefone.numero || '';
+                var tel = GR.Utils.extrairDddNumero(parte.telefone);
+                document.getElementById('parceiro-ddd').value = tel.ddd;
+                document.getElementById('parceiro-telefone').value = tel.numero;
             }
         }
     },
@@ -386,8 +388,9 @@ GR.Modules.PartesRelacionadas = {
                 document.getElementById('parte-nome').value = item.nome || '';
                 document.getElementById('parte-cpf').value = item.cpf || '';
                 if (item.telefone) {
-                    document.getElementById('parte-ddd').value = item.telefone.ddd || '';
-                    document.getElementById('parte-telefone').value = item.telefone.numero || '';
+                    var tel = GR.Utils.extrairDddNumero(item.telefone);
+                    document.getElementById('parte-ddd').value = tel.ddd;
+                    document.getElementById('parte-telefone').value = tel.numero;
                 }
             }
         }

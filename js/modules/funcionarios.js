@@ -207,8 +207,9 @@ GR.Modules.Funcionarios = {
             if (item) {
                 document.getElementById('func-nome').value = item.nome || '';
                 document.getElementById('func-cpf').value = item.cpf || '';
-                document.getElementById('func-ddd').value = item.telefone?.ddd || '';
-                document.getElementById('func-telefone').value = item.telefone?.numero || '';
+                var tel = GR.Utils.extrairDddNumero(item.telefone);
+                document.getElementById('func-ddd').value = tel.ddd;
+                document.getElementById('func-telefone').value = tel.numero;
                 document.getElementById('func-cargo').value = item.cargo || '';
                 document.getElementById('func-salario').value = GR.Utils.formatarMoedaSemSimbolo(item.salario || 0);
                 document.getElementById('func-admissao').value = item.admissao || '';
