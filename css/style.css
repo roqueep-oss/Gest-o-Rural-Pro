@@ -1685,6 +1685,7 @@ tbody tr:hover { background: var(--bg); }
 /* ----- LAYOUT PRINCIPAL: SIDEBAR + CONTEÚDO ----- */
 .app-layout {
     display: flex;
+    width: 100%;
     min-height: calc(100vh - var(--header-height));
 }
 
@@ -1693,6 +1694,7 @@ tbody tr:hover { background: var(--bg); }
     display: flex;
     flex-direction: column;
     min-width: 0;
+    width: 100%;
 }
 
 /* ----- MENU NAVEGAÇÃO (SIDEBAR) ----- */
@@ -1878,7 +1880,7 @@ tbody tr:hover { background: var(--bg); }
 }
 
 /* ----- FOOTER ----- */
-#appContent { display: none; min-height: 100vh; }
+#appContent { display: none; width: 100%; min-height: 100vh; }
 #app-footer {
     text-align: center;
     padding: 12px;
