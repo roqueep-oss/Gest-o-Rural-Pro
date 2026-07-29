@@ -1699,7 +1699,7 @@ tbody tr:hover { background: var(--bg); }
 
 /* ----- MENU NAVEGAÇÃO (SIDEBAR) ----- */
 .nav-menu {
-    background: #eef2f6;
+    background: #dce3ed;
     display: flex;
     flex-direction: column;
     width: 195px;
@@ -1716,12 +1716,12 @@ tbody tr:hover { background: var(--bg); }
     -webkit-overflow-scrolling: touch;
     box-shadow: var(--card-shadow);
 }
-[data-theme="escuro"] .nav-menu { background: #1a1f2e; }
-[data-theme="azul"] .nav-menu { background: #e8f0fe; }
-[data-theme="verde"] .nav-menu { background: #e8f5e9; }
-[data-theme="roxo"] .nav-menu { background: #f3e8ff; }
-[data-theme="vermelho"] .nav-menu { background: #fef2f2; }
-[data-theme="laranja"] .nav-menu { background: #fff3e0; }
+[data-theme="escuro"] .nav-menu { background: #151b28; }
+[data-theme="azul"] .nav-menu { background: #d4e2f7; }
+[data-theme="verde"] .nav-menu { background: #d4e8d6; }
+[data-theme="roxo"] .nav-menu { background: #e8ddf5; }
+[data-theme="vermelho"] .nav-menu { background: #f5e0e0; }
+[data-theme="laranja"] .nav-menu { background: #f5e8d0; }
 .nav-menu::-webkit-scrollbar { width: 3px; }
 .nav-menu::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
@@ -1729,7 +1729,7 @@ tbody tr:hover { background: var(--bg); }
     flex: 0 0 auto;
     padding: 7px 10px;
     border: 1px solid transparent;
-    background: var(--surface);
+    background: transparent;
     border-radius: 0;
     font-size: 12px;
     font-weight: 500;
@@ -1744,9 +1744,8 @@ tbody tr:hover { background: var(--bg); }
     width: 100%;
 }
 .nav-btn:hover {
-    background: var(--surface);
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 1px var(--primary-light);
+    background: rgba(255,255,255,0.5);
+    border-color: var(--text-muted);
 }
 .nav-btn.active {
     background: var(--primary);
@@ -2091,6 +2090,7 @@ tbody tr:hover { background: var(--bg); }
         border-right: none;
         border-bottom: 1px solid var(--border);
         justify-content: flex-start;
+        background: var(--surface);
     }
     .nav-btn {
         font-size: 11px;
