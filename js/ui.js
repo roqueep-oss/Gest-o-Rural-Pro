@@ -1493,6 +1493,9 @@ GR.UI = {
                         <button class="btn btn-sm btn-secondary" onclick="GR.UI._mostrarSubAba('config-perfis')" id="tab-config-perfis" style="font-size:12px;">
                             🔐 Perfis
                         </button>
+                        <button class="btn btn-sm btn-secondary" onclick="GR.UI._mostrarSubAba('config-partes')" id="tab-config-partes" style="font-size:12px;">
+                            👤 Partes Relacionadas
+                        </button>
                         <button class="btn btn-sm btn-secondary" onclick="GR.UI._mostrarSubAba('config-fornecedores')" id="tab-config-fornecedores" style="font-size:12px;">
                             🏢 Fornecedores <span style="background:rgba(255,255,255,0.2);padding:0 6px;border-radius:8px;font-size:10px;">${fornecedoresCount}</span>
                         </button>
@@ -1584,9 +1587,30 @@ GR.UI = {
                                     </button>
                                 </div>
                             ` : ''}
+</div>
+                    </div>
+
+                    <div id="config-partes" class="sub-aba-content" style="display:none;">
+                        <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border);border-top:4px solid #9C27B0;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                                <div>
+                                    <h3 style="font-size:15px;margin:0;color:var(--text);">👤 Partes Relacionadas</h3>
+                                    <p style="font-size:12px;color:var(--text-light);margin:4px 0 0 0;">
+                                        Cadastre partes relacionadas para associar a parceiros, contratos e outras operações
+                                    </p>
+                                </div>
+                                <button class="btn btn-success" onclick="GR.Modules.PartesRelacionadas.abrirModal()">
+                                    ➕ Nova Parte
+                                </button>
+                            </div>
+                            <div id="lista-partes-relacionadas">
+                                <div style="text-align:center;padding:20px;color:var(--text-light);">
+                                    ⏳ Carregando partes relacionadas...
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
+
                     <div id="config-fornecedores" class="sub-aba-content" style="display:none;">
                         <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border);border-top:4px solid #2196F3;">
                             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
@@ -1712,6 +1736,37 @@ GR.UI = {
                 }
             }
         }, 300);
+
+        setTimeout(function() {
+            var abaPartes = document.getElementById('config-partes');
+            if (abaPartes && abaPartes.style.display !== 'none') {
+                GR.UI._renderListaPartesRelacionadas();
+            }
+        }, 300);
+    },
+
+    _renderListaPartesRelacionadas: function() {
+        var lista = document.getElementById('lista-partes-relacionadas');
+        if (!lista) return;
+        var partes = GR.State.data.partesRelacionadas || [];
+        if (partes.length === 0) {
+            lista.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);">Nenhuma parte relacionada cadastrada</div>';
+            return;
+        }
+        var html = '<div style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;">';
+        partes.forEach(function(p) {
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg-light);">' +
+                '<div><strong>' + GR.Utils.escapeHtml(p.nome || 'Sem nome') + '</strong>' +
+                (p.cpf ? ' <span style="font-size:11px;color:var(--text-light);">📄 ' + p.cpf + '</span>' : '') +
+                (p.telefone ? ' <span style="font-size:11px;color:var(--text-light);">📱 ' + (p.telefone.ddd || '') + (p.telefone.numero || '') + '</span>' : '') +
+                '</div>' +
+                '<div style="display:flex;gap:4px;">' +
+                '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;font-size:10px;">✏️</button>' +
+                '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                '</div></div>';
+        });
+        html += '</div>';
+        lista.innerHTML = html;
     },
 
     // ================================================================
@@ -1747,6 +1802,13 @@ GR.UI = {
             } else {
                 console.warn('⚠️ Módulo Fornecedores não encontrado!');
             }
+        }
+
+        if (abaId === 'config-partes') {
+            setTimeout(function() {
+                GR.UI._renderListaPartesRelacionadas();
+                console.log('✅ Partes relacionadas renderizadas na sub-aba');
+            }, 200);
         }
     },
 
