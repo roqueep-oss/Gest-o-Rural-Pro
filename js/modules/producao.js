@@ -30,10 +30,15 @@ GR.Modules.Producao = {
         colheitas.forEach(function(c) {
             var lotes = c.lotes || [];
             var cargas = c.cargas || [];
-            lotes.forEach(function(l) {
-                totalLotes += l.quantidade || 0;
-                totalGastos += l.totalGasto || 0;
-            });
+            if (lotes.length) {
+                lotes.forEach(function(l) {
+                    totalLotes += l.quantidade || 0;
+                    totalGastos += l.totalGasto || 0;
+                });
+            } else {
+                totalLotes += c.sacosMaduros || 0;
+                totalGastos += c.totalGasto || 0;
+            }
             cargas.forEach(function(cr) {
                 totalEnviadoSecagem += cr.sacosEnviados || 0;
                 totalBeneficiado += cr.sacasBeneficiadas || 0;
@@ -95,11 +100,12 @@ GR.Modules.Producao = {
         ordenadas.forEach(function(c) {
             var lotes = c.lotes || [];
             var cargas = c.cargas || [];
-            var totalLotes = lotes.reduce(function(s, l) { return s + (l.quantidade || 0); }, 0);
+            var temLotes = lotes.length > 0;
+            var totalLotes = temLotes ? lotes.reduce(function(s, l) { return s + (l.quantidade || 0); }, 0) : (c.sacosMaduros || 0);
             var totalEnviado = cargas.reduce(function(s, cr) { return s + (cr.sacosEnviados || 0); }, 0);
             var totalBeneficiado = cargas.reduce(function(s, cr) { return s + (cr.sacasBeneficiadas || 0); }, 0);
             var saldoMaduro = totalLotes - totalEnviado;
-            var totalGastoColheita = lotes.reduce(function(s, l) { return s + (l.totalGasto || 0); }, 0);
+            var totalGastoColheita = temLotes ? lotes.reduce(function(s, l) { return s + (l.totalGasto || 0); }, 0) : (c.totalGasto || 0);
 
             html += '<div class="card" style="margin-bottom:8px;padding:10px;">' +
                 '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">' +
