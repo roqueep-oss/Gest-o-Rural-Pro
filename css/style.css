@@ -1699,7 +1699,7 @@ tbody tr:hover { background: var(--bg); }
 
 /* ----- MENU NAVEGAÇÃO (SIDEBAR) ----- */
 .nav-menu {
-    background: var(--surface);
+    background: #eef2f6;
     display: flex;
     flex-direction: column;
     width: 195px;
@@ -1716,18 +1716,24 @@ tbody tr:hover { background: var(--bg); }
     -webkit-overflow-scrolling: touch;
     box-shadow: var(--card-shadow);
 }
+[data-theme="escuro"] .nav-menu { background: #1a1f2e; }
+[data-theme="azul"] .nav-menu { background: #e8f0fe; }
+[data-theme="verde"] .nav-menu { background: #e8f5e9; }
+[data-theme="roxo"] .nav-menu { background: #f3e8ff; }
+[data-theme="vermelho"] .nav-menu { background: #fef2f2; }
+[data-theme="laranja"] .nav-menu { background: #fff3e0; }
 .nav-menu::-webkit-scrollbar { width: 3px; }
 .nav-menu::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
 .nav-btn {
     flex: 0 0 auto;
     padding: 7px 10px;
-    border: none;
-    background: transparent;
-    border-radius: 8px;
+    border: 1px solid transparent;
+    background: var(--surface);
+    border-radius: 0;
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-light);
+    color: var(--text);
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -1737,11 +1743,19 @@ tbody tr:hover { background: var(--bg); }
     text-align: left;
     width: 100%;
 }
-.nav-btn:hover { background: var(--bg); }
+.nav-btn:hover {
+    background: var(--surface);
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 1px var(--primary-light);
+}
 .nav-btn.active {
     background: var(--primary);
     color: #fff;
+    border-color: var(--primary-dark);
     box-shadow: 0 2px 8px rgba(76,175,80,0.3);
+}
+.nav-btn.active:hover {
+    border-color: var(--primary-dark);
 }
 .nav-btn .icon { font-size: 0.9rem; min-width: 20px; text-align: center; }
 
