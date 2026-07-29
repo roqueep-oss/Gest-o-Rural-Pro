@@ -1,5 +1,5 @@
 // ================================================================
-// MÓDULO: PRODUÇÃO - Culturas, Colheitas, Secagem e Estoque
+// MÓDULO: PRODUÇÃO - Culturas, Colheitas, Lotes, Secagem
 // ================================================================
 
 GR.Modules.Producao = {
@@ -22,12 +22,24 @@ GR.Modules.Producao = {
             colheitas = colheitas.filter(function(c) { return c.propriedade === propAtiva; });
         }
 
-        var totalSacosMaduros = colheitas.reduce(function(s, c) { return s + (c.sacosMaduros || 0); }, 0);
-        var totalSacosBeneficiados = colheitas.reduce(function(s, c) {
+        var totalLotes = 0;
+        var totalEnviadoSecagem = 0;
+        var totalBeneficiado = 0;
+        var totalGastos = 0;
+
+        colheitas.forEach(function(c) {
+            var lotes = c.lotes || [];
             var cargas = c.cargas || [];
-            return s + cargas.reduce(function(ss, cr) { return ss + (cr.sacasBeneficiadas || 0); }, 0);
-        }, 0);
-        var totalGastos = colheitas.reduce(function(s, c) { return s + (c.totalGasto || 0); }, 0);
+            lotes.forEach(function(l) {
+                totalLotes += l.quantidade || 0;
+                totalGastos += l.totalGasto || 0;
+            });
+            cargas.forEach(function(cr) {
+                totalEnviadoSecagem += cr.sacosEnviados || 0;
+                totalBeneficiado += cr.sacasBeneficiadas || 0;
+            });
+        });
+
         var totalCargas = colheitas.reduce(function(s, c) {
             return s + ((c.cargas || []).length);
         }, 0);
@@ -35,9 +47,9 @@ GR.Modules.Producao = {
         var html = '<div class="stats-grid">' +
             '<div class="stats-card"><div class="number">' + culturas.length + '</div><div class="label">🌱 Culturas</div></div>' +
             '<div class="stats-card"><div class="number">' + colheitas.length + '</div><div class="label">🌾 Colheitas</div></div>' +
-            '<div class="stats-card"><div class="number">' + totalSacosMaduros + '</div><div class="label">🟤 Sacos Maduros</div></div>' +
-            '<div class="stats-card"><div class="number">' + totalSacosBeneficiados + '</div><div class="label">⚪ Sacas Beneficiadas</div></div>' +
-            '<div class="stats-card"><div class="number">' + totalCargas + '</div><div class="label">🚛 Cargas Secagem</div></div>' +
+            '<div class="stats-card"><div class="number">' + totalLotes + '</div><div class="label">📦 Total Sacos</div></div>' +
+            '<div class="stats-card"><div class="number">' + totalEnviadoSecagem + '</div><div class="label">🚛 Env. Secagem</div></div>' +
+            '<div class="stats-card"><div class="number">' + totalBeneficiado + '</div><div class="label">⚪ Sacas Benef.</div></div>' +
             '<div class="stats-card"><div class="number" style="color:' + (totalGastos >= 0 ? 'var(--danger)' : 'var(--success)') + ';">' + GR.Utils.formatarMoedaBR(totalGastos) + '</div><div class="label">💰 Total Gasto</div></div>' +
             '</div>';
 
@@ -81,38 +93,63 @@ GR.Modules.Producao = {
         var ordenadas = colheitas.slice().sort(function(a, b) { return (b.data || '').localeCompare(a.data || ''); });
         var html = '';
         ordenadas.forEach(function(c) {
+            var lotes = c.lotes || [];
             var cargas = c.cargas || [];
+            var totalLotes = lotes.reduce(function(s, l) { return s + (l.quantidade || 0); }, 0);
             var totalEnviado = cargas.reduce(function(s, cr) { return s + (cr.sacosEnviados || 0); }, 0);
             var totalBeneficiado = cargas.reduce(function(s, cr) { return s + (cr.sacasBeneficiadas || 0); }, 0);
-            var saldoMaduro = (c.sacosMaduros || 0) - totalEnviado;
+            var saldoMaduro = totalLotes - totalEnviado;
+            var totalGastoColheita = lotes.reduce(function(s, l) { return s + (l.totalGasto || 0); }, 0);
 
             html += '<div class="card" style="margin-bottom:8px;padding:10px;">' +
                 '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">' +
                 '<div><strong style="font-size:14px;">' + GR.Utils.escapeHtml(c.cultura || 'Sem cultura') + '</strong> ' +
-                '<span style="font-size:11px;color:var(--text-light);">' + GR.Utils.formatarDataBR(c.data) + '</span></div>' +
+                '<span style="font-size:11px;color:var(--text-light);">' + GR.Utils.formatarDataBR(c.data) + '</span>' +
+                (c.talhao ? '<span style="font-size:11px;color:var(--text-light);margin-left:6px;">📍 Talhão: <strong>' + GR.Utils.escapeHtml(c.talhao) + '</strong></span>' : '') +
+                '</div>' +
                 '<div style="display:flex;gap:3px;">' +
-                '<button class="btn btn-info btn-sm" onclick="GR.Modules.Producao.abrirModalCarga(\'' + c.id + '\')" title="Adicionar carga de secagem" style="font-size:9px;">🚛 Carga</button>' +
                 '<button class="btn btn-primary btn-sm" onclick="GR.Modules.Producao.abrirModalColheita(\'' + c.id + '\')" title="Editar colheita" style="font-size:9px;">✏️</button>' +
                 '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Producao.excluirColheita(\'' + c.id + '\')" title="Excluir colheita" style="font-size:9px;">🗑️</button>' +
                 '</div></div>' +
-                '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:4px;margin-top:6px;font-size:11px;">' +
-                '<div>👣 Pés: <strong>' + (c.pesColhidos || 0) + '</strong></div>' +
-                '<div>🟤 Sacos maduros: <strong>' + (c.sacosMaduros || 0) + '</strong></div>' +
-                '<div>💰 Custo/pé: <strong>' + GR.Utils.formatarMoedaBR(c.custoPorPe || 0) + '</strong></div>' +
-                '<div>💰 Custo/saco: <strong>' + GR.Utils.formatarMoedaBR(c.custoSaco || 0) + '</strong></div>' +
-                '<div>💸 Total gasto: <strong>' + GR.Utils.formatarMoedaBR(c.totalGasto || 0) + '</strong></div>' +
-                '<div>📦 Saldo maduro: <strong style="color:' + (saldoMaduro > 0 ? 'var(--warning)' : 'var(--text-light)') + ';">' + saldoMaduro + '</strong></div>' +
+                '<div style="font-size:11px;color:var(--text-light);margin:4px 0;">📍 Talhão: <strong>' + GR.Utils.escapeHtml(c.talhao || '-') + '</strong> | Propriedade: <strong>' + GR.Utils.escapeHtml(c.propriedade || '-') + '</strong></div>' +
+                '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:4px;margin-top:6px;font-size:11px;">' +
+                '<div>📦 Total colhido: <strong>' + totalLotes + '</strong> sacos</div>' +
+                '<div>🚛 Enviado secagem: <strong>' + totalEnviado + '</strong></div>' +
+                '<div>⚪ Beneficiado: <strong>' + totalBeneficiado + '</strong></div>' +
+                '<div>📦 Saldo: <strong style="color:' + (saldoMaduro > 0 ? 'var(--warning)' : 'var(--text-light)') + ';">' + saldoMaduro + '</strong></div>' +
+                '<div>💸 Total gasto: <strong>' + GR.Utils.formatarMoedaBR(totalGastoColheita) + '</strong></div>' +
+                '</div>' +
+                '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">' +
+                '<button class="btn btn-info btn-sm" onclick="GR.Modules.Producao.abrirModalLote(\'' + c.id + '\')" title="Adicionar lote de colheita" style="font-size:10px;">📦 Lotes (' + lotes.length + ')</button>' +
+                '<button class="btn btn-secondary btn-sm" onclick="GR.Modules.Producao.abrirModalCarga(\'' + c.id + '\')" title="Adicionar carga de secagem" style="font-size:10px;">🚛 Carga Secagem (' + cargas.length + ')</button>' +
                 '</div>';
 
+            if (lotes.length) {
+                html += '<div style="margin-top:6px;padding:6px;background:var(--primary-subtle);border-radius:4px;border-left:3px solid var(--primary);">' +
+                    '<div style="font-size:11px;font-weight:600;margin-bottom:4px;">📦 Lotes de Colheita</div>';
+                lotes.forEach(function(l, idx) {
+                    html += '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;padding:3px 0;border-bottom:1px solid var(--border-light);">' +
+                        '<span><strong>#' + (idx + 1) + '</strong> ' + (l.data ? GR.Utils.formatarDataBR(l.data) : '') + '</span>' +
+                        '<span>📦 <strong>' + (l.quantidade || 0) + '</strong> sacos</span>' +
+                        '<span>👣 R$ ' + GR.Utils.formatarMoedaBR(l.custoPorPe || 0) + '/pé</span>' +
+                        '<span>🟤 R$ ' + GR.Utils.formatarMoedaBR(l.custoSaco || 0) + '/saco</span>' +
+                        '<span>⚖️ R$ ' + GR.Utils.formatarMoedaBR(l.custoPorKg || 0) + '/kg</span>' +
+                        '<span>💸 <strong>' + GR.Utils.formatarMoedaBR(l.totalGasto || 0) + '</strong></span>' +
+                        '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Producao.excluirLote(\'' + c.id + '\',' + idx + ')" title="Excluir lote" style="font-size:8px;padding:1px 4px;">🗑️</button>' +
+                        '</div>';
+                });
+                html += '</div>';
+            }
+
             if (cargas.length) {
-                html += '<div style="margin-top:6px;padding:6px;background:var(--bg);border-radius:4px;">' +
+                html += '<div style="margin-top:6px;padding:6px;background:var(--bg);border-radius:4px;border-left:3px solid var(--warning);">' +
                     '<div style="font-size:11px;font-weight:600;margin-bottom:4px;">🚛 Cargas para Secagem</div>';
                 cargas.forEach(function(cr, idx) {
-                    html += '<div style="display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px solid var(--border-light);">' +
+                    html += '<div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;padding:2px 0;border-bottom:1px solid var(--border-light);">' +
                         '<span>#' + (idx + 1) + ' ' + (cr.data ? GR.Utils.formatarDataBR(cr.data) : '') + '</span>' +
-                        '<span>Enviado: <strong>' + (cr.sacosEnviados || 0) + '</strong> sacos</span>' +
-                        '<span>Beneficiado: <strong>' + (cr.sacasBeneficiadas || 0) + '</strong> sacas</span>' +
-                        '<span>Rendimento: <strong>' + (cr.sacosEnviados && cr.sacasBeneficiadas ? ((cr.sacasBeneficiadas / cr.sacosEnviados * 100).toFixed(1) + '%') : '-') + '</strong></span>' +
+                        '<span>📤 <strong>' + (cr.sacosEnviados || 0) + '</strong> sacos</span>' +
+                        '<span>📥 <strong>' + (cr.sacasBeneficiadas || 0) + '</strong> sacas</span>' +
+                        '<span>📊 <strong>' + (cr.sacosEnviados && cr.sacasBeneficiadas ? ((cr.sacasBeneficiadas / cr.sacosEnviados * 100).toFixed(1) + '%') : '-') + '</strong></span>' +
                         '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Producao.excluirCarga(\'' + c.id + '\',' + idx + ')" title="Excluir carga" style="font-size:8px;padding:1px 4px;">🗑️</button>' +
                         '</div>';
                 });
@@ -192,7 +229,7 @@ GR.Modules.Producao = {
     },
 
     // ================================================================
-    // COLHEITAS
+    // COLHEITAS (simplificada: talhão, data, cultura, propriedade)
     // ================================================================
     abrirModalColheita: function(editId) {
         var container = document.getElementById('modal-container');
@@ -204,7 +241,6 @@ GR.Modules.Producao = {
         }
 
         var culturas = GR.State.filtrarPorPropriedade(GR.State.data.culturas || [], 'propriedade');
-        var propAtiva = GR.State.ui.propriedadeAtiva || 'todas';
         var optionsCultura = '<option value="">Selecione...</option>';
         culturas.forEach(function(c) {
             var sel = (item && item.cultura === c.nome) ? 'selected' : '';
@@ -214,19 +250,11 @@ GR.Modules.Producao = {
         var modal = document.createElement('div');
         modal.className = 'modal active';
         modal.style.display = 'flex';
-        modal.innerHTML = '<div class="modal-content" style="max-width:500px;">' +
+        modal.innerHTML = '<div class="modal-content" style="max-width:450px;">' +
             '<div class="modal-header"><h2 class="modal-title">' + (editId ? '✏️ Editar' : '🌾 Nova') + ' Colheita</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<div class="form-group"><label>📍 Talhão</label><input type="text" id="colheita-talhao" class="form-control" placeholder="Ex: Talhão A-1" value="' + (item ? GR.Utils.escapeHtml(item.talhao || '') : '') + '"></div>' +
             '<div class="form-group"><label>Cultura</label><select id="colheita-cultura" class="form-control">' + optionsCultura + '</select></div>' +
             '<div class="form-group"><label>Data da Colheita</label><input type="date" id="colheita-data" class="form-control" value="' + (item ? item.data : new Date().toISOString().slice(0, 10)) + '"></div>' +
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-            '<div class="form-group"><label>👣 Pés Colhidos</label><input type="number" id="colheita-pes" class="form-control" value="' + (item ? item.pesColhidos || 0 : 0) + '"></div>' +
-            '<div class="form-group"><label>🟤 Sacos Maduros</label><input type="number" id="colheita-sacos" class="form-control" step="0.1" value="' + (item ? item.sacosMaduros || 0 : 0) + '"></div>' +
-            '</div>' +
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-            '<div class="form-group"><label>💰 Custo por Pé (R$)</label><input type="number" id="colheita-custoPe" class="form-control" step="0.01" value="' + (item ? item.custoPorPe || 0 : 0) + '"></div>' +
-            '<div class="form-group"><label>💰 Custo por Saco (R$)</label><input type="number" id="colheita-custoSaco" class="form-control" step="0.01" value="' + (item ? item.custoSaco || 0 : 0) + '"></div>' +
-            '</div>' +
-            '<div class="form-group"><label>💸 Total Gasto (R$) <span style="font-size:10px;color:var(--text-light);">(calculado automaticamente)</span></label><input type="number" id="colheita-totalGasto" class="form-control" step="0.01" value="' + (item ? item.totalGasto || 0 : 0) + '"></div>' +
             '<div class="form-group"><label>Propriedade</label><select id="colheita-propriedade" class="form-control"></select></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarColheita(\'' + (editId || '') + '\')">✅ Salvar</button>' +
@@ -238,27 +266,7 @@ GR.Modules.Producao = {
             document.getElementById('colheita-propriedade').value = item.propriedade || '';
         }
 
-        // Auto-calcular total gasto
-        var inputPes = document.getElementById('colheita-pes');
-        var inputCustoPe = document.getElementById('colheita-custoPe');
-        var inputCustoSaco = document.getElementById('colheita-custoSaco');
-        var inputTotal = document.getElementById('colheita-totalGasto');
-        var inputSacos = document.getElementById('colheita-sacos');
-
-        function calcularTotal() {
-            var pes = parseFloat(inputPes.value) || 0;
-            var custoPe = parseFloat(inputCustoPe.value) || 0;
-            var sacos = parseFloat(inputSacos.value) || 0;
-            var custoSaco = parseFloat(inputCustoSaco.value) || 0;
-            var total = (pes * custoPe) + (sacos * custoSaco);
-            if (total > 0) inputTotal.value = total.toFixed(2);
-        }
-        inputPes.addEventListener('input', calcularTotal);
-        inputCustoPe.addEventListener('input', calcularTotal);
-        inputSacos.addEventListener('input', calcularTotal);
-        inputCustoSaco.addEventListener('input', calcularTotal);
-
-        setTimeout(function() { document.getElementById('colheita-cultura').focus(); }, 100);
+        setTimeout(function() { document.getElementById('colheita-talhao').focus(); }, 100);
     },
 
     salvarColheita: function(editId) {
@@ -266,26 +274,31 @@ GR.Modules.Producao = {
         if (!user) return;
         var uid = user.uid;
 
+        var talhao = document.getElementById('colheita-talhao').value.trim();
+        var cultura = document.getElementById('colheita-cultura').value;
+        var data = document.getElementById('colheita-data').value;
+        var propriedade = document.getElementById('colheita-propriedade').value.trim();
+
+        if (!talhao) { GR.Toast.error('Informe o talhão!'); return; }
+        if (!cultura) { GR.Toast.error('Selecione uma cultura!'); return; }
+        if (!data) { GR.Toast.error('Informe a data!'); return; }
+        if (!propriedade) { GR.Toast.error('Selecione a propriedade!'); return; }
+
         var dados = {
-            cultura: document.getElementById('colheita-cultura').value,
-            data: document.getElementById('colheita-data').value,
-            pesColhidos: parseFloat(document.getElementById('colheita-pes').value) || 0,
-            sacosMaduros: parseFloat(document.getElementById('colheita-sacos').value) || 0,
-            custoPorPe: parseFloat(document.getElementById('colheita-custoPe').value) || 0,
-            custoSaco: parseFloat(document.getElementById('colheita-custoSaco').value) || 0,
-            totalGasto: parseFloat(document.getElementById('colheita-totalGasto').value) || 0,
-            propriedade: GR.Utils.escapeHtml(document.getElementById('colheita-propriedade').value.trim()),
-            cargas: [],
+            talhao: GR.Utils.escapeHtml(talhao),
+            cultura: cultura,
+            data: data,
+            propriedade: GR.Utils.escapeHtml(propriedade),
             dataCriacao: GR.Utils.now()
         };
-
-        if (!dados.cultura) { GR.Toast.error('Selecione uma cultura!'); return; }
-        if (!dados.data) { GR.Toast.error('Informe a data!'); return; }
 
         if (editId) {
             dados.dataAtualizacao = GR.Utils.now();
             var item = GR.State.data.colheitas.find(function(c) { return c.id === editId; });
-            if (item && item.cargas) dados.cargas = item.cargas;
+            if (item) {
+                if (item.lotes) dados.lotes = item.lotes;
+                if (item.cargas) dados.cargas = item.cargas;
+            }
 
             db.collection('users').doc(uid).collection('colheitas').doc(editId).update(dados)
                 .then(function() {
@@ -298,6 +311,9 @@ GR.Modules.Producao = {
                     GR.Toast.error('Erro: ' + err.message);
                 });
         } else {
+            dados.lotes = [];
+            dados.cargas = [];
+
             db.collection('users').doc(uid).collection('colheitas').add(dados)
                 .then(function(docRef) {
                     dados.id = docRef.id;
@@ -327,7 +343,121 @@ GR.Modules.Producao = {
     },
 
     // ================================================================
-    // CARGAS DE SECAGEM
+    // LOTES DE COLHEITA (quantidade, custo/pé, custo/saco, custo/kg)
+    // ================================================================
+    abrirModalLote: function(colheitaId) {
+        var container = document.getElementById('modal-container');
+        if (!container) return;
+
+        var colheita = GR.State.data.colheitas.find(function(c) { return c.id === colheitaId; });
+        if (!colheita) { GR.Toast.error('Colheita não encontrada'); return; }
+
+        var modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.style.display = 'flex';
+        modal.innerHTML = '<div class="modal-content" style="max-width:480px;">' +
+            '<div class="modal-header"><h2 class="modal-title">📦 Novo Lote de Colheita</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<p style="font-size:12px;color:var(--text-light);margin-bottom:6px;">' +
+            '<strong>' + GR.Utils.escapeHtml(colheita.cultura) + '</strong> | ' +
+            'Talhão: <strong>' + GR.Utils.escapeHtml(colheita.talhao || '-') + '</strong> | ' +
+            'Data: ' + GR.Utils.formatarDataBR(colheita.data) +
+            '</p>' +
+            '<div class="form-group"><label>Data da Colheita do Lote</label><input type="date" id="lote-data" class="form-control" value="' + new Date().toISOString().slice(0, 10) + '"></div>' +
+            '<div class="form-group"><label>📦 Quantidade (sacos)</label><input type="number" id="lote-quantidade" class="form-control" step="0.1" value="0"></div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">' +
+            '<div class="form-group"><label>👣 Custo/pé (R$)</label><input type="number" id="lote-custoPe" class="form-control" step="0.01" value="0"></div>' +
+            '<div class="form-group"><label>🟤 Custo/saco (R$)</label><input type="number" id="lote-custoSaco" class="form-control" step="0.01" value="0"></div>' +
+            '<div class="form-group"><label>⚖️ Custo/kg (R$)</label><input type="number" id="lote-custoKg" class="form-control" step="0.01" value="0"></div>' +
+            '</div>' +
+            '<div class="form-group"><label>💸 Total Gasto (R$) <span style="font-size:10px;color:var(--text-light);">(calculado automaticamente)</span></label><input type="number" id="lote-totalGasto" class="form-control" step="0.01" value="0" readonly style="background:var(--bg);font-weight:700;"></div>' +
+            '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
+            '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarLote(\'' + colheitaId + '\')">✅ Salvar Lote</button>' +
+            '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
+        container.appendChild(modal);
+
+        var inputQuant = document.getElementById('lote-quantidade');
+        var inputCustoPe = document.getElementById('lote-custoPe');
+        var inputCustoSaco = document.getElementById('lote-custoSaco');
+        var inputCustoKg = document.getElementById('lote-custoKg');
+        var inputTotal = document.getElementById('lote-totalGasto');
+
+        function calcularTotal() {
+            var qtd = parseFloat(inputQuant.value) || 0;
+            var custoPe = parseFloat(inputCustoPe.value) || 0;
+            var custoSaco = parseFloat(inputCustoSaco.value) || 0;
+            var custoKg = parseFloat(inputCustoKg.value) || 0;
+            var total = (qtd * custoPe) + (qtd * custoSaco) + (qtd * custoKg);
+            inputTotal.value = total.toFixed(2);
+        }
+        inputQuant.addEventListener('input', calcularTotal);
+        inputCustoPe.addEventListener('input', calcularTotal);
+        inputCustoSaco.addEventListener('input', calcularTotal);
+        inputCustoKg.addEventListener('input', calcularTotal);
+
+        setTimeout(function() { document.getElementById('lote-data').focus(); }, 100);
+    },
+
+    salvarLote: function(colheitaId) {
+        var user = firebase.auth().currentUser;
+        if (!user) return;
+
+        var data = document.getElementById('lote-data').value;
+        var quantidade = parseFloat(document.getElementById('lote-quantidade').value) || 0;
+        var custoPorPe = parseFloat(document.getElementById('lote-custoPe').value) || 0;
+        var custoSaco = parseFloat(document.getElementById('lote-custoSaco').value) || 0;
+        var custoPorKg = parseFloat(document.getElementById('lote-custoKg').value) || 0;
+        var totalGasto = parseFloat(document.getElementById('lote-totalGasto').value) || 0;
+
+        if (!quantidade) { GR.Toast.error('Informe a quantidade colhida!'); return; }
+
+        var colheita = GR.State.data.colheitas.find(function(c) { return c.id === colheitaId; });
+        if (!colheita) { GR.Toast.error('Colheita não encontrada'); return; }
+
+        var lotes = colheita.lotes || [];
+        lotes.push({
+            data: data,
+            quantidade: quantidade,
+            custoPorPe: custoPorPe,
+            custoSaco: custoSaco,
+            custoPorKg: custoPorKg,
+            totalGasto: totalGasto
+        });
+
+        db.collection('users').doc(user.uid).collection('colheitas').doc(colheitaId).update({ lotes: lotes })
+            .then(function() {
+                GR.State.atualizarNoCache('colheitas', colheitaId, colheita);
+                var modal = document.querySelector('.modal.active');
+                if (modal) modal.remove();
+                GR.Toast.success('✅ Lote registrado!');
+                GR.UI.refreshCurrentView();
+            }).catch(function(err) {
+                GR.Toast.error('Erro: ' + err.message);
+            });
+    },
+
+    excluirLote: function(colheitaId, index) {
+        if (!confirm('Excluir este lote?')) return;
+        var user = firebase.auth().currentUser;
+        if (!user) return;
+
+        var colheita = GR.State.data.colheitas.find(function(c) { return c.id === colheitaId; });
+        if (!colheita) return;
+
+        var lotes = colheita.lotes || [];
+        lotes.splice(index, 1);
+
+        db.collection('users').doc(user.uid).collection('colheitas').doc(colheitaId).update({ lotes: lotes })
+            .then(function() {
+                GR.State.atualizarNoCache('colheitas', colheitaId, colheita);
+                GR.Toast.success('Lote excluído!');
+                GR.UI.refreshCurrentView();
+            }).catch(function(err) {
+                GR.Toast.error('Erro: ' + err.message);
+            });
+    },
+
+    // ================================================================
+    // CARGAS DE SECAGEM (valida saldo dos lotes)
     // ================================================================
     abrirModalCarga: function(colheitaId) {
         var container = document.getElementById('modal-container');
@@ -336,18 +466,23 @@ GR.Modules.Producao = {
         var colheita = GR.State.data.colheitas.find(function(c) { return c.id === colheitaId; });
         if (!colheita) { GR.Toast.error('Colheita não encontrada'); return; }
 
-        var saldoMaduro = (colheita.sacosMaduros || 0);
+        var lotes = colheita.lotes || [];
         var cargas = colheita.cargas || [];
+        var totalColhido = lotes.reduce(function(s, l) { return s + (l.quantidade || 0); }, 0);
         var totalEnviado = cargas.reduce(function(s, c) { return s + (c.sacosEnviados || 0); }, 0);
-        var disponivel = saldoMaduro - totalEnviado;
+        var disponivel = totalColhido - totalEnviado;
 
         var modal = document.createElement('div');
         modal.className = 'modal active';
         modal.style.display = 'flex';
         modal.innerHTML = '<div class="modal-content" style="max-width:450px;">' +
             '<div class="modal-header"><h2 class="modal-title">🚛 Nova Carga de Secagem</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
-            '<p style="font-size:12px;color:var(--text-light);margin-bottom:6px;">Cultura: <strong>' + GR.Utils.escapeHtml(colheita.cultura) + '</strong> | Data: ' + GR.Utils.formatarDataBR(colheita.data) + '</p>' +
-            '<p style="font-size:12px;">🟤 Sacos maduros: <strong>' + saldoMaduro + '</strong> | 📤 Já enviados: <strong>' + totalEnviado + '</strong> | 📦 Disponível: <strong style="color:' + (disponivel > 0 ? 'var(--success)' : 'var(--danger)') + ';">' + disponivel + '</strong></p>' +
+            '<p style="font-size:12px;color:var(--text-light);margin-bottom:6px;">' +
+            'Cultura: <strong>' + GR.Utils.escapeHtml(colheita.cultura) + '</strong> | ' +
+            'Talhão: <strong>' + GR.Utils.escapeHtml(colheita.talhao || '-') + '</strong> | ' +
+            'Data: ' + GR.Utils.formatarDataBR(colheita.data) +
+            '</p>' +
+            '<p style="font-size:12px;">📦 Total colhido: <strong>' + totalColhido + '</strong> sacos | 📤 Já enviado: <strong>' + totalEnviado + '</strong> | 📦 Disponível: <strong style="color:' + (disponivel > 0 ? 'var(--success)' : 'var(--danger)') + ';">' + disponivel + '</strong></p>' +
             '<div class="form-group"><label>Data do Envio</label><input type="date" id="carga-data" class="form-control" value="' + new Date().toISOString().slice(0, 10) + '"></div>' +
             '<div class="form-group"><label>📤 Sacos Enviados para Secagem</label><input type="number" id="carga-enviados" class="form-control" step="0.1" value="0"></div>' +
             '<div class="form-group"><label>📥 Sacas Beneficiadas (resultado)</label><input type="number" id="carga-beneficiadas" class="form-control" step="0.1" value="0"></div>' +
@@ -371,7 +506,16 @@ GR.Modules.Producao = {
         var colheita = GR.State.data.colheitas.find(function(c) { return c.id === colheitaId; });
         if (!colheita) { GR.Toast.error('Colheita não encontrada'); return; }
 
+        var lotes = colheita.lotes || [];
         var cargas = colheita.cargas || [];
+        var totalColhido = lotes.reduce(function(s, l) { return s + (l.quantidade || 0); }, 0);
+        var totalEnviado = cargas.reduce(function(s, c) { return s + (c.sacosEnviados || 0); }, 0);
+
+        if (enviados > (totalColhido - totalEnviado)) {
+            GR.Toast.error('Quantidade excede o saldo disponível de ' + (totalColhido - totalEnviado) + ' sacos!');
+            return;
+        }
+
         cargas.push({
             data: data,
             sacosEnviados: enviados,
