@@ -46,6 +46,7 @@ GR.Modules.Configuracoes = {
         html += '<div class="config-menu-custom" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding:10px;background:var(--bg-light,#f5f5f5);border-radius:8px;border:1px solid var(--border,#ddd);">';
         html += this._botao('gerais', '📋 Gerais');
         html += this._botao('perfis', '👥 Perfis');
+        html += this._botao('partesRelacionadas', '👤 Partes Relacionadas');
         html += this._botao('fornecedores', '🚚 Fornecedores');
         html += this._botao('backup', '💾 Backup');
         html += this._botao('aparencia', '🎨 Aparência');
@@ -124,6 +125,9 @@ GR.Modules.Configuracoes = {
                 break;
             case 'perfis':
                 container.innerHTML = self._renderPerfis(GR.State.data.perfis || []);
+                break;
+            case 'partesRelacionadas':
+                container.innerHTML = self._renderPartesRelacionadas(GR.State.data.partesRelacionadas || []);
                 break;
             case 'fornecedores':
                 container.innerHTML = self._renderFornecedores(GR.State.data.fornecedores || []);
@@ -251,6 +255,34 @@ GR.Modules.Configuracoes = {
             '<input type="number" id="config-novo-perfil-nivel" class="form-control" placeholder="Nível" style="width:80px;padding:8px;border-radius:6px;border:1px solid var(--border);" value="1">' +
             '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarPerfil()" title="Adicionar perfil" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">➕</button>' +
             '</div>' +
+            '</div>';
+        return html;
+    },
+
+    _renderPartesRelacionadas: function(partes) {
+        var html = '<div class="card" style="padding:16px;border-radius:8px;background:var(--card-bg,#fff);border:1px solid var(--border,#ddd);">' +
+            '<h4 style="font-size:14px;margin-bottom:12px;">👤 Partes Relacionadas</h4>' +
+            '<div style="margin-bottom:10px;">';
+        if (partes && partes.length) {
+            html += '<div style="max-height:250px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;">';
+            partes.forEach(function(p) {
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--bg-light);">' +
+                    '<span><strong>' + GR.Utils.escapeHtml(p.nome || 'Sem nome') + '</strong> ' +
+                    (p.cpf ? '📄 ' + p.cpf : '') +
+                    (p.telefone ? ' 📱 ' + (p.telefone.ddd || '') + (p.telefone.numero || '') : '') +
+                    '</span>' +
+                    '<div style="display:flex;gap:4px;">' +
+                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;font-size:10px;">✏️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                    '</div>' +
+                    '</div>';
+            });
+            html += '</div>';
+        } else {
+            html += '<div style="color:#999;padding:10px;text-align:center;">Nenhuma parte relacionada cadastrada</div>';
+        }
+        html += '</div>' +
+            '<button class="btn btn-success" onclick="GR.Modules.PartesRelacionadas.abrirModal()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">👤 Nova Parte Relacionada</button>' +
             '</div>';
         return html;
     },
