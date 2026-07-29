@@ -2413,60 +2413,6 @@ tbody tr:hover { background: var(--bg); }
 /* ================================================================ */
 /* 🧭 NAVEGAÇÃO PRINCIPAL (NAVBAR) E TABS */
 /* ================================================================ */
-.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    padding: 5px 10px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    justify-content: center;
-    -webkit-overflow-scrolling: touch;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-}
-
-.nav-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    padding: 4px 8px;
-    border: 1.5px solid transparent;
-    border-radius: var(--radius-full);
-    background: transparent;
-    color: var(--text-light);
-    font-family: var(--font-sans);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    user-select: none;
-}
-.nav-btn .icon {
-    font-size: 12px;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.nav-btn:hover {
-    background: var(--surface-hover);
-    color: var(--text);
-    border-color: var(--border-light);
-}
-.nav-btn:hover .icon {
-    transform: scale(1.2);
-}
-.nav-btn.active {
-    background: var(--primary-subtle);
-    color: var(--primary-dark);
-    border-color: rgba(5, 150, 105, 0.35);
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);
-}
-[data-theme="escuro"] .nav-btn.active {
-    background: rgba(16, 185, 129, 0.18);
-    color: var(--primary-light);
-    border-color: rgba(16, 185, 129, 0.4);
-}
-
 /* Tabs de Propriedade */
 .prop-tabs-container {
     padding: 12px 0 18px 0;
