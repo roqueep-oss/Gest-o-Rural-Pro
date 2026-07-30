@@ -59,11 +59,24 @@ var __persistenceEnabled = false;
 try {
     var auth = firebase.auth();
     var db = firebase.firestore();
+    db.settings({
+        ignoreUndefinedProperties: true
+    });
+    try {
+        db.enablePersistence({ synchronizeTabs: true });
+        __persistenceEnabled = true;
+    } catch (e) {
+        if (e.code === 'failed-precondition') {
+            __persistenceEnabled = true;
+        }
+    }
+    __firestoreInitialized = true;
+    window.__firestoreInitialized = true;
+    window.db = db;
     var storage = firebase.storage();
     console.log('✅ Auth, Firestore e Storage criados');
 } catch (error) {
     console.error('❌ Erro ao criar referências do Firebase:', error);
-    // Fallback: cria referências vazias para não quebrar
     var auth = { 
         currentUser: null, 
         onAuthStateChanged: function() {}, 
@@ -100,107 +113,6 @@ try {
     };
 }
 
-// ================================================================
-// 🆕 HABILITAR PERSISTÊNCIA DO FIRESTORE (CORRIGIDO)
-// ================================================================
-function habilitarPersistence() {
-    // Evita habilitar mais de uma vez
-    if (__persistenceEnabled) {
-        console.log('ℹ️ Persistência já ativada');
-        return Promise.resolve();
-    }
-    
-    // Evita habilitar se o Firestore já tiver sido usado
-    if (__firestoreInitialized) {
-        console.log('ℹ️ Firestore já inicializado, persistência não pode ser ativada');
-        return Promise.resolve();
-    }
-    
-    console.log('📦 Ativando persistência offline do Firestore...');
-    
-    // Tenta habilitar persistência com sincronização de abas
-    return db.enablePersistence({
-        synchronizeTabs: true
-    }).then(function() {
-        __persistenceEnabled = true;
-        console.log('✅ Persistência offline ativada com sucesso!');
-        return true;
-    }).catch(function(err) {
-        if (err.code === 'failed-precondition') {
-            // Múltiplas abas abertas, persistência já ativa
-            console.log('ℹ️ Persistência já ativa (múltiplas abas)');
-            __persistenceEnabled = true;
-            return true;
-        } else if (err.code === 'unimplemented') {
-            // Navegador não suporta persistência
-            console.log('ℹ️ Persistência não suportada pelo navegador');
-            return false;
-        } else {
-            console.warn('⚠️ Erro ao ativar persistência:', err);
-            return false;
-        }
-    });
-}
-
-// ================================================================
-// 🆕 INICIALIZAR FIRESTORE COM CONFIGURAÇÕES
-// ================================================================
-function inicializarFirestore() {
-    if (__firestoreInitialized) {
-        console.log('ℹ️ Firestore já inicializado');
-        return db;
-    }
-    
-    try {
-        // Primeiro, habilita persistência (se possível)
-        habilitarPersistence().then(function() {
-            // Aplica configurações
-            db.settings({ 
-                cache: true, 
-                merge: true,
-                ignoreUndefinedProperties: true
-            });
-            
-            __firestoreInitialized = true;
-            console.log('✅ Firestore configurado com cache e persistência');
-            
-            // Marca como inicializado globalmente
-            window.__firestoreInitialized = true;
-            window.db = db;
-        }).catch(function(err) {
-            console.warn('⚠️ Erro ao configurar Firestore:', err);
-            // Tenta configurar mesmo sem persistência
-            try {
-                db.settings({ 
-                    merge: true,
-                    ignoreUndefinedProperties: true
-                });
-                __firestoreInitialized = true;
-                window.__firestoreInitialized = true;
-                window.db = db;
-                console.log('✅ Firestore configurado (sem persistência)');
-            } catch(e) {
-                console.error('❌ Erro crítico ao configurar Firestore:', e);
-            }
-        });
-    } catch (error) {
-        console.warn('⚠️ Erro ao configurar Firestore:', error);
-    }
-    
-    return db;
-}
-
-// ================================================================
-// EXECUTA INICIALIZAÇÃO ASSÍNCRONA
-// ================================================================
-// Aguarda o próximo tick para não bloquear o carregamento
-setTimeout(function() {
-    inicializarFirestore();
-}, 100);
-
-// ================================================================
-// VARIÁVEL GLOBAL DO USUÁRIO ATUAL
-// ================================================================
 var currentUser = null;
 
 // ================================================================
@@ -552,8 +464,7 @@ window.register = register;
 window.logout = logout;
 window.showToast = showToast;
 window.log = log;
-window.habilitarPersistence = habilitarPersistence;
-window.inicializarFirestore = inicializarFirestore;
+
 
 // ================================================================
 // 🆕 INICIALIZAÇÃO AUTOMÁTICA DO MONITORAMENTO
@@ -562,16 +473,13 @@ window.inicializarFirestore = inicializarFirestore;
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         console.log('📄 DOM carregado, iniciando monitoramento...');
-        // Primeiro inicializa Firestore, depois monitora autenticação
         setTimeout(function() {
-            inicializarFirestore();
             monitorarAutenticacao();
         }, 50);
     });
 } else {
     console.log('📄 DOM já carregado, iniciando monitoramento...');
     setTimeout(function() {
-        inicializarFirestore();
         monitorarAutenticacao();
     }, 50);
 }
