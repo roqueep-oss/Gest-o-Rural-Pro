@@ -19,6 +19,7 @@
     var MODELO_DEEPSEEK = 'deepseek-v4-flash';
     var URL_NVIDIA = 'https://integrate.api.nvidia.com/v1';
     var MODELO_NVIDIA = 'deepseek-ai/deepseek-v4-flash';
+    var CHAVE_NVIDIA_PADRAO = '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';
     var PROVEDORES = {
         gemini: { nome: 'Google Gemini', icone: '🔴' },
         deepseek: { nome: 'DeepSeek V4', icone: '🟢' },
@@ -41,7 +42,7 @@
             this._provedor = localStorage.getItem('gr_ia_provedor') || 'gemini';
             this._apiKeyGemini = localStorage.getItem('gr_gemini_key') || '';
             this._apiKeyDeepSeek = localStorage.getItem('gr_deepseek_key') || '';
-            this._apiKeyNvidia = localStorage.getItem('gr_nvidia_key') || '';
+            this._apiKeyNvidia = localStorage.getItem('gr_nvidia_key') || CHAVE_NVIDIA_PADRAO;
             this._inicializado = true;
             console.log('✅ Módulo IA inicializado (provedor: ' + this._provedor + ')');
             this._carregarChavesFirestore();
@@ -406,8 +407,15 @@
                     { role: 'system', content: 'Você é um assistente especializado em gestão rural. Responda em português brasileiro, de forma clara e direta.' },
                     { role: 'user', content: prompt }
                 ],
-                temperature: 0.7,
-                max_tokens: 2048
+                temperature: 1,
+                top_p: 0.95,
+                max_tokens: 16384,
+                extra_body: {
+                    chat_template_kwargs: {
+                        thinking: true,
+                        reasoning_effort: 'high'
+                    }
+                }
             };
 
             return fetch(URL_NVIDIA + '/chat/completions', {
@@ -425,7 +433,10 @@
                 }
                 return res.json();
             }).then(function(data) {
-                return data.choices?.[0]?.message?.content || '';
+                var msg = data.choices?.[0]?.message;
+                var reasoning = msg?.reasoning || msg?.reasoning_content || '';
+                var content = msg?.content || '';
+                return (reasoning ? '[Raciocínio]\n' + reasoning + '\n\n[Resposta]\n' : '') + content;
             });
         },
 
