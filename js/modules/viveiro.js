@@ -948,7 +948,7 @@ GR.Modules.Viveiro = {
                     ${podeVerProducao ? `<button class="btn btn-sm btn-secondary" onclick="GR.Modules.Viveiro._mostrarSubAba('viveiro-producao')" id="tab-viveiro-producao" style="font-size:11px;">🌱 Produção</button>` : ''}
                     ${podeVerVendas ? `<button class="btn btn-sm btn-secondary" onclick="GR.Modules.Viveiro._mostrarSubAba('viveiro-vendas')" id="tab-viveiro-vendas" style="font-size:11px;">💰 Vendas</button>` : ''}
                     ${podeVerCaixa ? `<button class="btn btn-sm btn-secondary" onclick="GR.Modules.Viveiro._mostrarSubAba('viveiro-caixa')" id="tab-viveiro-caixa" style="font-size:11px;">📒 Livro Caixa</button>` : ''}
-                    ${podeVerRelatorios ? `<button class="btn btn-sm btn-secondary" onclick="GR.Modules.Viveiro._mostrarSubAba('viveiro-relatorios')" id="tab-viveiro-relatorios" style="font-size:11px;">📊 Relatórios</button>` : ''}
+                    ${podeVerRelatorios ? `<button class="btn btn-sm btn-secondary" onclick="GR.Modules.Viveiro._mostrarSubAba('viveiro-relatorios')" id="tab-viveiro-relatorios" style="font-size:11px;">📈 Relatórios</button>` : ''}
                 </div>
 
                 <div id="viveiro-dashboard" class="sub-aba-content">

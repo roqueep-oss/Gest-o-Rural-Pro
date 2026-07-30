@@ -756,7 +756,8 @@
             { nome: 'Backup', obj: GR.Backup },
             { nome: 'Scanner', obj: GR.Scanner },
             { nome: 'PDFImport', obj: GR.PDFImport },
-            { nome: 'Voice', obj: GR.Voice }
+            { nome: 'Voice', obj: GR.Voice },
+            { nome: 'IA', obj: GR.Modules.IA }
         ];
 
         modulos.forEach(function(mod) {

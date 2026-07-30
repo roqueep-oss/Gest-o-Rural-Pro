@@ -76,12 +76,31 @@ GR.UI = {
         root.style.setProperty('--font-size-base', '14px');
         var label = this._getElement('fontSizeLabel');
         if (label) label.textContent = '100%';
-        
+
         var label2 = document.getElementById('fontSizeLabel2');
         if (label2) label2.textContent = '100%';
-        
+
         localStorage.setItem('gr_font_size', 14);
         GR.Toast.info('🔤 Fonte resetada para 100%');
+    },
+
+    toggleSidebar: function() {
+        var nav = document.getElementById('mainNav');
+        if (!nav) return;
+        nav.classList.toggle('collapsed');
+        document.querySelector('.app-layout')?.classList.toggle('sidebar-collapsed');
+        var btn = nav.querySelector('.nav-toggle-btn');
+        if (btn) btn.textContent = nav.classList.contains('collapsed') ? '▶' : '◀';
+        localStorage.setItem('gr_sidebar_collapsed', nav.classList.contains('collapsed') ? '1' : '0');
+    },
+
+    navegarPara: function(section) {
+        var btn = document.querySelector('.nav-btn[data-section="' + section + '"]');
+        if (btn) {
+            btn.click();
+        } else if (typeof this.mudarView === 'function') {
+            this.mudarView(section);
+        }
     },
 
     toggleModoEscuro: function() {
@@ -135,12 +154,13 @@ GR.UI = {
             'documentos': '📁 Documentos',
             'analises': '🧪 Análises',
             'viveiro': '🌱 Viveiro',
-            'relatorios': '📊 Relatórios',
+            'relatorios': '📈 Relatórios',
             'configuracoes': '⚙️ Configurações',
             'historico': '📜 Histórico',
             'notificacoes': '🔔 Notificações',
             'nfe': '📄 NF-e',
-            'producao': '🌾 Produção'
+            'producao': '🌾 Produção',
+            'ia': '🤖 IA'
         };
         var titleEl = this._getElement('view-title');
         if (titleEl) titleEl.textContent = titles[view] || view;
@@ -192,7 +212,8 @@ GR.UI = {
             'historico': this._renderHistorico.bind(this),
             'notificacoes': this._renderNotificacoes.bind(this),
             'nfe': this._renderNFe.bind(this),
-            'producao': this._renderProducao.bind(this)
+            'producao': this._renderProducao.bind(this),
+            'ia': this._renderIA.bind(this)
         };
 
         var renderFn = renderMap[view];
@@ -293,6 +314,17 @@ GR.UI = {
             document.documentElement.style.setProperty('--font-size-base', savedFont + 'px');
             var label = this._getElement('fontSizeLabel');
             if (label) label.textContent = Math.round((savedFont / 14) * 100) + '%';
+
+            // Restaurar estado da sidebar
+            if (localStorage.getItem('gr_sidebar_collapsed') === '1') {
+                var nav = document.getElementById('mainNav');
+                if (nav) {
+                    nav.classList.add('collapsed');
+                    document.querySelector('.app-layout')?.classList.add('sidebar-collapsed');
+                    var btn = nav.querySelector('.nav-toggle-btn');
+                    if (btn) btn.textContent = '▶';
+                }
+            }
 
             document.querySelectorAll('.nav-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
@@ -1438,7 +1470,7 @@ GR.UI = {
         container.innerHTML = `
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span class="emoji">📊</span> Relatórios</div>
+                    <div class="card-title"><span class="emoji">📈</span> Relatórios</div>
                 </div>
                 <div id="relatorios-content"></div>
             </div>
@@ -1908,6 +1940,13 @@ GR.UI = {
         if (GR.Modules.Producao && typeof GR.Modules.Producao.render === 'function') GR.Modules.Producao.render();
     },
 
+    _renderIA: function(container) {
+        container.innerHTML = '<div id="ia-content"></div>';
+        if (GR.Modules.IA && typeof GR.Modules.IA.render === 'function') {
+            GR.Modules.IA.render();
+        }
+    },
+
     // ================================================================
     // UTILITÁRIOS
     // ================================================================
@@ -2042,15 +2081,6 @@ var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade'
         GR.State.setPropriedadeAtiva(propriedade);
         this.atualizarPropTabsComPermissoes();
         this.refreshCurrentView();
-    },
-
-    toggleSidebar: function() {
-        var sidebar = this._getElement('sidebar');
-        var overlay = this._getElement('sidebar-overlay');
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-            if (overlay) overlay.classList.toggle('show');
-        }
     },
 
     updateUserInfo: function() {

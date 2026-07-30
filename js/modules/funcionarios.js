@@ -1203,6 +1203,7 @@ GR.Modules.Funcionarios = {
         db.collection('users').doc(user.uid).collection('recibos').add(dados)
             .then(function() {
                 GR.Toast.success('✅ Recibo salvo com sucesso!');
+                GR.Modal.close('modal-visualizar-recibo');
                 GR.State.adicionarHistorico('salvou recibo', 'Recibos', 'Funcionário: ' + (f ? f.nome : ''));
             }).catch(function(err) {
                 GR.Toast.error('Erro ao salvar: ' + err.message);

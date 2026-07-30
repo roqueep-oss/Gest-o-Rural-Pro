@@ -368,15 +368,12 @@ GR.Modules.Configuracoes = {
         if (existing) existing.remove();
 
         var propriedades = GR.State.data.propriedades || [];
-        var html = '<div id="modal-propriedades" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;">' +
-            '<div style="background:#fff;border-radius:12px;padding:24px;max-width:700px;width:95%;max-height:90vh;overflow-y:auto;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">' +
-            '<h3 style="margin:0;color:#2E7D32;">🏠 Gerenciar Propriedades</h3>' +
-            '<button onclick="this.closest(\'#modal-propriedades\').remove()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#999;">×</button>' +
-            '</div>' +
+        var html = '<div id="modal-propriedades" class="modal active" style="display:flex;">' +
+            '<div class="modal-content" style="max-width:700px;width:95%;">' +
+            '<div class="modal-header"><h2 class="modal-title">🏠 Gerenciar Propriedades</h2><button class="close-btn" onclick="GR.Modal.close(\'propriedades\')">×</button></div>' +
             '<div style="margin-bottom:15px;">' +
-            '<div style="font-size:12px;color:#666;margin-bottom:6px;">📋 <strong>Propriedades cadastradas:</strong> ' + (propriedades ? propriedades.length : 0) + '</div>' +
-            '<div style="max-height:200px;overflow-y:auto;border:1px solid #ddd;border-radius:6px;">';
+            '<div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">📋 <strong>Propriedades cadastradas:</strong> ' + (propriedades ? propriedades.length : 0) + '</div>' +
+            '<div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;">';
 
         if (propriedades && propriedades.length) {
             propriedades.forEach(function(p) {
@@ -435,7 +432,7 @@ GR.Modules.Configuracoes = {
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="documentos" checked> 📁 Documentos</label>' +
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="analises" checked> 🔬 Análises</label>' +
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="viveiro" checked> 🌱 Viveiro</label>' +
-            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="relatorios" checked> 📊 Relatórios</label>' +
+            '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="relatorios" checked> 📈 Relatórios</label>' +
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="producao" checked> 🌾 Produção</label>' +
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="nfe" checked> 📄 NF-e</label>' +
             '</div></div>' +
@@ -447,6 +444,7 @@ GR.Modules.Configuracoes = {
             '</div>';
 
         document.body.insertAdjacentHTML('beforeend', html);
+        GR.Modal.open('propriedades');
     },
 
     salvarPropriedadeModal: function() {
@@ -498,8 +496,7 @@ GR.Modules.Configuracoes = {
                 dados.id = docRef.id;
                 GR.State.inserirNoCache('propriedades', dados);
                 GR.Toast.success('✅ Propriedade "' + nome + '" adicionada!');
-                var modal = document.getElementById('modal-propriedades');
-                if (modal) modal.remove();
+                GR.Modal.close('propriedades');
                 GR.UI.atualizarPropTabs();
                 GR.UI._atualizarSelectsPropriedade();
                 GR.UI.refreshCurrentView();
@@ -727,9 +724,9 @@ GR.Modules.Configuracoes = {
         }
 
         var modalHtml = 
-            '<div id="modal-editar-propriedade" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;">' +
-            '<div style="background:#fff;border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;">' +
-            '<h4 style="margin-top:0;">✏️ Editar Propriedade</h4>' +
+            '<div id="modal-editar-propriedade" class="modal active" style="display:flex;">' +
+            '<div class="modal-content" style="max-width:500px;width:90%;">' +
+            '<div class="modal-header"><h2 class="modal-title">✏️ Editar Propriedade</h2><button class="close-btn" onclick="GR.Modal.close(\'editar-propriedade\')">×</button></div>' +
             '<div style="display:grid;gap:8px;">' +
             '<div><label>Nome *</label><input type="text" id="edit-prop-nome" class="form-control" value="' + GR.Utils.escapeHtml(propriedade.nome || '') + '" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;"></div>' +
             '<div><label>Localização</label><input type="text" id="edit-prop-localizacao" class="form-control" value="' + GR.Utils.escapeHtml(propriedade.localizacao || '') + '" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;"></div>' +
@@ -768,14 +765,14 @@ GR.Modules.Configuracoes = {
             GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'documentos', '📁 Documentos', propriedade) +
             GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'analises', '🔬 Análises', propriedade) +
             GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'viveiro', '🌱 Viveiro', propriedade) +
-            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'relatorios', '📊 Relatórios', propriedade) +
+            GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'relatorios', '📈 Relatórios', propriedade) +
             GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'producao', '🌾 Produção', propriedade) +
             GR.Modules.Configuracoes._htmlCheckboxModulo('edit', 'nfe', '📄 NF-e', propriedade) +
             '</div></div>' +
             '</div>' +
             '<div style="display:flex;gap:8px;margin-top:12px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Configuracoes._salvarEdicaoPropriedade(\'' + id + '\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">💾 Salvar</button>' +
-            '<button class="btn btn-secondary" onclick="GR.Modules.Configuracoes._fecharModalEdicao()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#9E9E9E;color:#fff;">❌ Cancelar</button>' +
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'editar-propriedade\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#9E9E9E;color:#fff;">❌ Cancelar</button>' +
             '</div>' +
             '</div>' +
             '</div>';
@@ -783,6 +780,7 @@ GR.Modules.Configuracoes = {
         var existing = document.getElementById('modal-editar-propriedade');
         if (existing) existing.remove();
         document.body.insertAdjacentHTML('beforeend', modalHtml);
+        GR.Modal.open('editar-propriedade');
     },
 
     _salvarEdicaoPropriedade: function(id) {
@@ -821,7 +819,7 @@ GR.Modules.Configuracoes = {
             .then(function() {
                 GR.State.atualizarNoCache('propriedades', id, dados);
                 GR.Toast.success('✅ Propriedade atualizada!');
-                GR.Modules.Configuracoes._fecharModalEdicao();
+                GR.Modal.close('editar-propriedade');
                 GR.UI.atualizarPropTabs();
                 GR.UI._atualizarSelectsPropriedade();
                 GR.UI.refreshCurrentView();
@@ -843,8 +841,7 @@ GR.Modules.Configuracoes = {
     },
 
     _fecharModalEdicao: function() {
-        var modal = document.getElementById('modal-editar-propriedade');
-        if (modal) modal.remove();
+        GR.Modal.close('editar-propriedade');
     },
 
     excluirPropriedade: function(id) {

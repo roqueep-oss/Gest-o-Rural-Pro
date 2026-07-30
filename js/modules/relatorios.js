@@ -16,7 +16,7 @@ GR.Modules.Relatorios = {
         
         var html = `
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding:8px 12px;background:var(--bg);border-radius:4px;border:1px solid var(--border);">
-                <span style="font-size:13px;font-weight:600;">📊 Relatórios</span>
+                <span style="font-size:13px;font-weight:600;">📈 Relatórios</span>
                 <span style="font-size:11px;color:var(--text-light);">${propDisplay}</span>
                 <button class="btn btn-sm btn-secondary" onclick="GR.Modules.Relatorios._alternarPropriedade()" style="font-size:10px;">
                     ${propAtiva === 'todas' ? '🔍 Filtrar por propriedade' : '🌍 Todas as propriedades'}
@@ -62,7 +62,7 @@ GR.Modules.Relatorios = {
 
         div.innerHTML = html;
         
-        console.log('📊 Relatórios carregados - Propriedade ativa:', propAtiva);
+        console.log('📈 Relatórios carregados - Propriedade ativa:', propAtiva);
     },
 
     // ================================================================

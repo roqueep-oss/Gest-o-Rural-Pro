@@ -589,6 +589,7 @@
                 <button class="config-btn" onclick="GR.Notificacoes.abrirModal()" title="Notificações" style="position:relative;">
                     🔔<span id="notificacao-badge" style="display:none;position:absolute;top:-5px;right:-5px;background:red;color:#fff;border-radius:50%;padding:1px 5px;font-size:8px;font-weight:bold;">0</span>
                 </button>
+                <button class="btn-ia-header" onclick="GR.UI.navegarPara('ia')" title="Assistente IA">🤖</button>
                 <button class="btn-funcionario" onclick="GR.Modules.Perfis.abrirLoginFuncionario()" title="Acesso do Funcionário">
                     👨‍🌾
                 </button>
@@ -604,23 +605,28 @@
 
             <!-- MENU DE NAVEGAÇÃO (SIDEBAR) -->
             <nav class="nav-menu no-print" id="mainNav">
+                <div style="display:flex;justify-content:flex-end;padding:2px 0 4px 0;">
+                    <button class="nav-toggle-btn" onclick="GR.UI.toggleSidebar()" title="Recolher/Expandir menu">◀</button>
+                </div>
                 <button class="nav-btn active" data-section="dashboard"><span class="icon">📊</span> Painel</button>
                 <button class="nav-btn" data-section="acoes"><span class="icon">📋</span> Ações</button>
                 <button class="nav-btn" data-section="analises"><span class="icon">🧪</span> Análises</button>
-                <button class="nav-btn" data-section="configuracoes"><span class="icon">⚙️</span> Config.</button>
                 <button class="nav-btn" data-section="contabilidade"><span class="icon">🧾</span> Contabilidade</button>
                 <button class="nav-btn" data-section="credito"><span class="icon">💳</span> Crédito</button>
                 <button class="nav-btn" data-section="documentos"><span class="icon">📁</span> Documentos</button>
                 <button class="nav-btn" data-section="funcionarios"><span class="icon">👨‍🌾</span> Funcionários</button>
-                <button class="nav-btn" data-section="historico"><span class="icon">📜</span> Histórico</button>
                 <button class="nav-btn" data-section="insumos"><span class="icon">🧪</span> Insumos</button>
-                <button class="nav-btn" data-section="notificacoes"><span class="icon">🔔</span> Notificações</button>
                 <button class="nav-btn" data-section="orcamentos"><span class="icon">💰</span> Orçamentos</button>
                 <button class="nav-btn" data-section="parceiros"><span class="icon">👥</span> Parceiros</button>
                 <button class="nav-btn" data-section="pecuaria"><span class="icon">🐄</span> Pecuária</button>
                 <button class="nav-btn" data-section="producao"><span class="icon">🌾</span> Produção</button>
-                <button class="nav-btn" data-section="relatorios"><span class="icon">📊</span> Relatórios</button>
+                <button class="nav-btn" data-section="relatorios"><span class="icon">📈</span> Relatórios</button>
                 <button class="nav-btn" data-section="viveiro"><span class="icon">🌱</span> Viveiro</button>
+                <div style="flex:1;min-height:8px;"></div>
+                <hr style="border:none;border-top:1px solid var(--border);margin:4px 0;">
+                <button class="nav-btn" data-section="configuracoes"><span class="icon">⚙️</span> Config.</button>
+                <button class="nav-btn" data-section="historico"><span class="icon">📜</span> Histórico</button>
+                <button class="nav-btn" data-section="notificacoes"><span class="icon">🔔</span> Notificações</button>
             </nav>
 
             <!-- CONTEÚDO PRINCIPAL -->
@@ -700,6 +706,7 @@
 
                 <!-- NOTIFICAÇÕES -->
                 <div id="section-notificacoes" class="section hidden"></div>
+                <div id="section-ia" class="section hidden"></div>
                 <div id="section-producao" class="section hidden"><div id="lista-producao"></div></div>
             </div>
 
@@ -2640,6 +2647,7 @@
         <script src="js/modules/scanner.js"></script>
         <script src="js/modules/pdfimport.js"></script>
         <script src="js/modules/voice.js"></script>
+        <script src="js/modules/ia.js"></script>
         <script src="js/modules/producao.js"></script>
 
         <!-- 🆕 PERFIS -->

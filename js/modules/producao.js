@@ -180,15 +180,17 @@ GR.Modules.Producao = {
 
         var modal = document.createElement('div');
         modal.className = 'modal active';
+        modal.id = 'modal-cultura';
         modal.style.display = 'flex';
         modal.innerHTML = '<div class="modal-content" style="max-width:400px;">' +
-            '<div class="modal-header"><h2 class="modal-title">🌱 Nova Cultura</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<div class="modal-header"><h2 class="modal-title">🌱 Nova Cultura</h2><button class="close-btn" onclick="GR.Modal.close(\'cultura\')">×</button></div>' +
             '<div class="form-group"><label>Nome da Cultura</label><input type="text" id="cultura-nome" class="form-control" placeholder="Ex: Café Conilon"></div>' +
             '<div class="form-group"><label>Propriedade</label><select id="cultura-propriedade" class="form-control"></select></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarCultura()">✅ Salvar</button>' +
-            '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'cultura\')">Cancelar</button></div></div>';
         container.appendChild(modal);
+        GR.Modal.open('cultura');
         if (GR.UI && typeof GR.UI._atualizarSelectsPropriedade === 'function') GR.UI._atualizarSelectsPropriedade();
         setTimeout(function() { document.getElementById('cultura-nome').focus(); }, 100);
     },
@@ -211,8 +213,7 @@ GR.Modules.Producao = {
             .then(function(docRef) {
                 dados.id = docRef.id;
                 GR.State.inserirNoCache('culturas', dados);
-                var modal = document.querySelector('.modal.active');
-                if (modal) modal.remove();
+                GR.Modal.close('cultura');
                 GR.Toast.success('✅ Cultura cadastrada!');
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {
@@ -255,17 +256,19 @@ GR.Modules.Producao = {
 
         var modal = document.createElement('div');
         modal.className = 'modal active';
+        modal.id = 'modal-colheita';
         modal.style.display = 'flex';
         modal.innerHTML = '<div class="modal-content" style="max-width:450px;">' +
-            '<div class="modal-header"><h2 class="modal-title">' + (editId ? '✏️ Editar' : '🌾 Nova') + ' Colheita</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<div class="modal-header"><h2 class="modal-title">' + (editId ? '✏️ Editar' : '🌾 Nova') + ' Colheita</h2><button class="close-btn" onclick="GR.Modal.close(\'colheita\')">×</button></div>' +
             '<div class="form-group"><label>📍 Talhão</label><input type="text" id="colheita-talhao" class="form-control" placeholder="Ex: Talhão A-1" value="' + (item ? GR.Utils.escapeHtml(item.talhao || '') : '') + '"></div>' +
             '<div class="form-group"><label>Cultura</label><select id="colheita-cultura" class="form-control">' + optionsCultura + '</select></div>' +
             '<div class="form-group"><label>Data da Colheita</label><input type="date" id="colheita-data" class="form-control" value="' + (item ? item.data : new Date().toISOString().slice(0, 10)) + '"></div>' +
             '<div class="form-group"><label>Propriedade</label><select id="colheita-propriedade" class="form-control"></select></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarColheita(\'' + (editId || '') + '\')">✅ Salvar</button>' +
-            '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'colheita\')">Cancelar</button></div></div>';
         container.appendChild(modal);
+        GR.Modal.open('colheita');
 
         if (GR.UI && typeof GR.UI._atualizarSelectsPropriedade === 'function') GR.UI._atualizarSelectsPropriedade();
         if (item) {
@@ -309,8 +312,7 @@ GR.Modules.Producao = {
             db.collection('users').doc(uid).collection('colheitas').doc(editId).update(dados)
                 .then(function() {
                     GR.State.atualizarNoCache('colheitas', editId, dados);
-                    var modal = document.querySelector('.modal.active');
-                    if (modal) modal.remove();
+                    GR.Modal.close('colheita');
                     GR.Toast.success('✅ Colheita atualizada!');
                     GR.UI.refreshCurrentView();
                 }).catch(function(err) {
@@ -324,8 +326,7 @@ GR.Modules.Producao = {
                 .then(function(docRef) {
                     dados.id = docRef.id;
                     GR.State.inserirNoCache('colheitas', dados);
-                    var modal = document.querySelector('.modal.active');
-                    if (modal) modal.remove();
+                    GR.Modal.close('colheita');
                     GR.Toast.success('✅ Colheita registrada!');
                     GR.UI.refreshCurrentView();
                 }).catch(function(err) {
@@ -360,9 +361,10 @@ GR.Modules.Producao = {
 
         var modal = document.createElement('div');
         modal.className = 'modal active';
+        modal.id = 'modal-lote';
         modal.style.display = 'flex';
         modal.innerHTML = '<div class="modal-content" style="max-width:480px;">' +
-            '<div class="modal-header"><h2 class="modal-title">📦 Novo Lote de Colheita</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<div class="modal-header"><h2 class="modal-title">📦 Novo Lote de Colheita</h2><button class="close-btn" onclick="GR.Modal.close(\'lote\')">×</button></div>' +
             '<p style="font-size:12px;color:var(--text-light);margin-bottom:6px;">' +
             '<strong>' + GR.Utils.escapeHtml(colheita.cultura) + '</strong> | ' +
             'Talhão: <strong>' + GR.Utils.escapeHtml(colheita.talhao || '-') + '</strong> | ' +
@@ -378,8 +380,9 @@ GR.Modules.Producao = {
             '<div class="form-group"><label>💸 Total Gasto (R$) <span style="font-size:10px;color:var(--text-light);">(calculado automaticamente)</span></label><input type="number" id="lote-totalGasto" class="form-control" step="0.01" value="0" readonly style="background:var(--bg);font-weight:700;"></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarLote(\'' + colheitaId + '\')">✅ Salvar Lote</button>' +
-            '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'lote\')">Cancelar</button></div></div>';
         container.appendChild(modal);
+        GR.Modal.open('lote');
 
         var inputQuant = document.getElementById('lote-quantidade');
         var inputCustoPe = document.getElementById('lote-custoPe');
@@ -432,8 +435,7 @@ GR.Modules.Producao = {
         db.collection('users').doc(user.uid).collection('colheitas').doc(colheitaId).update({ lotes: lotes })
             .then(function() {
                 GR.State.atualizarNoCache('colheitas', colheitaId, colheita);
-                var modal = document.querySelector('.modal.active');
-                if (modal) modal.remove();
+                GR.Modal.close('lote');
                 GR.Toast.success('✅ Lote registrado!');
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {
@@ -480,9 +482,10 @@ GR.Modules.Producao = {
 
         var modal = document.createElement('div');
         modal.className = 'modal active';
+        modal.id = 'modal-carga';
         modal.style.display = 'flex';
         modal.innerHTML = '<div class="modal-content" style="max-width:450px;">' +
-            '<div class="modal-header"><h2 class="modal-title">🚛 Nova Carga de Secagem</h2><button class="close-btn" onclick="this.closest(\'.modal.active\').remove()">×</button></div>' +
+            '<div class="modal-header"><h2 class="modal-title">🚛 Nova Carga de Secagem</h2><button class="close-btn" onclick="GR.Modal.close(\'carga\')">×</button></div>' +
             '<p style="font-size:12px;color:var(--text-light);margin-bottom:6px;">' +
             'Cultura: <strong>' + GR.Utils.escapeHtml(colheita.cultura) + '</strong> | ' +
             'Talhão: <strong>' + GR.Utils.escapeHtml(colheita.talhao || '-') + '</strong> | ' +
@@ -494,8 +497,9 @@ GR.Modules.Producao = {
             '<div class="form-group"><label>📥 Sacas Beneficiadas (resultado)</label><input type="number" id="carga-beneficiadas" class="form-control" step="0.1" value="0"></div>' +
             '<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">' +
             '<button class="btn btn-success" onclick="GR.Modules.Producao.salvarCarga(\'' + colheitaId + '\')">✅ Salvar Carga</button>' +
-            '<button class="btn btn-secondary" onclick="this.closest(\'.modal.active\').remove()">Cancelar</button></div></div>';
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'carga\')">Cancelar</button></div></div>';
         container.appendChild(modal);
+        GR.Modal.open('carga');
         setTimeout(function() { document.getElementById('carga-enviados').focus(); }, 100);
     },
 
@@ -531,8 +535,7 @@ GR.Modules.Producao = {
         db.collection('users').doc(user.uid).collection('colheitas').doc(colheitaId).update({ cargas: cargas })
             .then(function() {
                 GR.State.atualizarNoCache('colheitas', colheitaId, colheita);
-                var modal = document.querySelector('.modal.active');
-                if (modal) modal.remove();
+                GR.Modal.close('carga');
                 GR.Toast.success('✅ Carga registrada!');
                 GR.UI.refreshCurrentView();
             }).catch(function(err) {

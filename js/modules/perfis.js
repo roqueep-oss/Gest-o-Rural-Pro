@@ -29,7 +29,7 @@ GR.Modules.Perfis = {
         { id: 'documentos', nome: '📁 Documentos', icon: '📁' },
         { id: 'analises', nome: '🧪 Análises', icon: '🧪' },
         { id: 'viveiro', nome: '🌱 Viveiro', icon: '🌱' },
-        { id: 'relatorios', nome: '📊 Relatórios', icon: '📊' },
+        { id: 'relatorios', nome: '📈 Relatórios', icon: '📈' },
         { id: 'configuracoes', nome: '⚙️ Config.', icon: '⚙️' },
         { id: 'historico', nome: '📜 Histórico', icon: '📜' },
         { id: 'nfe', nome: '📄 NF-e', icon: '📄' },

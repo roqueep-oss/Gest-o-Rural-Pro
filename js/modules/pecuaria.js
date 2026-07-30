@@ -779,7 +779,7 @@
                     ref.doc(editId).update(dados)
                         .then(function() {
                             GR.State.atualizarNoCache('animais', editId, dados);
-                            this._closeModal('modal-animal');
+                            GR.Modal.close('modal-animal');
                             alert('🐄 Animal atualizado!');
                             this._refreshView();
                         }.bind(this))
@@ -792,7 +792,7 @@
                         .then(function(docRef) {
                             dados.id = docRef.id;
                             GR.State.inserirNoCache('animais', dados);
-                            this._closeModal('modal-animal');
+                            GR.Modal.close('modal-animal');
                             alert('🐄 Animal salvo!');
                             this._refreshView();
                         }.bind(this))
