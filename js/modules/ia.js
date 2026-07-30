@@ -44,6 +44,51 @@
             this._apiKeyNvidia = localStorage.getItem('gr_nvidia_key') || '';
             this._inicializado = true;
             console.log('✅ Módulo IA inicializado (provedor: ' + this._provedor + ')');
+            this._carregarChavesFirestore();
+        },
+
+        _salvarChaveFirestore: function() {
+            var user = firebase.auth().currentUser;
+            if (!user) return;
+            var ref = db.collection('users').doc(user.uid).collection('config').doc('ia');
+            ref.set({
+                provedor: this._provedor,
+                geminiKey: this._apiKeyGemini,
+                deepseekKey: this._apiKeyDeepSeek,
+                nvidiaKey: this._apiKeyNvidia
+            }, { merge: true }).catch(function(err) {
+                console.warn('⚠️ Erro ao salvar chaves IA no Firestore:', err);
+            });
+        },
+
+        _carregarChavesFirestore: function() {
+            var self = this;
+            var user = firebase.auth().currentUser;
+            if (!user) return;
+            var ref = db.collection('users').doc(user.uid).collection('config').doc('ia');
+            ref.get().then(function(doc) {
+                if (doc.exists) {
+                    var data = doc.data();
+                    if (data.geminiKey) {
+                        self._apiKeyGemini = data.geminiKey;
+                        localStorage.setItem('gr_gemini_key', data.geminiKey);
+                    }
+                    if (data.deepseekKey) {
+                        self._apiKeyDeepSeek = data.deepseekKey;
+                        localStorage.setItem('gr_deepseek_key', data.deepseekKey);
+                    }
+                    if (data.nvidiaKey) {
+                        self._apiKeyNvidia = data.nvidiaKey;
+                        localStorage.setItem('gr_nvidia_key', data.nvidiaKey);
+                    }
+                    if (data.provedor) {
+                        self._provedor = data.provedor;
+                        localStorage.setItem('gr_ia_provedor', data.provedor);
+                    }
+                }
+            }).catch(function(err) {
+                console.warn('⚠️ Erro ao carregar chaves IA do Firestore:', err);
+            });
         },
 
         _getApiKey: function() {
@@ -204,7 +249,7 @@
                 </div>
 
                 <div style="margin-top:8px;font-size:11px;color:var(--text-light,#999);">
-                    💡 As chaves ficam salvas apenas no seu navegador (localStorage).
+                    💡 As chaves ficam salvas no Firebase (nuvem) e no navegador (localStorage).
                     ${provedor !== 'gemini' ? '⚠️ Análise de imagens requer Gemini.' : ''}
                 </div>
 
@@ -255,6 +300,8 @@
 
             this._provedor = provedor;
             localStorage.setItem('gr_ia_provedor', provedor);
+
+            this._salvarChaveFirestore();
 
             var overlay = document.getElementById('ia-modal-overlay');
             if (overlay) overlay.remove();
