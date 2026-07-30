@@ -169,6 +169,12 @@ GR.UI = {
             btn.classList.toggle('active', btn.dataset.section === view);
         });
         
+        document.querySelectorAll('.bottom-nav-btn').forEach(function(btn) {
+            if (btn.dataset.section) {
+                btn.classList.toggle('active', btn.dataset.section === view);
+            }
+        });
+        
         try {
             localStorage.setItem('gr_ultima_aba', view);
         } catch(e) {}
@@ -1991,14 +1997,14 @@ GR.UI = {
     _atualizarSelectsPropriedade: function() {
         var props = GR.State.data.propriedades || [];
         var propAtiva = GR.State.ui.propriedadeAtiva || 'todas';
-var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade',
-        'insumo-propriedade', 'animal-propriedade', 'func-propriedade',
-        'parceiro-propriedade', 'desp-propriedade', 'rec-propriedade',
-        'doc-propriedade', 'analise-propriedade',
-        'viveiro-insumo-propriedade', 'viveiro-servico-propriedade',
-        'viveiro-muda-propriedade', 'viveiro-trabalhador-propriedade',
-        'cultura-propriedade', 'colheita-propriedade'
-    ];
+        var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade',
+            'insumo-propriedade', 'animal-propriedade', 'func-propriedade',
+            'parceiro-propriedade', 'desp-propriedade', 'rec-propriedade',
+            'doc-propriedade', 'analise-propriedade',
+            'viveiro-insumo-propriedade', 'viveiro-servico-propriedade',
+            'viveiro-muda-propriedade', 'viveiro-trabalhador-propriedade',
+            'cultura-propriedade', 'colheita-propriedade'
+        ];
 
         selectIds.forEach(function(id) {
             var select = document.getElementById(id);
@@ -2109,6 +2115,106 @@ var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade'
     _abrirArquivo: function(arquivoId) {
         if (!arquivoId) { GR.Toast.error('Arquivo não encontrado.'); return; }
         GR.Toast.info('📄 Abrindo arquivo: ' + arquivoId);
+    },
+
+    // ================================================================
+    // 🌟 BUSCA RÁPIDA / PALETTE DE COMANDOS (CTRL + K)
+    // ================================================================
+    abrirBuscaRapida: function() {
+        var modal = document.getElementById('quickSearchModal');
+        var input = document.getElementById('quickSearchInput');
+        if (!modal || !input) return;
+        
+        modal.classList.add('show');
+        input.value = '';
+        input.focus();
+        this.filtrarBuscaRapida('');
+    },
+
+    fecharBuscaRapida: function() {
+        var modal = document.getElementById('quickSearchModal');
+        if (modal) {
+            modal.classList.remove('show');
+        }
+    },
+
+    filtrarBuscaRapida: function(query) {
+        var resultsContainer = document.getElementById('quickSearchResults');
+        if (!resultsContainer) return;
+        
+        var q = (query || '').toLowerCase().trim();
+        
+        var modulos = [
+            { id: 'dashboard', title: 'Painel / Dashboard', sub: 'Visão geral financeira, produção e indicadores', icon: '📊' },
+            { id: 'acoes', title: 'Ações Rurais', sub: 'Plantio, adubação, colheita e tratamentos', icon: '📋' },
+            { id: 'analises', title: 'Análises de Solo & Folha', sub: 'Laudos de laboratório e macronutrientes', icon: '🧪' },
+            { id: 'contabilidade', title: 'Contabilidade & Caixa', sub: 'Fluxo de caixa, receitas e despesas', icon: '🧾' },
+            { id: 'credito', title: 'Crédito Rural', sub: 'Financiamentos, Custeio e Investimento', icon: '💳' },
+            { id: 'documentos', title: 'Documentação da Fazenda', sub: 'Contratos, escrituras e notas fiscais', icon: '📁' },
+            { id: 'funcionarios', title: 'Gestão de Funcionários', sub: 'Cadastro, ponto, folha e recibos', icon: '👨‍🌾' },
+            { id: 'insumos', title: 'Estoque de Insumos', sub: 'Fertilizantes, defensivos e sementes', icon: '🧪' },
+            { id: 'orcamentos', title: 'Orçamentos & Cotações', sub: 'Cotações de fornecedores e previsões', icon: '💰' },
+            { id: 'parceiros', title: 'Parceiros & Fornecedores', sub: 'Contatos de fornecedores e clientes', icon: '👥' },
+            { id: 'pecuaria', title: 'Pecuária & Gado', sub: 'Rebanho, vacinação, pesagem e lote', icon: '🐄' },
+            { id: 'producao', title: 'Produção & Safras', sub: 'Histórico de colheita e sacas/ha', icon: '🌾' },
+            { id: 'relatorios', title: 'Relatórios & Exportação', sub: 'PDF, Excel e gráficos consolidados', icon: '📈' },
+            { id: 'viveiro', title: 'Viveiro de Mudas', sub: 'Lotes de mudas, estaquia e germinação', icon: '🌱' },
+            { id: 'ia', title: 'Assistente Virtual de IA', sub: 'Consultas inteligentes e análise preditiva', icon: '🤖' },
+            { id: 'configuracoes', title: 'Configurações do Sistema', sub: 'Temas, propriedades e preferências', icon: '⚙️' }
+        ];
+
+        var filtrados = modulos.filter(function(m) {
+            if (!q) return true;
+            return m.title.toLowerCase().includes(q) || m.sub.toLowerCase().includes(q);
+        });
+
+        if (filtrados.length === 0) {
+            resultsContainer.innerHTML = `
+                <div style="padding:20px;text-align:center;color:var(--text-light);">
+                    <div style="font-size:32px;margin-bottom:6px;">🔍</div>
+                    <div>Nenhum resultado encontrado para "<strong>${q}</strong>"</div>
+                </div>
+            `;
+            return;
+        }
+
+        var html = '';
+        filtrados.forEach(function(item) {
+            html += `
+                <div class="quick-search-item" onclick="GR.UI.navegarPara('${item.id}'); GR.UI.fecharBuscaRapida();">
+                    <span class="item-icon">${item.icon}</span>
+                    <div class="item-info">
+                        <span class="item-title">${item.title}</span>
+                        <span class="item-sub">${item.sub}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        resultsContainer.innerHTML = html;
+    },
+
+    // ================================================================
+    // 🌟 SKELETON LOADERS
+    // ================================================================
+    mostrarSkeleton: function(containerId, count = 3, type = 'card') {
+        var el = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+        if (!el) return;
+        
+        var html = '';
+        for (var i = 0; i < count; i++) {
+            if (type === 'card') {
+                html += `
+                    <div class="skeleton skeleton-card">
+                        <div class="skeleton skeleton-text short" style="margin-bottom:12px;"></div>
+                        <div class="skeleton skeleton-text" style="width:80%;"></div>
+                    </div>
+                `;
+            } else {
+                html += `<div class="skeleton skeleton-text" style="height:24px;margin-bottom:10px;"></div>`;
+            }
+        }
+        el.innerHTML = html;
     }
 };
 
@@ -2118,40 +2224,21 @@ var selectIds = ['tarefa-propriedade', 'orc-propriedade', 'contrato-propriedade'
 GR.UI._abrirGraficoCredito = GR.UI._abrirGraficoCredito;
 GR.UI._renderGraficoCredito = GR.UI._renderGraficoCredito;
 
-console.log('✅ GR.UI v3.1 carregado com CORREÇÕES!');
-console.log('📌 CORREÇÕES APLICADAS:');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.init()');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.podeVer()');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.podeCriar()');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.getPerfilAtual()');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.podeGerenciarPerfis()');
-console.log('   - 🔧 Verificação segura de GR.Modules.Perfis.podeZerarBanco()');
-console.log('📌 Melhorias ativas:');
-console.log('   - 🆕 Cache de elementos DOM');
-console.log('   - 🆕 Throttle e Debounce');
-console.log('   - 🆕 Animações de transição');
-console.log('   - 🆕 Suporte a teclado (acessibilidade)');
-console.log('   - 🆕 Fechamento automático do sidebar mobile');
-console.log('   - 🆕 Atualização automática em segundo plano');
-console.log('   - 🆕 Valores FIXOS no TOPO das colunas do gráfico 🚀');
-console.log('   - 🆕 Fundo branco nos valores para legibilidade');
-console.log('   - 🆕 Exportação do dashboard');
-console.log('   - 🆕 Verificação de permissões por módulo');
-console.log('   - 🆕 Indicadores de tendência no dashboard');
-console.log('   - 🆕 Sub-abas de configuração com Fornecedores');
-console.log('   - 🆕 Listener em tempo real para fornecedores');
-console.log('   - 🆕 Atualização automática de selects de fornecedores');
-console.log('   - 🆕 Exportação de configurações');
-console.log('   - 🆕 Seletor de tema na aba Aparência');
-console.log('   - 🆕 Botão de ajuda rápida');
-console.log('   - 🆕 Prevenção de clique duplo em botões');
-console.log('   - 🆕 Detecção de alterações nos dados');
-console.log('   - 🆕 Ctrl+S para salvar modais');
-console.log('   - 🆕 ESC para fechar modais');
-console.log('   - 🆕 F1 para ajuda');
-console.log('   - 🏠 Filtro de propriedades por perfil');
-console.log('   - 📊 Dashboard filtrado por propriedade');
-console.log('   - 🚀 Persistência da aba ativa');
+// Listener de atalho global para Busca Rápida (Ctrl + K / Cmd + K e ESC)
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (typeof GR !== 'undefined' && GR.UI && typeof GR.UI.abrirBuscaRapida === 'function') {
+            GR.UI.abrirBuscaRapida();
+        }
+    } else if (e.key === 'Escape') {
+        if (typeof GR !== 'undefined' && GR.UI && typeof GR.UI.fecharBuscaRapida === 'function') {
+            GR.UI.fecharBuscaRapida();
+        }
+    }
+});
+
+console.log('✅ GR.UI v3.1 carregado com MELHORIAS DE UI/UX (Busca Rápida Ctrl+K, Bottom Nav, Skeleton Loaders e Transições)!');
 console.log('   - 🚀 Atalhos de teclado (Ctrl+1 a Ctrl+9, Ctrl+D, Ctrl+C)');
 console.log('   - 🚀 Detecção de conexão Online/Offline');
 console.log('   - 🚀 Tempo de carregamento no footer');

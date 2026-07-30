@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -564,6 +564,9 @@
         <header class="header no-print">
             <h1><img src="favicon.png" class="app-icon"> Gestão Rural</h1>
             <div class="header-right">
+                <button class="btn-quick-search" onclick="GR.UI.abrirBuscaRapida()" title="Buscar no sistema (Ctrl+K)">
+                    <span>🔍</span> <span class="no-mobile" style="font-size:12px;">Buscar...</span> <kbd class="quick-search-shortcut" style="font-size:10px;">Ctrl+K</kbd>
+                </button>
                 <span class="user-badge" id="userEmail">
                     <span id="userName">usuário</span>
                     <span class="nivel" id="userLevel">usuário</span>
@@ -731,6 +734,45 @@
                 <span id="footer-online" style="color:var(--success);">🟢 Online</span>
                 <span>|</span>
                 <span id="footer-status" style="font-size:9px;color:var(--text-light);">✅ Pronto</span>
+            </div>
+
+            <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+            <nav class="bottom-nav no-print" id="bottomNav">
+                <div class="bottom-nav-grid">
+                    <button class="bottom-nav-btn active" data-section="dashboard" onclick="GR.UI.navegarPara('dashboard')">
+                        <span class="icon">📊</span>
+                        <span>Painel</span>
+                    </button>
+                    <button class="bottom-nav-btn" data-section="acoes" onclick="GR.UI.navegarPara('acoes')">
+                        <span class="icon">📋</span>
+                        <span>Ações</span>
+                    </button>
+                    <button class="bottom-nav-btn btn-action-add" onclick="GR.UI.abrirBuscaRapida()" title="Busca Rápida">
+                        <span class="icon">🔍</span>
+                    </button>
+                    <button class="bottom-nav-btn" data-section="ia" onclick="GR.UI.navegarPara('ia')">
+                        <span class="icon">🤖</span>
+                        <span>Assistente</span>
+                    </button>
+                    <button class="bottom-nav-btn" onclick="GR.UI.toggleSidebar()">
+                        <span class="icon">☰</span>
+                        <span>Menu</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- MODAL: BUSCA RÁPIDA (CTRL + K) -->
+            <div id="quickSearchModal" class="quick-search-backdrop" onclick="if(event.target===this) GR.UI.fecharBuscaRapida()">
+                <div class="quick-search-modal">
+                    <div class="quick-search-header">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="quickSearchInput" class="quick-search-input" placeholder="Digite para buscar módulos, animais, tarefas, insumos..." oninput="GR.UI.filtrarBuscaRapida(this.value)">
+                        <kbd class="quick-search-shortcut">ESC</kbd>
+                    </div>
+                    <div id="quickSearchResults" class="quick-search-results">
+                        <!-- Resultados dinâmicos da busca -->
+                    </div>
+                </div>
             </div>
 
         </div>
