@@ -410,11 +410,9 @@
                 temperature: 1,
                 top_p: 0.95,
                 max_tokens: 16384,
-                extra_body: {
-                    chat_template_kwargs: {
-                        thinking: true,
-                        reasoning_effort: 'high'
-                    }
+                chat_template_kwargs: {
+                    thinking: true,
+                    reasoning_effort: 'high'
                 }
             };
 
@@ -427,8 +425,10 @@
                 body: JSON.stringify(body)
             }).then(function(res) {
                 if (!res.ok) {
-                    return res.json().then(function(err) {
-                        throw new Error(err.error?.message || 'Erro na API NVIDIA');
+                    return res.text().then(function(text) {
+                        var detalhe = '';
+                        try { var j = JSON.parse(text); detalhe = j.error?.message || j.message || text.slice(0,200); } catch(e) { detalhe = text.slice(0,200); }
+                        throw new Error('NVIDIA: ' + detalhe);
                     });
                 }
                 return res.json();
@@ -618,7 +618,7 @@
                 } else if (msgErro.indexOf('API key') > -1 || msgErro.indexOf('key') > -1 || msgErro.indexOf('401') > -1) {
                     msgErro = '⚠️ Problema com a chave da API. Verifique se está correta no ⚙️ ou gere uma nova.';
                 } else if (msgErro.indexOf('fetch') > -1 || msgErro.indexOf('network') > -1 || msgErro.indexOf('NetworkError') > -1) {
-                    msgErro = '⚠️ Erro de conexão. Verifique sua internet e tente novamente.';
+                    msgErro = '⚠️ Erro de conexão. Verifique sua internet e tente novamente.\n\nDetalhe: ' + (msgErro.length > 100 ? msgErro.slice(0,100) : msgErro);
                 } else if (msgErro.indexOf('not found') > -1 || msgErro.indexOf('not supported') > -1) {
                     msgErro = '⚠️ Modelo de IA não disponível. Tente o outro provedor no ⚙️.';
                 }
