@@ -1127,4 +1127,107 @@ GR.Modules.Configuracoes = {
     }
 };
 
+// ================================================================
+// PARTES RELACIONADAS
+// ================================================================
+GR.Modules.PartesRelacionadas = {
+    abrirModal: function(editId) {
+        GR.State.ui.parteEditando = editId || null;
+        document.getElementById('modal-parte-title').textContent = editId ? '✏️ Editar Parte' : '👤 Nova Parte Relacionada';
+        document.getElementById('parte-nome').value = '';
+        document.getElementById('parte-cpf').value = '';
+        document.getElementById('parte-ddd').value = '';
+        document.getElementById('parte-telefone').value = '';
+
+        if (editId) {
+            var item = GR.State.data.partesRelacionadas.find(function(p) { return p.id === editId; });
+            if (item) {
+                document.getElementById('parte-nome').value = item.nome || '';
+                document.getElementById('parte-cpf').value = item.cpf || '';
+                if (item.telefone) {
+                    var tel = GR.Utils.extrairDddNumero(item.telefone);
+                    document.getElementById('parte-ddd').value = tel.ddd;
+                    document.getElementById('parte-telefone').value = tel.numero;
+                }
+            }
+        }
+        GR.Modal.open('modal-parte-relacionada');
+    },
+
+    salvar: function() {
+        var nome = document.getElementById('parte-nome').value.trim();
+        var cpf = document.getElementById('parte-cpf').value.trim();
+        var ddd = document.getElementById('parte-ddd').value.trim();
+        var telefone = document.getElementById('parte-telefone').value.trim();
+        var editId = GR.State.ui.parteEditando;
+
+        if (!nome || !cpf) { GR.Toast.error('Nome e CPF são obrigatórios!'); return; }
+        if (!GR.Utils.validarCPF(cpf)) { GR.Toast.error('CPF inválido!'); return; }
+
+        var user = firebase.auth().currentUser;
+        if (!user) {
+            GR.Toast.error('Usuário não autenticado!');
+            return;
+        }
+
+        var uid = user.uid;
+        var dados = {
+            nome: GR.Utils.escapeHtml(nome),
+            cpf: cpf,
+            telefone: (ddd || telefone) ? { ddd: ddd, numero: telefone } : null,
+            dataCriacao: GR.Utils.now()
+        };
+
+        var ref = db.collection('users').doc(uid).collection('partesRelacionadas');
+
+        if (editId) {
+            ref.doc(editId).update(dados)
+                .then(function() {
+                    GR.State.atualizarNoCache('partesRelacionadas', editId, dados);
+                    GR.Modal.close('modal-parte-relacionada');
+                    GR.Toast.success('Parte atualizada!');
+                    GR.State.adicionarHistorico('editou parte', 'Partes', 'Parte: ' + nome);
+                    GR.UI.atualizarDatalists();
+                    GR.UI.refreshCurrentView();
+                }).catch(function(err) {
+                    GR.Toast.error('Erro ao atualizar: ' + err.message);
+                });
+        } else {
+            ref.add(dados)
+                .then(function(docRef) {
+                    dados.id = docRef.id;
+                    GR.State.inserirNoCache('partesRelacionadas', dados);
+                    GR.Modal.close('modal-parte-relacionada');
+                    GR.Toast.success('Parte salva!');
+                    GR.State.adicionarHistorico('criou parte', 'Partes', 'Parte: ' + nome);
+                    GR.UI.atualizarDatalists();
+                    GR.UI.refreshCurrentView();
+                }).catch(function(err) {
+                    GR.Toast.error('Erro ao salvar: ' + err.message);
+                });
+        }
+    },
+
+    editar: function(id) {
+        this.abrirModal(id);
+    },
+
+    excluir: function(id) {
+        if (!confirm('Excluir esta parte relacionada?')) return;
+        var user = firebase.auth().currentUser;
+        if (!user) return;
+        var uid = user.uid;
+        db.collection('users').doc(uid).collection('partesRelacionadas').doc(id).delete()
+            .then(function() {
+                GR.State.removerDoCache('partesRelacionadas', id);
+                GR.Toast.success('Parte excluída!');
+                GR.State.adicionarHistorico('excluiu parte', 'Partes', 'Parte ID: ' + id);
+                GR.UI.atualizarDatalists();
+                GR.UI.refreshCurrentView();
+            }).catch(function(err) {
+                GR.Toast.error('Erro ao excluir: ' + err.message);
+            });
+    }
+};
+
 console.log('✅ Módulo Configurações (versão final com injeção automática) carregado!');
