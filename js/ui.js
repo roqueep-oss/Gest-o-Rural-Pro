@@ -1442,7 +1442,6 @@ GR.UI = {
                     ${podeCriar ?
                         `<div style="display:flex;gap:3px;flex-wrap:wrap;">
                             <button class="btn btn-primary" onclick="GR.Modules.Parceiros.abrirModal()" title="Cadastrar novo parceiro">➕ Novo Parceiro</button>
-                            <button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.abrirModal()" title="Cadastrar nova parte relacionada">👤 Nova Parte</button>
                         </div>` :
                         `<span style="font-size:12px;color:var(--text-light);">👁️ Visualização apenas</span>`
                     }
