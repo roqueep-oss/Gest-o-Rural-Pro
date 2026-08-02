@@ -120,7 +120,7 @@ GR.Modules.Dashboard = {
                                 <button class="btn btn-sm btn-secondary" onclick="GR.Modules.Dashboard._navegarCalendario(1)">▶</button>
                             </div>
                         </div>
-                        <div id="dashCalendarioGrid"></div>
+                        <div id="dashCalendarioGrid" class="dash-cal"></div>
                         <div class="dash-card-head" style="margin-top:12px;"><h3>🗓️ Eventos de Hoje</h3></div>
                         <div id="dashEventosHoje" style="font-size:12px;"></div>
                     </div>
