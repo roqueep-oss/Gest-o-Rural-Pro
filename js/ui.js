@@ -91,6 +91,8 @@ GR.UI = {
         document.querySelector('.app-layout')?.classList.toggle('sidebar-collapsed');
         var btn = nav.querySelector('.nav-toggle-btn');
         if (btn) btn.textContent = nav.classList.contains('collapsed') ? '▶' : '◀';
+        var hb = document.getElementById('hamburgerBtn');
+        if (hb) hb.classList.toggle('active', !nav.classList.contains('collapsed'));
         localStorage.setItem('gr_sidebar_collapsed', nav.classList.contains('collapsed') ? '1' : '0');
     },
 
@@ -111,9 +113,8 @@ GR.UI = {
         var novo = themes[idx];
         document.documentElement.setAttribute('data-theme', novo);
         localStorage.setItem('gr_theme', novo);
-        var sel = this._getElement('themeSelector');
-        if (sel) sel.value = novo;
-        
+        this._atualizarSwatchTema(novo);
+
         var nomesTemas = {
             'claro': '☀️ Claro',
             'escuro': '🌙 Escuro',
@@ -124,6 +125,57 @@ GR.UI = {
             'laranja': '🟠 Laranja'
         };
         GR.Toast.info(`🎨 Tema alterado para: ${nomesTemas[novo] || novo}`);
+    },
+
+    // ================================================================
+    // SELETOR DE PERFIL DE CORES (direto)
+    // ================================================================
+    toggleThemePicker: function(event) {
+        if (event) event.stopPropagation();
+        var popover = this._getElement('themePopover');
+        if (!popover) return;
+        popover.style.display = popover.style.display === 'none' ? 'block' : 'none';
+    },
+
+    _fecharThemePicker: function() {
+        var popover = this._getElement('themePopover');
+        if (popover) popover.style.display = 'none';
+    },
+
+    _atualizarSwatchTema: function(tema) {
+        var cores = {
+            'claro': '#ffffff',
+            'escuro': '#0f172a',
+            'azul': '#0284c7',
+            'verde': '#16a34a',
+            'roxo': '#9333ea',
+            'vermelho': '#dc2626',
+            'laranja': '#ea580c'
+        };
+        var dot = this._getElement('themePickerDot');
+        if (dot) dot.style.background = cores[tema] || '#ffffff';
+        document.querySelectorAll('.theme-option').forEach(function(opt) {
+            opt.classList.toggle('active', opt.getAttribute('data-theme') === tema);
+        });
+    },
+
+    definirTema: function(tema, event) {
+        if (event) event.stopPropagation();
+        document.documentElement.setAttribute('data-theme', tema);
+        localStorage.setItem('gr_theme', tema);
+        this._atualizarSwatchTema(tema);
+        this._fecharThemePicker();
+
+        var nomesTemas = {
+            'claro': '☀️ Claro',
+            'escuro': '🌙 Escuro',
+            'azul': '🔵 Azul',
+            'verde': '🟢 Verde',
+            'roxo': '🟣 Roxo',
+            'vermelho': '🔴 Vermelho',
+            'laranja': '🟠 Laranja'
+        };
+        GR.Toast.info(`🎨 Perfil de cores: ${nomesTemas[tema] || tema}`);
     },
 
     mudarView: function(view) {
@@ -306,30 +358,34 @@ GR.UI = {
         try {
             var savedTheme = localStorage.getItem('gr_theme') || 'claro';
             document.documentElement.setAttribute('data-theme', savedTheme);
-            var sel = this._getElement('themeSelector');
-            if (sel) {
-                sel.value = savedTheme;
-                sel.onchange = function() {
-                    document.documentElement.setAttribute('data-theme', this.value);
-                    localStorage.setItem('gr_theme', this.value);
-                    GR.Toast.info('🎨 Tema alterado para: ' + this.value);
-                };
-            }
+            this._atualizarSwatchTema(savedTheme);
+
+            document.addEventListener('click', function(e) {
+                var picker = document.getElementById('themePicker');
+                var popover = document.getElementById('themePopover');
+                if (popover && picker && !picker.contains(e.target)) {
+                    popover.style.display = 'none';
+                }
+            });
 
             var savedFont = parseFloat(localStorage.getItem('gr_font_size')) || 14;
             document.documentElement.style.setProperty('--font-size-base', savedFont + 'px');
             var label = this._getElement('fontSizeLabel');
             if (label) label.textContent = Math.round((savedFont / 14) * 100) + '%';
 
-            // Restaurar estado da sidebar
-            if (localStorage.getItem('gr_sidebar_collapsed') === '1') {
-                var nav = document.getElementById('mainNav');
+            // Restaurar estado da sidebar (padrão: oculta atrás do hambúrguer)
+            var nav = document.getElementById('mainNav');
+            var collapsed = localStorage.getItem('gr_sidebar_collapsed');
+            if (collapsed === null || collapsed === '1') {
                 if (nav) {
                     nav.classList.add('collapsed');
                     document.querySelector('.app-layout')?.classList.add('sidebar-collapsed');
                     var btn = nav.querySelector('.nav-toggle-btn');
                     if (btn) btn.textContent = '▶';
                 }
+            } else {
+                var hb = document.getElementById('hamburgerBtn');
+                if (hb) hb.classList.add('active');
             }
 
             document.querySelectorAll('.nav-btn').forEach(function(btn) {

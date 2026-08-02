@@ -562,7 +562,12 @@
 
         <!-- HEADER COM TOOLTIPS -->
         <header class="header no-print">
-            <h1><img src="favicon.png" class="app-icon"> Gestão Rural</h1>
+            <div class="header-left">
+                <button class="hamburger-btn" id="hamburgerBtn" onclick="GR.UI.toggleSidebar()" title="Abrir/Fechar menu" aria-label="Menu">
+                    <span></span><span></span><span></span><span></span>
+                </button>
+                <h1><img src="favicon.png" class="app-icon"> Gestão Rural</h1>
+            </div>
             <div class="header-right">
                 <button class="btn-quick-search" onclick="GR.UI.abrirBuscaRapida()" title="Buscar no sistema (Ctrl+K)">
                     <span>🔍</span> <span class="no-mobile" style="font-size:12px;">Buscar...</span> <kbd class="quick-search-shortcut" style="font-size:10px;">Ctrl+K</kbd>
@@ -571,22 +576,41 @@
                     <span id="userName">usuário</span>
                     <span class="nivel" id="userLevel">usuário</span>
                 </span>
-                <select id="themeSelector" class="config-btn">
-                    <option value="claro" style="color:#000;">☀️ Claro</option>
-                    <option value="escuro" style="color:#000;">🌙 Escuro</option>
-                    <option value="azul" style="color:#000;">🔵 Azul</option>
-                    <option value="verde" style="color:#000;">🟢 Verde</option>
-                    <option value="roxo" style="color:#000;">🟣 Roxo</option>
-                    <option value="vermelho" style="color:#000;">🔴 Vermelho</option>
-                    <option value="laranja" style="color:#000;">🟠 Laranja</option>
-                </select>
+                <div class="theme-picker" id="themePicker">
+                    <button class="config-btn" onclick="GR.UI.toggleThemePicker(event)" title="Escolher perfil de cores">
+                        <span id="themePickerDot" class="theme-dot" style="background:#ffffff;"></span>
+                    </button>
+                    <div class="theme-popover" id="themePopover" style="display:none;">
+                        <div class="theme-popover-title">🎨 Perfis de cores</div>
+                        <button class="theme-option" data-theme="claro" onclick="GR.UI.definirTema('claro', event)">
+                            <span class="theme-swatch" style="background:#ffffff;border:1px solid #d0d7de;"></span> Claro
+                        </button>
+                        <button class="theme-option" data-theme="escuro" onclick="GR.UI.definirTema('escuro', event)">
+                            <span class="theme-swatch" style="background:#0f172a;"></span> Escuro
+                        </button>
+                        <button class="theme-option" data-theme="azul" onclick="GR.UI.definirTema('azul', event)">
+                            <span class="theme-swatch" style="background:#0284c7;"></span> Azul
+                        </button>
+                        <button class="theme-option" data-theme="verde" onclick="GR.UI.definirTema('verde', event)">
+                            <span class="theme-swatch" style="background:#16a34a;"></span> Verde
+                        </button>
+                        <button class="theme-option" data-theme="roxo" onclick="GR.UI.definirTema('roxo', event)">
+                            <span class="theme-swatch" style="background:#9333ea;"></span> Roxo
+                        </button>
+                        <button class="theme-option" data-theme="vermelho" onclick="GR.UI.definirTema('vermelho', event)">
+                            <span class="theme-swatch" style="background:#dc2626;"></span> Vermelho
+                        </button>
+                        <button class="theme-option" data-theme="laranja" onclick="GR.UI.definirTema('laranja', event)">
+                            <span class="theme-swatch" style="background:#ea580c;"></span> Laranja
+                        </button>
+                    </div>
+                </div>
                 <div class="font-controls">
                     <button class="btn" onclick="GR.UI.ajustarFonte(-1)">A−</button>
                     <span class="font-size-label" id="fontSizeLabel">100%</span>
                     <button class="btn" onclick="GR.UI.ajustarFonte(1)">A+</button>
                     <button class="btn" onclick="GR.UI.resetarFonte()">↺</button>
                 </div>
-                <button class="config-btn" onclick="GR.UI.toggleModoEscuro()" title="Modo escuro">🌓</button>
                 <button class="config-btn" onclick="GR.Backup.openBackupModal()" title="Backup">💾</button>
                 <button class="config-btn" onclick="GR.UI.openConfigurations()" title="Configurações">⚙️</button>
                 <button class="config-btn" onclick="GR.Notificacoes.abrirModal()" title="Notificações" style="position:relative;">
