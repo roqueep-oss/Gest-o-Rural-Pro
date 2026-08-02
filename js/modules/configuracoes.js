@@ -227,7 +227,7 @@ GR.Modules.Configuracoes = {
             '<div><label style="font-size:12px;color:var(--text-light);">CPF/CNPJ</label><input type="text" id="config-documento" value="' + GR.Utils.escapeHtml(user.documento || '') + '" class="form-control" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border);" placeholder="Ex: 123.456.789-00"></div>' +
             '<div><label style="font-size:12px;color:var(--text-light);">Endereço</label><input type="text" id="config-endereco" value="' + GR.Utils.escapeHtml(user.endereco || '') + '" class="form-control" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border);"></div>' +
             '<div><label style="font-size:12px;color:var(--text-light);">Cidade/UF</label><input type="text" id="config-cidade" value="' + GR.Utils.escapeHtml(user.cidade || '') + '" class="form-control" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border);"></div>' +
-            '<button class="btn btn-primary" onclick="GR.Modules.Configuracoes.salvarPerfil()" style="padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;background:#2196F3;color:#fff;">💾 Salvar Perfil</button>' +
+            '<button class="btn btn-primary" onclick="GR.Modules.Configuracoes.salvarPerfil()" style="padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">💾 Salvar Perfil</button>' +
             '</div></div>';
     },
 
@@ -242,7 +242,7 @@ GR.Modules.Configuracoes = {
                     '<span><strong>' + GR.Utils.escapeHtml(p.nome || p.name || 'Sem nome') + '</strong> ' +
                     (p.nivel || p.level ? '🎯 Nível: ' + (p.nivel || p.level) : '') +
                     '</span>' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPerfil(\'' + p.id + '\')" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPerfil(\'' + p.id + '\')" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">🗑️</button>' +
                     '</div>';
             });
             html += '</div>';
@@ -253,7 +253,7 @@ GR.Modules.Configuracoes = {
             '<div style="display:flex;gap:8px;">' +
             '<input type="text" id="config-novo-perfil" class="form-control" placeholder="Nome do perfil" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);">' +
             '<input type="number" id="config-novo-perfil-nivel" class="form-control" placeholder="Nível" style="width:80px;padding:8px;border-radius:6px;border:1px solid var(--border);" value="1">' +
-            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarPerfil()" title="Adicionar perfil" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">➕</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarPerfil()" title="Adicionar perfil" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">➕</button>' +
             '</div>' +
             '</div>';
         return html;
@@ -272,8 +272,8 @@ GR.Modules.Configuracoes = {
                     (p.telefone ? ' 📱 ' + (p.telefone.ddd || '') + (p.telefone.numero || '') : '') +
                     '</span>' +
                     '<div style="display:flex;gap:4px;">' +
-                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;font-size:10px;">✏️</button>' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">✏️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">🗑️</button>' +
                     '</div>' +
                     '</div>';
             });
@@ -282,7 +282,7 @@ GR.Modules.Configuracoes = {
             html += '<div style="color:#999;padding:10px;text-align:center;">Nenhuma parte relacionada cadastrada</div>';
         }
         html += '</div>' +
-            '<button class="btn btn-success" onclick="GR.Modules.PartesRelacionadas.abrirModal()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">👤 Nova Parte Relacionada</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.PartesRelacionadas.abrirModal()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">👤 Nova Parte Relacionada</button>' +
             '</div>';
         return html;
     },
@@ -298,7 +298,7 @@ GR.Modules.Configuracoes = {
                     '<span><strong>' + GR.Utils.escapeHtml(f.nome || f.razaoSocial || 'Sem nome') + '</strong> ' +
                     (f.cpfcnpj ? '📄 ' + f.cpfcnpj : '') +
                     '</span>' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirFornecedor(\'' + f.id + '\')" title="Excluir fornecedor" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirFornecedor(\'' + f.id + '\')" title="Excluir fornecedor" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">🗑️</button>' +
                     '</div>';
             });
             html += '</div>';
@@ -309,7 +309,7 @@ GR.Modules.Configuracoes = {
             '<div style="display:flex;gap:8px;">' +
             '<input type="text" id="config-novo-fornecedor" class="form-control" placeholder="Nome do fornecedor" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);">' +
             '<input type="text" id="config-novo-fornecedor-cnpj" class="form-control" placeholder="CNPJ/CPF" style="width:120px;padding:8px;border-radius:6px;border:1px solid var(--border);">' +
-            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarFornecedor()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">➕</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.adicionarFornecedor()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">➕</button>' +
             '</div>' +
             '</div>';
         return html;
@@ -319,9 +319,9 @@ GR.Modules.Configuracoes = {
         return '<div class="card" style="padding:16px;border-radius:8px;background:var(--card-bg,#fff);border:1px solid var(--border,#ddd);">' +
             '<h4 style="font-size:14px;margin-bottom:12px;">💾 Backup</h4>' +
             '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-            '<button class="btn btn-primary" onclick="GR.Modules.Configuracoes.fazerBackup()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#2196F3;color:#fff;">📤 Fazer Backup</button>' +
-            '<button class="btn btn-info" onclick="GR.Modules.Configuracoes.exportarDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#2196F3;color:#fff;">📥 Exportar</button>' +
-            '<button class="btn btn-secondary" onclick="GR.Modules.Configuracoes.importarDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#9E9E9E;color:#fff;">📤 Importar</button>' +
+            '<button class="btn btn-primary" onclick="GR.Modules.Configuracoes.fazerBackup()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">📤 Fazer Backup</button>' +
+            '<button class="btn btn-info" onclick="GR.Modules.Configuracoes.exportarDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">📥 Exportar</button>' +
+            '<button class="btn btn-secondary" onclick="GR.Modules.Configuracoes.importarDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">📤 Importar</button>' +
             '</div></div>';
     },
 
@@ -355,8 +355,8 @@ GR.Modules.Configuracoes = {
         return '<div style="margin-top:10px;padding:16px;border-radius:8px;background:#fff3e0;border:2px solid #ff9800;">' +
             '<h4 style="font-size:14px;color:#e65100;margin-bottom:12px;">⚠️ Zona de Risco</h4>' +
             '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes.redefinirDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#f44336;color:#fff;">🗑️ Redefinir Todos os Dados</button>' +
-            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes.excluirConta()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#f44336;color:#fff;">❌ Excluir Conta</button>' +
+            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes.redefinirDados()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">🗑️ Redefinir Todos os Dados</button>' +
+            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes.excluirConta()" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">❌ Excluir Conta</button>' +
             '</div></div>';
     },
 
@@ -383,8 +383,8 @@ GR.Modules.Configuracoes = {
                     (p.area && p.area !== '0' ? ' <span style="font-size:11px;color:#666;">📐 ' + GR.Utils.escapeHtml(p.area) + ' ha</span>' : '') +
                     '</div>' +
                     '<div style="display:flex;gap:4px;">' +
-                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.Configuracoes.editarPropriedade(\'' + p.id + '\')" title="Editar propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;">✏️</button> ' +
-                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPropriedade(\'' + p.id + '\')" title="Excluir propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;">🗑️</button>' +
+                    '<button class="btn btn-info btn-sm" onclick="GR.Modules.Configuracoes.editarPropriedade(\'' + p.id + '\')" title="Editar propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;">✏️</button> ' +
+                    '<button class="btn btn-danger btn-sm" onclick="GR.Modules.Configuracoes.excluirPropriedade(\'' + p.id + '\')" title="Excluir propriedade" style="padding:4px 8px;border:none;border-radius:4px;cursor:pointer;">🗑️</button>' +
                     '</div>' +
                     '</div>';
             });
@@ -437,7 +437,7 @@ GR.Modules.Configuracoes = {
             '<label style="display:flex;align-items:center;gap:3px;padding:3px 8px;background:#f0f0f0;border-radius:4px;font-size:12px;cursor:pointer;"><input type="checkbox" name="prop-modulos" value="nfe" checked> 📄 NF-e</label>' +
             '</div></div>' +
             '<textarea id="modal-prop-observacao" class="form-control" placeholder="📝 Observações" style="width:100%;height:60px;resize:vertical;padding:8px;border-radius:6px;border:1px solid #ddd;"></textarea>' +
-            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.salvarPropriedadeModal()" style="padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;background:#4CAF50;color:#fff;">➕ Adicionar Propriedade</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes.salvarPropriedadeModal()" style="padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">➕ Adicionar Propriedade</button>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -771,8 +771,8 @@ GR.Modules.Configuracoes = {
             '</div></div>' +
             '</div>' +
             '<div style="display:flex;gap:8px;margin-top:12px;">' +
-            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes._salvarEdicaoPropriedade(\'' + id + '\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#4CAF50;color:#fff;">💾 Salvar</button>' +
-            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'editar-propriedade\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:#9E9E9E;color:#fff;">❌ Cancelar</button>' +
+            '<button class="btn btn-success" onclick="GR.Modules.Configuracoes._salvarEdicaoPropriedade(\'' + id + '\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">💾 Salvar</button>' +
+            '<button class="btn btn-secondary" onclick="GR.Modal.close(\'editar-propriedade\')" style="padding:8px 16px;border:none;border-radius:6px;cursor:pointer;">❌ Cancelar</button>' +
             '</div>' +
             '</div>' +
             '</div>';
@@ -857,8 +857,8 @@ GR.Modules.Configuracoes = {
             '<p style="color:#666;margin:8px 0;">Deseja realmente excluir a propriedade <strong>"' + GR.Utils.escapeHtml(nome) + '"</strong>?</p>' +
             '<p style="font-size:12px;color:#999;">Esta ação não pode ser desfeita.</p>' +
             '<div style="display:flex;gap:8px;margin-top:16px;">' +
-            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes._confirmarExclusaoPropriedade(\'' + id + '\')" style="flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;background:#f44336;color:#fff;">🗑️ Excluir</button>' +
-            '<button class="btn btn-secondary" onclick="GR.Modules.Configuracoes._fecharModalConfirmacao()" style="flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;background:#9E9E9E;color:#fff;">❌ Cancelar</button>' +
+            '<button class="btn btn-danger" onclick="GR.Modules.Configuracoes._confirmarExclusaoPropriedade(\'' + id + '\')" style="flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;">🗑️ Excluir</button>' +
+            '<button class="btn btn-secondary" onclick="GR.Modules.Configuracoes._fecharModalConfirmacao()" style="flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;">❌ Cancelar</button>' +
             '</div>' +
             '</div>' +
             '</div>' +

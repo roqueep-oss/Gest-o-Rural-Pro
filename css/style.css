@@ -35,10 +35,21 @@
     --success: #10b981;
     --warning: #f59e0b;
     --info: #06b6d4;
+    --success-dark: #059669;
+    --success-light: #10b981;
+    --warning-dark: #d97706;
+    --warning-light: #f59e0b;
+    --danger-dark: #dc2626;
+    --danger-light: #ef4444;
+    --info-dark: #0284c7;
+    --info-light: #06b6d4;
     --border: #e2e8f0;
     --border-light: #f1f5f9;
+    --bg-light: #f8fafc;
     --focus-ring: 0 0 0 3px rgba(5, 150, 105, 0.25);
     --card-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+    --radius: var(--radius-md);
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
     --font-size-base: 14px;
     --header-height: 60px;
     --surface-hover: #f1f5f9;
@@ -62,6 +73,8 @@
     --surface-hover: #334155;
     --surface-active: #064e3b;
     --primary-subtle: #064e3b;
+    --bg-light: #1e293b;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 [data-theme="azul"] {
     --bg: #f0f9ff;
@@ -141,8 +154,38 @@
     padding: 0;
 }
 
+/* Foco visível (acessibilidade por teclado) */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+.nav-btn:focus-visible,
+.config-btn:focus-visible,
+.prop-tab:focus-visible,
+.close-btn:focus-visible,
+.theme-option:focus-visible,
+.dash-quick-item:focus-visible,
+.dash-tile:focus-visible,
+.hamburger-btn:focus-visible,
+.btn-ia-header:focus-visible,
+.btn-funcionario:focus-visible,
+.btn-propriedade-header:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
+}
+[data-theme="escuro"] .btn:focus-visible,
+[data-theme="escuro"] .nav-btn:focus-visible,
+[data-theme="escuro"] .config-btn:focus-visible,
+[data-theme="escuro"] .theme-option:focus-visible {
+    outline-color: var(--primary-light);
+    box-shadow: 0 0 0 2px #0f172a;
+}
+
 html {
-    font-size: var(--font-size-base);
+    font-size: 14px;
+    zoom: var(--font-scale, 1);
     scroll-behavior: smooth;
 }
 
@@ -650,10 +693,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 .btn-primary { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
-.btn-success { background: linear-gradient(135deg, #059669, #10b981); }
-.btn-warning { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
-.btn-danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
-.btn-info { background: linear-gradient(135deg, #0284c7, #06b6d4); }
+.btn-success { background: linear-gradient(135deg, var(--success-dark), var(--success-light)); }
+.btn-warning { background: linear-gradient(135deg, var(--warning-dark), var(--warning-light)); color: #fff; }
+.btn-danger { background: linear-gradient(135deg, var(--danger-dark), var(--danger-light)); }
+.btn-info { background: linear-gradient(135deg, var(--info-dark), var(--info-light)); }
 .btn-sm { padding: 4px 10px; font-size: 11px; min-height: 28px; border-radius: 6px; }
 .btn-secondary { background: #64748b; }
 
@@ -753,7 +796,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ----- CARDS ----- */
 .card {
-    background: var(--primary-subtle);
+    background: var(--surface);
     border-radius: var(--radius-md);
     padding: 20px;
     margin-bottom: 16px;
@@ -1455,11 +1498,12 @@ tbody tr:hover { background: var(--bg); }
 .credito-ano-body table th {
     text-align: left;
     padding: 4px 8px;
-    background: var(--bg);
-    border-bottom: 2px solid var(--border);
+    background: var(--primary-dark);
+    color: #fff;
+    border-bottom: none;
     font-weight: 600;
-    font-size: 10px;
-    color: var(--text-light);
+    font-size: 11px;
+    white-space: nowrap;
 }
 .credito-ano-body table td {
     padding: 4px 8px;
@@ -1678,11 +1722,12 @@ tbody tr:hover { background: var(--bg); }
 .contrato-ano-body table th {
     text-align: left;
     padding: 4px 8px;
-    background: var(--bg);
-    border-bottom: 2px solid var(--border);
+    background: var(--primary-dark);
+    color: #fff;
+    border-bottom: none;
     font-weight: 600;
-    font-size: 10px;
-    color: var(--text-light);
+    font-size: 11px;
+    white-space: nowrap;
 }
 .contrato-ano-body table td {
     padding: 4px 8px;
@@ -2201,12 +2246,12 @@ tbody tr:hover { background: var(--bg); }
 /* ----- TOUCH TARGET PARA MOBILE ----- */
 @media (max-width: 768px) {
     .btn, .nav-btn, .prop-tab, .config-btn, .close-btn, .btn-funcionario, .btn-propriedade-header {
-        min-height: 44px !important;
-        min-width: 44px !important;
+        min-height: 40px;
+        min-width: 40px;
     }
     .btn-sm {
-        min-height: 36px !important;
-        min-width: 36px !important;
+        min-height: 32px;
+        min-width: 32px;
     }
     .form-control, select, input, textarea {
         font-size: 16px !important;
@@ -2548,12 +2593,12 @@ tbody tr:hover { background: var(--bg); }
         font-size: 10px;
     }
     .prop-tab {
-        font-size: 8px;
+        font-size: 10px;
         padding: 3px 6px;
     }
     td, th {
-        font-size: 9px;
-        padding: 3px 4px;
+        font-size: 11px;
+        padding: 4px 6px;
     }
     .modal-content {
         padding: 8px;
@@ -2568,17 +2613,17 @@ tbody tr:hover { background: var(--bg); }
         padding: 16px 12px;
     }
     #orcamento-itens-container table {
-        font-size: 8px;
+        font-size: 10px;
     }
     #orcamento-itens-container table thead th,
     #orcamento-itens-container table tbody td {
-        padding: 2px 3px;
-        font-size: 8px;
+        padding: 3px 4px;
+        font-size: 10px;
     }
     #orcamento-itens-container table tbody input {
-        font-size: 8px !important;
-        padding: 1px 3px !important;
-        min-height: 24px !important;
+        font-size: 10px !important;
+        padding: 2px 4px !important;
+        min-height: 26px !important;
     }
 
     /* 🆕 Funcionários muito pequeno */
@@ -2819,6 +2864,7 @@ tbody tr:hover { background: var(--bg); }
     color: #334155;
     margin-bottom: 6px;
 }
+.login-card .form-group input,
 .login-card .form-control {
     background: #f8fafc;
     border: 1.5px solid #cbd5e1;
@@ -2826,8 +2872,13 @@ tbody tr:hover { background: var(--bg); }
     padding: 10px 14px;
     font-size: 14px;
     min-height: 44px;
+    width: 100%;
+    color: #0f172a;
+    transition: var(--transition);
 }
+.login-card .form-group input:focus,
 .login-card .form-control:focus {
+    outline: none;
     border-color: #059669;
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
 }
@@ -2871,6 +2922,38 @@ tbody tr:hover { background: var(--bg); }
     cursor: pointer;
     text-decoration: underline;
 }
+
+/* Login no tema escuro */
+[data-theme="escuro"] #loginSection {
+    background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
+}
+[data-theme="escuro"] .login-card {
+    background: rgba(30, 41, 59, 0.92);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+}
+[data-theme="escuro"] .login-card h2 { color: var(--primary-light); }
+[data-theme="escuro"] .login-card .sub { color: #94a3b8; }
+[data-theme="escuro"] .login-card .form-group label { color: #cbd5e1; }
+[data-theme="escuro"] .login-card .form-group input,
+[data-theme="escuro"] .login-card .form-control {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+[data-theme="escuro"] .login-card .form-group input::placeholder,
+[data-theme="escuro"] .login-card .form-control::placeholder { color: #64748b; }
+[data-theme="escuro"] .login-tabs { background: #1e293b; }
+[data-theme="escuro"] .login-tabs button { color: #94a3b8; }
+[data-theme="escuro"] .login-tabs button.active { background: var(--primary); color: #fff; }
+[data-theme="escuro"] .toggle-link { color: #94a3b8; }
+[data-theme="escuro"] .toggle-link a { color: var(--primary-light); }
+[data-theme="escuro"] .login-error {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #7f1d1d;
+}
+[data-theme="escuro"] .login-loading { color: var(--primary-light); }
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {

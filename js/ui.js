@@ -61,6 +61,7 @@ GR.UI = {
         var current = parseFloat(root.style.getPropertyValue('--font-size-base')) || 14;
         var novo = Math.max(10, Math.min(22, current + delta));
         root.style.setProperty('--font-size-base', novo + 'px');
+        root.style.setProperty('--font-scale', (novo / 14).toFixed(3));
         var label = this._getElement('fontSizeLabel');
         if (label) label.textContent = Math.round((novo / 14) * 100) + '%';
         
@@ -74,6 +75,7 @@ GR.UI = {
     resetarFonte: function() {
         var root = document.documentElement;
         root.style.setProperty('--font-size-base', '14px');
+        root.style.setProperty('--font-scale', '1');
         var label = this._getElement('fontSizeLabel');
         if (label) label.textContent = '100%';
 
@@ -370,6 +372,7 @@ GR.UI = {
 
             var savedFont = parseFloat(localStorage.getItem('gr_font_size')) || 14;
             document.documentElement.style.setProperty('--font-size-base', savedFont + 'px');
+            document.documentElement.style.setProperty('--font-scale', (savedFont / 14).toFixed(3));
             var label = this._getElement('fontSizeLabel');
             if (label) label.textContent = Math.round((savedFont / 14) * 100) + '%';
 
@@ -1855,8 +1858,8 @@ GR.UI = {
                 (p.telefone ? ' <span style="font-size:11px;color:var(--text-light);">📱 ' + (p.telefone.ddd || '') + (p.telefone.numero || '') + '</span>' : '') +
                 '</div>' +
                 '<div style="display:flex;gap:4px;">' +
-                '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#2196F3;color:#fff;font-size:10px;">✏️</button>' +
-                '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;background:#f44336;color:#fff;font-size:10px;">🗑️</button>' +
+                '<button class="btn btn-info btn-sm" onclick="GR.Modules.PartesRelacionadas.editar(\'' + p.id + '\')" title="Editar" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">✏️</button>' +
+                '<button class="btn btn-danger btn-sm" onclick="GR.Modules.PartesRelacionadas.excluir(\'' + p.id + '\')" title="Excluir" style="padding:2px 6px;border:none;border-radius:4px;cursor:pointer;font-size:10px;">🗑️</button>' +
                 '</div></div>';
         });
         html += '</div>';

@@ -1593,8 +1593,8 @@ GR.Modules.Viveiro = {
                                             <td style="padding:6px 8px;text-align:center;">${v.estoqueMin || 10}</td>
                                             <td style="padding:6px 8px;text-align:center;">${v.tempoProducao || 90} dias</td>
                                             <td style="padding:6px 8px;text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-sm btn-primary" onclick="GR.Modules.Viveiro.abrirModalVariedade('${v.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar variedade">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-sm btn-danger" onclick="GR.Modules.Viveiro.excluirVariedade('${v.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir variedade">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-sm btn-primary" onclick="GR.Modules.Viveiro.abrirModalVariedade('${v.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar variedade">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-sm btn-danger" onclick="GR.Modules.Viveiro.excluirVariedade('${v.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir variedade">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
@@ -1641,16 +1641,16 @@ GR.Modules.Viveiro = {
                                         '<span class="badge badge-secondary">' + m.status + '</span>';
                                     
                                     var botaoProntas = (m.status === 'Produção' && podeEditar) ? 
-                                        `<button class="btn btn-sm btn-success" onclick="GR.Modules.Viveiro.marcarMudaPronta('${m.id}')" style="font-size:8px;padding:2px 6px;background:#4CAF50;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Marcar como Pronta">✅</button>` : '';
+                                        `<button class="btn btn-sm btn-success" onclick="GR.Modules.Viveiro.marcarMudaPronta('${m.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Marcar como Pronta">✅</button>` : '';
                                     
                                     var botaoDescartar = ((m.status === 'Produção' || m.status === 'Pronta') && podeEditar) ? 
-                                        `<button class="btn btn-sm btn-danger" onclick="GR.Modules.Viveiro.marcarMudaDescartada('${m.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Descartar">🗑️</button>` : '';
+                                        `<button class="btn btn-sm btn-danger" onclick="GR.Modules.Viveiro.marcarMudaDescartada('${m.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Descartar">🗑️</button>` : '';
                                     
                                     var botaoEditar = podeEditar ? 
-                                        `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalMuda('${m.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar muda">✏️</button>` : '';
+                                        `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalMuda('${m.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar muda">✏️</button>` : '';
                                     
                                     var botaoExcluir = podeExcluir ? 
-                                        `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('muda','${m.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir muda">🗑️</button>` : '';
+                                        `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('muda','${m.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir muda">🗑️</button>` : '';
                                     
                                     return `
                                         <tr>
@@ -1712,8 +1712,8 @@ GR.Modules.Viveiro = {
                                             <td>${min}</td>
                                             <td>${statusEstoque}</td>
                                             <td style="text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalInsumo('${i.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar insumo">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('insumo','${i.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir insumo">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalInsumo('${i.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar insumo">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('insumo','${i.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir insumo">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
@@ -1761,8 +1761,8 @@ GR.Modules.Viveiro = {
                                             <td>${GR.Utils.formatarMoedaBR(s.custo)}</td>
                                             <td>${statusBadge}</td>
                                             <td style="text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalServico('${s.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar serviço">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('servico','${s.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir serviço">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalServico('${s.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar serviço">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('servico','${s.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir serviço">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
@@ -1805,8 +1805,8 @@ GR.Modules.Viveiro = {
                                             <td>${t.telefone ? GR.Utils.formatarTelefone(t.telefone.ddd, t.telefone.numero) : '-'}</td>
                                             <td>${t.admissao ? GR.Utils.formatarDataBR(t.admissao) : '-'}</td>
                                             <td style="text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalTrabalhador('${t.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar trabalhador">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('trabalhador','${t.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir trabalhador">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalTrabalhador('${t.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar trabalhador">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluir('trabalhador','${t.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir trabalhador">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
@@ -1881,11 +1881,11 @@ GR.Modules.Viveiro = {
                                         <td><span style="background:${statusColor};color:#fff;padding:1px 10px;border-radius:10px;font-size:9px;">${p.status || 'Pendente'}</span></td>
                                         <td>${p.dataPrevista ? GR.Utils.formatarDataBR(p.dataPrevista) : '-'}</td>
                                         <td style="text-align:center;white-space:nowrap;">
-                                            ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalPedido('${p.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar pedido">✏️</button>` : ''}
+                                            ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalPedido('${p.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar pedido">✏️</button>` : ''}
                                             ${p.status !== 'Entregue' && p.status !== 'Cancelado' ? `
-                                                <button class="btn btn-sm btn-success" onclick="GR.Modules.Viveiro.abrirConverterPedido('${p.id}')" style="font-size:8px;padding:2px 6px;background:#4CAF50;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Converter em Venda">🔄</button>
+                                                <button class="btn btn-sm btn-success" onclick="GR.Modules.Viveiro.abrirConverterPedido('${p.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Converter em Venda">🔄</button>
                                             ` : ''}
-                                            ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirPedido('${p.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir pedido">🗑️</button>` : ''}
+                                            ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirPedido('${p.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir pedido">🗑️</button>` : ''}
                                         </td>
                                     </tr>
                                 `;
@@ -1968,8 +1968,8 @@ GR.Modules.Viveiro = {
                                             <td>${GR.Utils.formatarMoedaBR(v.valorUnitario)}</td>
                                             <td><strong>${GR.Utils.formatarMoedaBR(v.valorTotal)}</strong></td>
                                             <td style="text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalVenda('${v.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar venda">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirVenda('${v.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir venda">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalVenda('${v.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar venda">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirVenda('${v.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir venda">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
@@ -2049,8 +2049,8 @@ GR.Modules.Viveiro = {
                                             <td style="font-weight:600;color:${c.tipo === 'receita' ? 'var(--success)' : 'var(--danger)'};">${GR.Utils.formatarMoedaBR(c.valor)}</td>
                                             <td style="font-weight:700;">${GR.Utils.formatarMoedaBR(c.saldoAcumulado)}</td>
                                             <td style="text-align:center;white-space:nowrap;">
-                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalLancamento('${c.id}')" style="font-size:8px;padding:2px 6px;background:#1976D2;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Editar lançamento">✏️</button>` : ''}
-                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirLancamento('${c.id}')" style="font-size:8px;padding:2px 6px;background:#d32f2f;color:#fff;border:none;border-radius:3px;cursor:pointer;" title="Excluir lançamento">🗑️</button>` : ''}
+                                                ${podeEditar ? `<button class="btn btn-primary btn-sm" onclick="GR.Modules.Viveiro.abrirModalLancamento('${c.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Editar lançamento">✏️</button>` : ''}
+                                                ${podeExcluir ? `<button class="btn btn-danger btn-sm" onclick="GR.Modules.Viveiro.excluirLancamento('${c.id}')" style="font-size:8px;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;" title="Excluir lançamento">🗑️</button>` : ''}
                                             </td>
                                         </tr>
                                     `;
