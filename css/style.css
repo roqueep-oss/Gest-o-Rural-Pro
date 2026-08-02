@@ -3404,4 +3404,210 @@ tbody tr:hover { background: var(--bg); }
     background: #1e293b;
     border-color: #334155;
     color: #94a3b8;
+}
+
+/* ================================================================ */
+/* DASHBOARD V2 - UI KIT (azul, ciano, amarelo/laranja)             */
+/* ================================================================ */
+
+.dash-wrap { display: flex; flex-direction: column; gap: 14px; }
+
+/* Hero / saudação */
+.dash-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary) 55%, #06b6d4);
+    color: #fff;
+    border-radius: var(--radius-lg, 18px);
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-md);
+}
+.dash-hero::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+}
+.dash-hero::before {
+    content: '';
+    position: absolute;
+    right: 50px;
+    bottom: -60px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+.dash-hero-info { position: relative; z-index: 1; }
+.dash-hello { font-size: 20px; font-weight: 800; font-family: var(--font-heading); letter-spacing: 0.2px; }
+.dash-sub { font-size: 12px; opacity: 0.92; margin-top: 2px; }
+.dash-prop {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+}
+.dash-hero-actions { position: relative; z-index: 1; display: flex; gap: 8px; flex-wrap: wrap; }
+.dash-hero-actions .btn {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    backdrop-filter: blur(4px);
+    border-radius: 999px;
+}
+.dash-hero-actions .btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* KPIs financeiros */
+.dash-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.dash-kpi {
+    --kpi: #2563eb;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+.dash-kpi::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--kpi); }
+.dash-kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.dash-kpi-ic {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.12);
+    background: color-mix(in srgb, var(--kpi) 15%, var(--surface));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.dash-kpi-num { font-size: 18px; font-weight: 800; color: var(--text); line-height: 1.15; white-space: nowrap; }
+.dash-kpi-lab { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+/* Cards genéricos do dashboard */
+.dash-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    padding: 14px;
+    box-shadow: var(--card-shadow);
+}
+.dash-card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.dash-card-head h3 { font-size: 14px; font-weight: 700; color: var(--text); font-family: var(--font-heading); }
+
+/* Contadores (tiles clicáveis) */
+.dash-counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 10px; }
+.dash-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--card-shadow);
+}
+.dash-tile:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow-md); }
+.dash-tile-ic { font-size: 22px; }
+.dash-tile-num { font-size: 20px; font-weight: 800; color: var(--primary-dark); line-height: 1.2; }
+.dash-tile-lab { font-size: 10px; color: var(--text-light); }
+
+/* Acesso rápido */
+.dash-quick { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 10px; }
+.dash-quick-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    background: var(--primary-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.dash-quick-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+.dash-quick-ic { font-size: 20px; }
+.dash-quick-lab { font-size: 10px; font-weight: 600; color: var(--text-light); text-align: center; }
+
+/* Grid 2 colunas */
+.dash-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dash-grid-2-col { display: flex; flex-direction: column; gap: 14px; }
+
+/* Calendário */
+.dash-cal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.dash-cal-head .btn { padding: 2px 10px; font-size: 12px; }
+.dash-cal-title { font-weight: 700; font-size: 13px; text-transform: capitalize; color: var(--text); }
+.dash-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.dash-cal-dow { display: contents; }
+.dash-cal-dow > div { text-align: center; font-size: 10px; font-weight: 700; color: var(--text-muted); padding: 4px 0; }
+.dash-cal-cell {
+    text-align: center;
+    font-size: 12px;
+    padding: 6px 0;
+    border-radius: 8px;
+    color: var(--text);
+    position: relative;
+    transition: var(--transition);
+    cursor: default;
+}
+.dash-cal-cell.empty { visibility: hidden; }
+.dash-cal-cell:hover { background: var(--surface-hover); }
+.dash-cal-cell.has-events { font-weight: 700; }
+.dash-cal-cell.hoje { background: var(--primary); color: #fff; box-shadow: var(--shadow-glow); }
+.dash-cal-cell.hoje .dash-cal-dots i { background: #fff !important; }
+.dash-cal-dots { display: flex; justify-content: center; gap: 2px; margin-top: 2px; }
+.dash-cal-dots i { width: 4px; height: 4px; border-radius: 50%; display: inline-block; }
+
+/* Listas (eventos / ações / alertas) */
+.dash-event {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px;
+    color: var(--text);
+}
+.dash-event:last-child { border-bottom: none; }
+.dash-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dash-empty { text-align: center; padding: 14px; color: var(--text-muted); font-size: 12px; }
+
+/* Seletor segmentado (Mês/Ano, Barras/Linha) */
+.dash-seg { display: inline-flex; background: var(--surface-hover); border-radius: 999px; padding: 2px; gap: 2px; }
+.dash-seg button {
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.dash-seg button.active { background: var(--primary); color: #fff; box-shadow: var(--shadow-sm); }
+
+@media (max-width: 768px) {
+    .dash-grid-2 { grid-template-columns: 1fr; }
+    .dash-hello { font-size: 18px; }
 }
