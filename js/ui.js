@@ -87,6 +87,16 @@ GR.UI = {
     },
 
     toggleSidebar: function() {
+        var self = this;
+        if (window.innerWidth <= 768) {
+            var sidebar = this._getElement('sidebar');
+            var overlay = this._getElement('sidebar-overlay');
+            if (!sidebar) return;
+            var abrir = !sidebar.classList.contains('open');
+            sidebar.classList.toggle('open', abrir);
+            if (overlay) overlay.classList.toggle('show', abrir);
+            return;
+        }
         var nav = document.getElementById('mainNav');
         if (!nav) return;
         nav.classList.toggle('collapsed');
@@ -96,6 +106,92 @@ GR.UI = {
         var hb = document.getElementById('hamburgerBtn');
         if (hb) hb.classList.toggle('active', !nav.classList.contains('collapsed'));
         localStorage.setItem('gr_sidebar_collapsed', nav.classList.contains('collapsed') ? '1' : '0');
+    },
+
+    fecharDrawerMobile: function() {
+        var sidebar = this._getElement('sidebar');
+        var overlay = this._getElement('sidebar-overlay');
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('show');
+    },
+
+    toggleHeaderMenu: function(event) {
+        if (event) event.stopPropagation();
+        var pop = this._getElement('headerMenuPopover');
+        if (!pop) return;
+        pop.classList.toggle('show');
+    },
+
+    fecharHeaderMenu: function() {
+        var pop = this._getElement('headerMenuPopover');
+        if (pop) pop.classList.remove('show');
+    },
+
+    // Move os botões de navegação entre a sidebar (desktop) e o drawer (mobile)
+    _orgNav: null,
+    organizarLayoutMobile: function() {
+        var self = this;
+        if (!this._orgNav) {
+            var navEl = document.getElementById('mainNav');
+            if (!navEl) return;
+            this._orgNav = Array.prototype.slice.call(navEl.children);
+        }
+        var mql = window.matchMedia('(max-width: 768px)');
+        var aplicar = function() {
+            var nav = document.getElementById('mainNav');
+            var drawerNav = document.getElementById('mobileDrawerNav');
+            if (!nav || !drawerNav) return;
+            if (mql.matches) {
+                self._orgNav.forEach(function(el) {
+                    if (el.classList && (el.classList.contains('nav-btn') || el.tagName === 'HR')) {
+                        if (el.parentNode !== drawerNav) drawerNav.appendChild(el);
+                    }
+                });
+            } else {
+                while (nav.firstChild) nav.removeChild(nav.firstChild);
+                self._orgNav.forEach(function(el) {
+                    if (el.parentNode !== nav) nav.appendChild(el);
+                });
+            }
+        };
+        if (mql.addEventListener) mql.addEventListener('change', aplicar);
+        else if (mql.addListener) mql.addListener(aplicar);
+        aplicar();
+    },
+
+    // Adiciona data-label nas tabelas de listagem para o modo "cards" no mobile
+    anotarTabelasMobile: function() {
+        var self = this;
+        var processar = function(root) {
+            var scope = root && root.querySelectorAll ? root : document;
+            var tables = scope.querySelectorAll ? scope.querySelectorAll('.table-responsive table') : [];
+            Array.prototype.forEach.call(tables, function(t) {
+                if (t.classList.contains('gr-cards')) return;
+                var thead = t.querySelector('thead');
+                var tbody = t.querySelector('tbody');
+                if (!thead || !tbody) return;
+                var ths = thead.querySelectorAll('th');
+                if (!ths.length) return;
+                Array.prototype.forEach.call(tbody.querySelectorAll('tr'), function(tr) {
+                    var tds = tr.querySelectorAll('td');
+                    for (var i = 0; i < tds.length; i++) {
+                        var th = ths[i];
+                        if (!th) continue;
+                        tds[i].setAttribute('data-label', (th.textContent || '').replace(/\s+/g, ' ').trim());
+                    }
+                });
+                t.classList.add('gr-cards');
+            });
+        };
+        processar(document);
+        if (this._tabelasObserver) return;
+        var container = document.getElementById('sectionContainer');
+        if (container) {
+            this._tabelasObserver = new MutationObserver(function(muts) {
+                muts.forEach(function(m) { processar(m.target); });
+            });
+            this._tabelasObserver.observe(container, { childList: true, subtree: true });
+        }
     },
 
     navegarPara: function(section) {
@@ -358,6 +454,17 @@ GR.UI = {
         var self = this;
 
         try {
+            // 🚀 Configura navegação móvel (drawer) e anotação de tabelas para cards
+            this.organizarLayoutMobile();
+            this.anotarTabelasMobile();
+
+            document.addEventListener('click', function(e) {
+                var menu = document.getElementById('headerMenuPopover');
+                var btn = document.getElementById('headerMoreBtn');
+                if (menu && menu.classList.contains('show') && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
             var savedTheme = localStorage.getItem('gr_theme') || 'claro';
             document.documentElement.setAttribute('data-theme', savedTheme);
             this._atualizarSwatchTema(savedTheme);
@@ -851,6 +958,12 @@ GR.UI = {
                 userNameEl.title = user.email || '';
             }
             
+            var menuUserName = document.getElementById('menuUserName');
+            if (menuUserName) {
+                menuUserName.textContent = user.displayName || user.email;
+                menuUserName.title = user.email || '';
+            }
+            
             var userLevelEl = this._getElement('userLevel');
             if (userLevelEl && GR.Modules.Perfis) {
                 var perfil = null;
@@ -878,6 +991,15 @@ GR.UI = {
                     userLevelEl.style.fontWeight = 'bold';
                     userLevelEl.style.display = 'inline-block';
                     userLevelEl.title = 'Nível: ' + perfil.nivel;
+
+                    var menuUserLevel = document.getElementById('menuUserLevel');
+                    if (menuUserLevel) {
+                        menuUserLevel.textContent = perfil.nome;
+                        menuUserLevel.style.color = cores[perfil.id] || '#78909c';
+                    }
+                } else {
+                    var menuUserLevel2 = document.getElementById('menuUserLevel');
+                    if (menuUserLevel2) menuUserLevel2.textContent = '—';
                 }
             }
             

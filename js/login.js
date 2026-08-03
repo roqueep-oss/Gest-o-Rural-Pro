@@ -182,6 +182,8 @@ GR.Login = {
                 label = '👤 Usuário';
             }
             nivelEl.textContent = label;
+            var menuUserLevel = document.getElementById('menuUserLevel');
+            if (menuUserLevel) menuUserLevel.textContent = label;
         }
 
         GR.Toast.success('Bem-vindo, ' + this.usuarioAtual + '!');

@@ -229,6 +229,11 @@ function atualizarElementosUsuario(user) {
     if (userNameEl) {
         userNameEl.textContent = user.displayName || user.email || 'Usuário';
     }
+
+    var menuUserName = document.getElementById('menuUserName');
+    if (menuUserName) {
+        menuUserName.textContent = user.displayName || user.email || 'Usuário';
+    }
     
     // Atualiza email
     var userEmailEl = document.getElementById('userEmail');
@@ -250,6 +255,8 @@ function atualizarElementosUsuario(user) {
             var perfil = GR.Modules.Perfis.getPerfilUsuario ? GR.Modules.Perfis.getPerfilUsuario() : null;
             if (perfil) {
                 userLevelEl.textContent = perfil.nome || 'Usuário';
+                var menuUserLevel = document.getElementById('menuUserLevel');
+                if (menuUserLevel) menuUserLevel.textContent = perfil.nome || 'Usuário';
             }
         }
     }
