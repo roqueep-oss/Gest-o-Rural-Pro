@@ -135,6 +135,17 @@ GR.Login = {
                             perfil: perfilId
                         };
                     }
+
+                    // Salva o nome do usuário para uso em recargas (dashboard "Olá, <nome>")
+                    if (userData.nome) {
+                        localStorage.setItem('gr_nome_usuario', userData.nome);
+                        var authUser = firebase.auth().currentUser;
+                        if (authUser && authUser.displayName !== userData.nome) {
+                            authUser.updateProfile({ displayName: userData.nome }).catch(function(err) {
+                                console.warn('⚠️ Erro ao salvar nome no perfil:', err);
+                            });
+                        }
+                    }
                     
                     console.log('👤 Perfil do usuário carregado:', perfilId);
                     
@@ -163,7 +174,8 @@ GR.Login = {
         document.getElementById('loginSection').classList.remove('show');
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
-        document.getElementById('userName').textContent = this.usuarioAtual;
+        var nomeExibicao = localStorage.getItem('gr_nome_usuario') || this.usuarioAtual;
+        document.getElementById('userName').textContent = nomeExibicao;
 
         var nivelEl = document.getElementById('userLevel');
         if (nivelEl) {

@@ -528,7 +528,7 @@
         APP.usuario = {
             uid: user.uid,
             email: user.email,
-            nome: user.displayName || user.email || 'Usuário',
+            nome: user.displayName || localStorage.getItem('gr_nome_usuario') || user.email || 'Usuário',
             telefone: user.phoneNumber || ''
         };
         log('✅ Usuário autenticado:', APP.usuario.email);

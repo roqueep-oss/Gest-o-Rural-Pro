@@ -954,13 +954,13 @@ GR.UI = {
             
             var userNameEl = this._getElement('userName');
             if (userNameEl) {
-                userNameEl.textContent = user.displayName || user.email;
+                userNameEl.textContent = user.displayName || localStorage.getItem('gr_nome_usuario') || user.email;
                 userNameEl.title = user.email || '';
             }
             
             var menuUserName = document.getElementById('menuUserName');
             if (menuUserName) {
-                menuUserName.textContent = user.displayName || user.email;
+                menuUserName.textContent = user.displayName || localStorage.getItem('gr_nome_usuario') || user.email;
                 menuUserName.title = user.email || '';
             }
             

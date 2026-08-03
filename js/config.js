@@ -227,12 +227,12 @@ function atualizarElementosUsuario(user) {
     // Atualiza nome do usuário
     var userNameEl = document.getElementById('userName');
     if (userNameEl) {
-        userNameEl.textContent = user.displayName || user.email || 'Usuário';
+        userNameEl.textContent = user.displayName || localStorage.getItem('gr_nome_usuario') || user.email || 'Usuário';
     }
 
     var menuUserName = document.getElementById('menuUserName');
     if (menuUserName) {
-        menuUserName.textContent = user.displayName || user.email || 'Usuário';
+        menuUserName.textContent = user.displayName || localStorage.getItem('gr_nome_usuario') || user.email || 'Usuário';
     }
     
     // Atualiza email
