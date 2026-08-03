@@ -259,11 +259,20 @@ GR.Backup = {
                 var uid = user.uid;
                 
                 // 🔥 MAPEIA TODAS AS COLEÇÕES
+                // Análises são separadas por tipo em coleções distintas
+                var analisesArr = dados.dados.analises || [];
+                var analisesSolo = analisesArr.filter(function(a) { return !a.tipo || a.tipo === 'solo'; });
+                var analisesTecido = analisesArr.filter(function(a) { return a.tipo === 'tecido-vegetal' || a.tipo === 'folha'; });
+                var analisesDres = analisesArr.filter(function(a) { return a.tipo === 'dres'; });
+
                 var colecoes = {
                     'propriedades': dados.dados.propriedades || [],
                     'tarefas': dados.dados.tarefas || [],
                     'documentos': dados.dados.documentos || [],
-                    'analises': dados.dados.analises || [],
+                    'analises': [], // limpa coleção legada
+                    'analisesSolo': analisesSolo,
+                    'analisesTecidoVegetal': analisesTecido,
+                    'analisesDres': analisesDres,
                     'receitas': dados.dados.receitas || [],
                     'despesas': dados.dados.despesas || [],
                     'insumos': dados.dados.insumos || [],

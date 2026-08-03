@@ -95,6 +95,9 @@ GR.State = {
     _verificandoVencimentos: false,
     _insumosIgnorados: ['Potácio', 'fogo', 'Ureia'],
 
+    // COLEÇÕES DE ANÁLISES (separadas por tipo)
+    analisesColecoes: ['analisesSolo', 'analisesTecidoVegetal', 'analisesDres'],
+
     // ================================================================
     // INICIALIZAÇÃO
     // ================================================================
@@ -125,6 +128,15 @@ GR.State = {
         this._inicializado = true;
         console.log('✅ State inicializado com sucesso!');
         return this;
+    },
+
+    // ================================================================
+    // COLEÇÃO DE ANÁLISES POR TIPO
+    // ================================================================
+    getColecaoAnalises: function(tipo) {
+        if (tipo === 'tecido-vegetal' || tipo === 'folha') return 'analisesTecidoVegetal';
+        if (tipo === 'dres') return 'analisesDres';
+        return 'analisesSolo';
     },
 
     // ================================================================
@@ -499,24 +511,44 @@ GR.State = {
         // 🆕 LISTENER PARA COLHEITAS
         this._carregarColheitas();
 
-        // 🆕 LISTENER PARA ANÁLISES
-        db.collection('users').doc(uid).collection('analises')
-            .onSnapshot(function(snapshot) {
-                var items = [];
-                snapshot.forEach(function(doc) {
-                    var data = doc.data();
-                    data.id = doc.id;
-                    items.push(data);
-                });
-                self.data.analises = items;
-                self._saveCache();
-                console.log('🔄 Análises atualizadas:', items.length);
-                if (window.dispatchEvent) {
-                    window.dispatchEvent(new Event('analises-atualizados'));
-                }
-            }, function(err) {
-                console.warn('⚠️ Erro no listener de análises:', err);
-            });
+        // 🆕 LISTENER PARA ANÁLISES (coleções separadas por tipo)
+        var colecoesAnalises = this.analisesColecoes;
+        var analisesData = {};
+
+        var processarAnalises = function() {
+            var items = [];
+            for (var i = 0; i < colecoesAnalises.length; i++) {
+                var lista = analisesData[colecoesAnalises[i]] || [];
+                items = items.concat(lista);
+            }
+            self.data.analises = items;
+            self._saveCache();
+            console.log('🔄 Análises atualizadas:', items.length);
+            if (window.dispatchEvent) {
+                window.dispatchEvent(new Event('analises-atualizados'));
+            }
+        };
+
+        for (var c = 0; c < colecoesAnalises.length; c++) {
+            (function(colecao) {
+                db.collection('users').doc(uid).collection(colecao)
+                    .onSnapshot(function(snapshot) {
+                        var items = [];
+                        snapshot.forEach(function(doc) {
+                            var data = doc.data();
+                            data.id = doc.id;
+                            items.push(data);
+                        });
+                        analisesData[colecao] = items;
+                        processarAnalises();
+                    }, function(err) {
+                        console.warn('⚠️ Erro no listener de análises (' + colecao + '):', err);
+                    });
+            })(colecoesAnalises[c]);
+        }
+
+        // 🆕 MIGRAÇÃO DE ANÁLISES LEGADAS (coleção única 'analises' → separadas por tipo)
+        this._migrarAnalisesLegadas(uid);
 
         // 🆕 LISTENER PARA DOCUMENTOS
         db.collection('users').doc(uid).collection('documentos')
@@ -701,10 +733,76 @@ GR.State = {
     },
 
     // ================================================================
+    // CARREGAR ANÁLISES - MERGE DAS COLEÇÕES SEPARADAS POR TIPO
+    // ================================================================
+    _carregarAnalisesMerged: function(uid) {
+        var self = this;
+        var colecoes = this.analisesColecoes;
+        var promises = colecoes.map(function(col) {
+            return db.collection('users').doc(uid).collection(col).get()
+                .then(function(snapshot) {
+                    var items = [];
+                    snapshot.forEach(function(doc) {
+                        var data = doc.data();
+                        data.id = doc.id;
+                        items.push(data);
+                    });
+                    return items;
+                })
+                .catch(function(err) {
+                    console.warn('⚠️ Erro ao carregar ' + col + ':', err);
+                    return [];
+                });
+        });
+
+        return Promise.all(promises).then(function(resultados) {
+            var items = [];
+            resultados.forEach(function(arr) {
+                items = items.concat(arr);
+            });
+            self.data.analises = items;
+            self._saveCache();
+            return items;
+        });
+    },
+
+    // ================================================================
+    // 🆕 MIGRAR ANÁLISES LEGADAS (coleção única 'analises' → por tipo)
+    // ================================================================
+    _migrarAnalisesLegadas: function(uid) {
+        if (!db || !uid) return;
+        var self = this;
+
+        db.collection('users').doc(uid).collection('analises').get()
+            .then(function(snapshot) {
+                if (snapshot.empty) return;
+                console.log('🔄 Migrando ' + snapshot.size + ' análises legadas...');
+
+                var writes = [];
+                snapshot.forEach(function(doc) {
+                    var data = doc.data();
+                    var col = self.getColecaoAnalises(data.tipo);
+                    var novoRef = db.collection('users').doc(uid).collection(col).doc(doc.id);
+                    writes.push(
+                        novoRef.set(data).then(function() {
+                            return doc.ref.delete();
+                        })
+                    );
+                });
+
+                return Promise.all(writes).then(function() {
+                    console.log('✅ Análises migradas para coleções separadas por tipo.');
+                });
+            })
+            .catch(function(err) {
+                console.warn('⚠️ Migração de análises legadas falhou:', err);
+            });
+    },
+
+    // ================================================================
     // CARREGAR DADOS - COM TODAS AS COLEÇÕES
     // ================================================================
-    carregarDados: function() {
-        var self = this;
+    carregarDados: function() {        var self = this;
         var user = firebase.auth().currentUser;
         if (!user) return Promise.reject('Usuário não autenticado');
 
@@ -715,7 +813,6 @@ GR.State = {
             'propriedades', 
             'tarefas', 
             'documentos', 
-            'analises', 
             'receitas', 
             'despesas', 
             'insumos',
@@ -768,6 +865,15 @@ GR.State = {
                     return [];
                 });
         });
+
+        // 🆕 Carrega análises das coleções separadas por tipo (merge)
+        promises.push(this._carregarAnalisesMerged(uid).then(function(items) {
+            console.log('✅ analises (mergidas): ' + items.length + ' itens');
+            return items;
+        }));
+
+        // 🆕 MIGRAÇÃO DE ANÁLISES LEGADAS
+        this._migrarAnalisesLegadas(uid);
 
         // 🆕 Carrega perfis
         promises.push(

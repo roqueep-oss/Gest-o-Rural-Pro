@@ -2556,7 +2556,8 @@ GR.Analises = {
             }).then(function(downloadURL) {
                 var docId = editId || dados.id;
                 if (docId) {
-                    db.collection('users').doc(uid).collection('analises').doc(docId).update({
+                    var col = GR.State.getColecaoAnalises(dados.tipo);
+                    db.collection('users').doc(uid).collection(col).doc(docId).update({
                         arquivoUrl: downloadURL,
                         arquivoNome: file.name,
                         arquivoPath: filePath
@@ -2592,7 +2593,8 @@ GR.Analises = {
     },
 
     _salvarDados: function(dados, uid) {
-        var ref = db.collection('users').doc(uid).collection('analises');
+        var col = GR.State.getColecaoAnalises(dados.tipo);
+        var ref = db.collection('users').doc(uid).collection(col);
         var editId = this._cache.analiseEditando || (GR.State && GR.State.ui ? GR.State.ui.analiseEditando : null);
         var isEdit = !!editId;
 
@@ -2657,7 +2659,8 @@ GR.Analises = {
 
         var uid = user.uid;
 
-        db.collection('users').doc(uid).collection('analises').doc(id).delete()
+        var col = item && item.tipo ? GR.State.getColecaoAnalises(item.tipo) : 'analisesSolo';
+        db.collection('users').doc(uid).collection(col).doc(id).delete()
             .then(function() {
                 if (item && item.arquivoPath) {
                     storage.ref(item.arquivoPath).delete()
